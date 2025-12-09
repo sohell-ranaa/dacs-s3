@@ -1,0 +1,35 @@
+{
+  "classifier": "Random Forest",
+  "category": "Ensemble (Bagging)",
+  "baseline_metrics": {
+    "accuracy": 0.8764638041163946,
+    "precision": 0.9552374048568322,
+    "recall": 0.8214758824904543,
+    "f1": 0.8833214629854623,
+    "mcc": 0.7633479411974088,
+    "auc": 0.9707103153014908
+  },
+  "optimised_metrics": {
+    "accuracy": 0.8740684882895671,
+    "precision": 0.9641463867731748,
+    "recall": 0.8088521779786488,
+    "f1": 0.8796982923005212,
+    "mcc": 0.7624614049070013,
+    "auc": 0.970485445970805
+  },
+  "baseline_auc": 0.9707103153014908,
+  "optimised_auc": 0.970485445970805,
+  "optimisation_strategies": [
+    "Hyperparameter Tuning",
+    "Feature Selection (Importance)",
+    "Class Weighting"
+  ],
+  "best_params": {
+    "n_estimators": "150",
+    "max_depth": "20",
+    "min_samples_split": "5",
+    "min_samples_leaf": "2"
+  },
+  "n_features_original": 122,
+  "n_features_selected": 29
+}

@@ -1,0 +1,33 @@
+{
+  "classifier": "K-Nearest Neighbors",
+  "category": "Non-Linear",
+  "baseline_metrics": {
+    "accuracy": 0.8504258339247693,
+    "precision": 0.9252134831460674,
+    "recall": 0.8020727811111977,
+    "f1": 0.8592536939644377,
+    "mcc": 0.7095542913577016,
+    "auc": 0.8827470798462379
+  },
+  "optimised_metrics": {
+    "accuracy": 0.8944730305180979,
+    "precision": 0.9551549982584465,
+    "recall": 0.854749474012312,
+    "f1": 0.9021672081260024,
+    "mcc": 0.7941324081597424,
+    "auc": 0.9337367492415801
+  },
+  "baseline_auc": 0.8827470798462379,
+  "optimised_auc": 0.9337367492415801,
+  "optimisation_strategies": [
+    "Hyperparameter Tuning",
+    "Feature Selection (Correlation)"
+  ],
+  "best_params": {
+    "n_neighbors": 7,
+    "weights": "distance",
+    "p": 1
+  },
+  "n_features_original": 122,
+  "n_features_selected": 75
+}

@@ -1,0 +1,32 @@
+{
+  "classifier": "Linear Discriminant Analysis",
+  "category": "Linear",
+  "baseline_metrics": {
+    "accuracy": 0.7715578424414479,
+    "precision": 0.9264069264069265,
+    "recall": 0.6503545546637575,
+    "f1": 0.7642157311601502,
+    "mcc": 0.5884538642227427,
+    "auc": 0.8862356338019138
+  },
+  "optimised_metrics": {
+    "accuracy": 0.7863733144073811,
+    "precision": 0.9687755818032978,
+    "recall": 0.6455232603444245,
+    "f1": 0.774784885895997,
+    "mcc": 0.6307261303384442,
+    "auc": 0.9476917835441935
+  },
+  "baseline_auc": 0.8862356338019138,
+  "optimised_auc": 0.9476917835441935,
+  "optimisation_strategies": [
+    "Hyperparameter Tuning",
+    "Feature Selection (Correlation)"
+  ],
+  "best_params": {
+    "solver": "lsqr",
+    "shrinkage": "auto"
+  },
+  "n_features_original": 122,
+  "n_features_selected": 29
+}
