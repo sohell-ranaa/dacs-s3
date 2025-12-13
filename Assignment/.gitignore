@@ -1,0 +1,18 @@
+# Recording files (large audio/video)
+Recording/
+
+# Jupyter
+.ipynb_checkpoints/
+*.py[cod]
+__pycache__/
+
+# Virtual environments
+venv/
+.venv/
+
+# Config
+jupyter_config.py
+
+# OS
+.DS_Store
+Thumbs.db
