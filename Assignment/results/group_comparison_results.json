@@ -1,0 +1,97 @@
+{
+  "comparison": [
+    {
+      "Model": "LDA",
+      "Category": "Linear",
+      "Member": "Muhammad Usama Fazal (TP086008)",
+      "Accuracy": 0.7747959545777147,
+      "F1 (Weighted)": 0.7628272310536731,
+      "MCC": 0.6712024922482346,
+      "Features": 30
+    },
+    {
+      "Model": "Random Forest",
+      "Category": "Ensemble",
+      "Member": "Imran Shahadat Noble (TP087895)",
+      "Accuracy": 0.870874733853797,
+      "F1 (Weighted)": 0.8401072667996408,
+      "MCC": 0.8145837316121911,
+      "Features": 37
+    },
+    {
+      "Model": "KNN",
+      "Category": "Non-Linear",
+      "Member": "Md Sohel Rana (TP087437)",
+      "Accuracy": 0.8751774308019872,
+      "F1 (Weighted)": 0.8654778429406811,
+      "MCC": 0.8160588737870642,
+      "Features": 30
+    }
+  ],
+  "mcc_per_class": [
+    {
+      "Attack Class": "benign",
+      "LDA": 0.6730860084953678,
+      "Random Forest": 0.7630726520339343,
+      "KNN": 0.7861474164855426
+    },
+    {
+      "Attack Class": "dos",
+      "LDA": 0.7858396678377656,
+      "Random Forest": 0.9839762592421812,
+      "KNN": 0.9459736590893898
+    },
+    {
+      "Attack Class": "probe",
+      "LDA": 0.5753158532956372,
+      "Random Forest": 0.925617642191929,
+      "KNN": 0.8503583429067464
+    },
+    {
+      "Attack Class": "r2l",
+      "LDA": 0.5128399526059619,
+      "Random Forest": 0.33013600883420074,
+      "KNN": 0.5673633725878119
+    },
+    {
+      "Attack Class": "u2r",
+      "LDA": 0.5789793599142157,
+      "Random Forest": 0.8204448686169844,
+      "KNN": 0.5719575067147805
+    }
+  ],
+  "baseline_vs_optimised": {
+    "LDA": {
+      "baseline": 0.6644,
+      "optimised": 0.6712
+    },
+    "Random Forest": {
+      "baseline": 0.8135,
+      "optimised": 0.8146
+    },
+    "KNN": {
+      "baseline": 0.7602,
+      "optimised": 0.8161
+    }
+  },
+  "ranking": [
+    {
+      "Model": "KNN",
+      "Category": "Non-Linear",
+      "Final Rank": 1
+    },
+    {
+      "Model": "Random Forest",
+      "Category": "Ensemble",
+      "Final Rank": 2
+    },
+    {
+      "Model": "LDA",
+      "Category": "Linear",
+      "Final Rank": 3
+    }
+  ],
+  "best_model": "KNN",
+  "best_category": "Non-Linear",
+  "best_member": "Md Sohel Rana (TP087437)"
+}

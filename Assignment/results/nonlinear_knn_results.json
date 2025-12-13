@@ -1,33 +1,79 @@
 {
   "classifier": "K-Nearest Neighbors",
   "category": "Non-Linear",
+  "member": "Md Sohel Rana (TP087437)",
+  "classification_type": "multi-class",
+  "classes": [
+    "benign",
+    "dos",
+    "probe",
+    "r2l",
+    "u2r"
+  ],
+  "baseline_comparison": [
+    {
+      "Algorithm": "KNN",
+      "accuracy": 0.836941,
+      "f1_weighted": 0.811963,
+      "f1_macro": 0.756495,
+      "mcc": 0.760186,
+      "train_time": 7.91996
+    },
+    {
+      "Algorithm": "Decision Tree",
+      "accuracy": 0.83357,
+      "f1_weighted": 0.812024,
+      "f1_macro": 0.708941,
+      "mcc": 0.754873,
+      "train_time": 0.878403
+    },
+    {
+      "Algorithm": "SVM-RBF",
+      "accuracy": 0.842929,
+      "f1_weighted": 0.837349,
+      "f1_macro": 0.751024,
+      "mcc": 0.768514,
+      "train_time": 121.457353
+    }
+  ],
   "baseline_metrics": {
-    "accuracy": 0.8504258339247693,
-    "precision": 0.9252134831460674,
-    "recall": 0.8020727811111977,
-    "f1": 0.8592536939644377,
-    "mcc": 0.7095542913577016,
-    "auc": 0.8827470798462379
+    "accuracy": 0.836941,
+    "f1_weighted": 0.811963,
+    "f1_macro": 0.756495,
+    "mcc": 0.760186,
+    "train_time": 7.91996
   },
   "optimised_metrics": {
-    "accuracy": 0.8944730305180979,
-    "precision": 0.9551549982584465,
-    "recall": 0.854749474012312,
-    "f1": 0.9021672081260024,
-    "mcc": 0.7941324081597424,
-    "auc": 0.9337367492415801
+    "accuracy": 0.875177,
+    "f1_weighted": 0.865478,
+    "f1_macro": 0.770056,
+    "mcc": 0.816059,
+    "train_time": 19.474568
   },
-  "baseline_auc": 0.8827470798462379,
-  "optimised_auc": 0.9337367492415801,
+  "baseline_mcc_per_class": {
+    "benign": 0.712995,
+    "dos": 0.936211,
+    "probe": 0.796488,
+    "r2l": 0.348606,
+    "u2r": 0.862762
+  },
+  "optimised_mcc_per_class": {
+    "benign": 0.786147,
+    "dos": 0.945974,
+    "probe": 0.850358,
+    "r2l": 0.567363,
+    "u2r": 0.571958
+  },
   "optimisation_strategies": [
     "Hyperparameter Tuning",
     "Feature Selection (Correlation)"
   ],
   "best_params": {
-    "n_neighbors": 7,
-    "weights": "distance",
-    "p": 1
+    "algorithm": "auto",
+    "n_neighbors": 3,
+    "p": 1,
+    "weights": "distance"
   },
   "n_features_original": 122,
-  "n_features_selected": 75
+  "n_features_selected": 30
 }

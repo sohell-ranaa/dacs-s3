@@ -1,4 +1,0 @@
-Classifier,Accuracy,Precision,Recall,F1-Score,MCC,AUC
-Linear (LDA),0.7864,0.9688,0.6455,0.7748,0.6307,0.0523
-Ensemble - RF,0.875,0.9632,0.8113,0.8808,0.7636,0.0329
-Non-Linear (KNN),0.896,0.9543,0.8584,0.9038,0.7965,0.0713

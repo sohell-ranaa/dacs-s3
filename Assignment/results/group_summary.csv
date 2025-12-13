@@ -1,5 +1,0 @@
-Classifier,Category,Baseline_F1,Optimised_F1,F1_Improvement_%,Optimised_AUC,Features_Used,Feature_Reduction_%
-Linear (LDA),Linear,0.76,0.77,1.38,0.95,29,76.23
-Ensemble - RF,Ensemble (Bagging),0.88,0.88,-0.41,0.97,29,76.23
-Non-Linear (KNN),Non-Linear,0.86,0.9,4.99,0.93,75,38.52
-Ensemble - GB,Ensemble (Boosting),0.88,0.86,-1.91,0.94,15,87.7

@@ -1,0 +1,42 @@
+{
+  "LDA": {
+    "accuracy": 0.8622693399574166,
+    "mcc": 0.805404159506661,
+    "category": "Linear"
+  },
+  "Logistic Regression": {
+    "accuracy": 0.9988023420865862,
+    "mcc": 0.9982354441761035,
+    "category": "Linear"
+  },
+  "Ridge Classifier": {
+    "accuracy": 1.0,
+    "mcc": 1.0,
+    "category": "Linear"
+  },
+  "Random Forest": {
+    "accuracy": 0.9653122782114976,
+    "mcc": 0.9494217516166448,
+    "category": "Ensemble"
+  },
+  "Extra Trees": {
+    "accuracy": 0.9611870120652946,
+    "mcc": 0.9441040406473891,
+    "category": "Ensemble"
+  },
+  "AdaBoost": {
+    "accuracy": 0.8989088005677786,
+    "mcc": 0.8572462984527774,
+    "category": "Ensemble"
+  },
+  "KNN": {
+    "accuracy": 0.919623846699787,
+    "mcc": 0.8852206988214105,
+    "category": "Non-Linear"
+  },
+  "Decision Tree": {
+    "accuracy": 0.9298704755145494,
+    "mcc": 0.9026422827293822,
+    "category": "Non-Linear"
+  }
+}
