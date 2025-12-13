@@ -20,7 +20,7 @@
 |-----|------|------------|------------|------|
 | 1 | Muhammad Usama Fazal | TP086008 | Linear (LDA) | Linear Classifier Analysis |
 | 2 | Imran Shahadat Noble | TP087895 | Ensemble (Random Forest) | Ensemble Classifier Analysis |
-| 3 | Md Sohel Rana | TP087437 | Non-Linear (KNN) | Non-Linear Classifier Analysis |
+| 3 | Md Sohel Rana | TP086217 | Non-Linear (KNN) | Non-Linear Classifier Analysis |
 
 **Intake Code:** UC2F2408CS
 
@@ -36,9 +36,9 @@
 
 ## EXECUTIVE SUMMARY
 
-**Prepared by:** Md Sohel Rana (TP087437), Muhammad Usama Fazal (TP086008), Imran Shahadat Noble (TP087895)
+**Prepared by:** Md Sohel Rana (TP086217), Muhammad Usama Fazal (TP086008), Imran Shahadat Noble (TP087895)
 
-This report presents a comprehensive evaluation of machine learning-based approaches for network intrusion detection using the NSL-KDD benchmark dataset. Three classification algorithms representing different methodological paradigms were implemented and compared: Linear Discriminant Analysis (linear method) by **Muhammad Usama Fazal (TP086008)**, K-Nearest Neighbors (non-linear method) by **Md Sohel Rana (TP087437)**, and Random Forest (ensemble method) by **Imran Shahadat Noble (TP087895)**.
+This report presents a comprehensive evaluation of machine learning-based approaches for network intrusion detection using the NSL-KDD benchmark dataset. Three classification algorithms representing different methodological paradigms were implemented and compared: Linear Discriminant Analysis (linear method) by **Muhammad Usama Fazal (TP086008)**, K-Nearest Neighbors (non-linear method) by **Md Sohel Rana (TP086217)**, and Random Forest (ensemble method) by **Imran Shahadat Noble (TP087895)**.
 
 **Classification Task:** Multi-class (5 categories: Benign, DoS, Probe, R2L, U2R)
 
@@ -46,14 +46,14 @@ This report presents a comprehensive evaluation of machine learning-based approa
 
 | Metric | Best Performer | Score | Author |
 |--------|----------------|-------|--------|
-| **Overall (MCC)** | K-Nearest Neighbors | 0.816 | Md Sohel Rana (TP087437) |
-| **Accuracy** | K-Nearest Neighbors | 87.5% | Md Sohel Rana (TP087437) |
-| **F1-Score (Weighted)** | K-Nearest Neighbors | 0.865 | Md Sohel Rana (TP087437) |
+| **Overall (MCC)** | K-Nearest Neighbors | 0.816 | Md Sohel Rana (TP086217) |
+| **Accuracy** | K-Nearest Neighbors | 87.5% | Md Sohel Rana (TP086217) |
+| **F1-Score (Weighted)** | K-Nearest Neighbors | 0.865 | Md Sohel Rana (TP086217) |
 | **Training Speed** | Random Forest | 3.03s | Imran Shahadat Noble (TP087895) |
 
 ### Principal Conclusions
 
-1. **KNN emerged as the top performer** (Md Sohel Rana - TP087437) with an MCC of 0.816 after optimisation, demonstrating that proper hyperparameter tuning (k=3, Manhattan distance, distance weighting) combined with feature selection can yield substantial improvements (+7.4% MCC).
+1. **KNN emerged as the top performer** (Md Sohel Rana - TP086217) with an MCC of 0.816 after optimisation, demonstrating that proper hyperparameter tuning (k=3, Manhattan distance, distance weighting) combined with feature selection can yield substantial improvements (+7.4% MCC).
 
 2. **Non-linear and ensemble methods significantly outperform linear approaches** for multi-class intrusion detection, with KNN (Md Sohel Rana) and Random Forest (Imran Shahadat Noble) achieving MCC scores of 0.816 and 0.810 respectively, compared to LDA's 0.671 (Muhammad Usama Fazal).
 
@@ -63,7 +63,7 @@ This report presents a comprehensive evaluation of machine learning-based approa
 
 ### Practical Recommendations
 
-- **For maximum detection accuracy:** Deploy optimised KNN (MCC: 0.816, Accuracy: 87.5%) - Md Sohel Rana (TP087437)
+- **For maximum detection accuracy:** Deploy optimised KNN (MCC: 0.816, Accuracy: 87.5%) - Md Sohel Rana (TP086217)
 - **For fastest training and deployment:** Use Random Forest (MCC: 0.810, Training: 3.03s) - Imran Shahadat Noble (TP087895)
 - **For interpretability requirements:** Use Linear methods with understanding of their limitations - Muhammad Usama Fazal (TP086008)
 
@@ -77,7 +77,7 @@ This report presents a comprehensive evaluation of machine learning-based approa
    - 1.1 Introduction
    - 1.2 Algorithm Classification Taxonomy
    - 1.3 Linear Classifier: Linear Discriminant Analysis (Muhammad Usama Fazal - TP086008)
-   - 1.4 Non-Linear Classifier: K-Nearest Neighbors (Md Sohel Rana - TP087437)
+   - 1.4 Non-Linear Classifier: K-Nearest Neighbors (Md Sohel Rana - TP086217)
    - 1.5 Ensemble Classifier: Random Forest (Imran Shahadat Noble - TP087895)
    - 1.6 Summary of Algorithm Characteristics
 
@@ -102,7 +102,7 @@ This report presents a comprehensive evaluation of machine learning-based approa
    - 4.4 Baseline vs Optimised Model Comparison
    - 4.5 Analysis and Discussion
 
-5. [Individual Chapter: K-Nearest Neighbors](#chapter-5-individual-chapter---k-nearest-neighbors-knn) (Md Sohel Rana - TP087437)
+5. [Individual Chapter: K-Nearest Neighbors](#chapter-5-individual-chapter---k-nearest-neighbors-knn) (Md Sohel Rana - TP086217)
    - 5.1 Algorithm Overview
    - 5.2 Baseline Comparison
    - 5.3 Optimisation Strategies Applied
@@ -125,7 +125,7 @@ This report presents a comprehensive evaluation of machine learning-based approa
 
 # CHAPTER 1: COMBINED REVIEW OF SELECTED ALGORITHMS
 
-**Contributors:** Muhammad Usama Fazal (TP086008), Imran Shahadat Noble (TP087895), Md Sohel Rana (TP087437)
+**Contributors:** Muhammad Usama Fazal (TP086008), Imran Shahadat Noble (TP087895), Md Sohel Rana (TP086217)
 
 ## 1.1 Introduction
 
@@ -149,7 +149,7 @@ This report presents a comprehensive study of machine learning-based network int
 The objective of this study is to evaluate and compare three distinct classification algorithms representing different methodological approaches to pattern recognition:
 
 1. **Linear Discriminant Analysis (LDA)** - A linear classification method - **Muhammad Usama Fazal (TP086008)**
-2. **K-Nearest Neighbors (KNN)** - A non-linear, instance-based learning method - **Md Sohel Rana (TP087437)**
+2. **K-Nearest Neighbors (KNN)** - A non-linear, instance-based learning method - **Md Sohel Rana (TP086217)**
 3. **Random Forest** - An ensemble method using bagging - **Imran Shahadat Noble (TP087895)**
 
 Each algorithm was implemented with both baseline (default parameters) and optimised configurations to evaluate the impact of various optimisation strategies on **multi-class classification performance** across five attack categories.
@@ -177,7 +177,7 @@ Machine learning classification algorithms can be organised into distinct catego
 
 The selection of algorithms from different categories ensures diversity in the approaches evaluated:
 - **Linear Methods:** Linear Discriminant Analysis (LDA) - **Muhammad Usama Fazal (TP086008)**
-- **Non-Linear Methods:** K-Nearest Neighbors (KNN) - **Md Sohel Rana (TP087437)**
+- **Non-Linear Methods:** K-Nearest Neighbors (KNN) - **Md Sohel Rana (TP086217)**
 - **Ensemble Methods (Bagging):** Random Forest - **Imran Shahadat Noble (TP087895)**
 
 This diversity is essential because different algorithm types may exhibit varying strengths and weaknesses when applied to network intrusion detection, where the data often contains complex, non-linear patterns and class imbalances.
@@ -212,7 +212,7 @@ LDA operates on the principle of maximising the ratio of between-class variance 
 
 ## 1.4 Non-Linear Classifier: K-Nearest Neighbors
 
-**Author:** Md Sohel Rana (TP087437)
+**Author:** Md Sohel Rana (TP086217)
 
 K-Nearest Neighbors is an instance-based learning algorithm that classifies new observations based on similarity measures in the feature space. Unlike parametric methods, KNN makes no assumptions about the underlying data distribution, making it highly flexible (Cover & Hart, 1967).
 
@@ -291,7 +291,7 @@ The diversity in these characteristics justifies the selection of these three al
 
 # CHAPTER 2: INTEGRATED PERFORMANCE DISCUSSION
 
-**Contributors:** Muhammad Usama Fazal (TP086008), Imran Shahadat Noble (TP087895), Md Sohel Rana (TP087437)
+**Contributors:** Muhammad Usama Fazal (TP086008), Imran Shahadat Noble (TP087895), Md Sohel Rana (TP086217)
 
 ## 2.1 Experimental Setup
 
@@ -367,9 +367,9 @@ Matthews Correlation Coefficient is selected as the primary ranking metric becau
 |------------|--------|----------|---------------|------------|-----|------------|
 | LDA (Linear) | Muhammad Usama Fazal (TP086008) | 0.775 | 0.763 | 0.671 | 0.671 | 0.34s |
 | Random Forest (Ensemble) | Imran Shahadat Noble (TP087895) | 0.868 | 0.840 | 0.778 | 0.810 | 3.03s |
-| **KNN (Non-Linear)** | **Md Sohel Rana (TP087437)** | **0.875** | **0.865** | **0.770** | **0.816** | 15.23s |
+| **KNN (Non-Linear)** | **Md Sohel Rana (TP086217)** | **0.875** | **0.865** | **0.770** | **0.816** | 15.23s |
 
-The results reveal that **KNN (Md Sohel Rana - TP087437) achieved the highest overall MCC (0.816)**, indicating the best correlation between predictions and actual labels among all tested classifiers.
+The results reveal that **KNN (Md Sohel Rana - TP086217) achieved the highest overall MCC (0.816)**, indicating the best correlation between predictions and actual labels among all tested classifiers.
 
 ![Model Comparison](../../figures/fig1_model_comparison.png)
 *Figure 3: Accuracy and MCC comparison across all optimised models*
@@ -391,7 +391,7 @@ The results reveal that **KNN (Md Sohel Rana - TP087437) achieved the highest ov
 
 **Key Observations:**
 1. Random Forest (Imran Shahadat Noble - TP087895) excels at detecting DoS (0.984), Probe (0.911), and U2R (0.847) attacks
-2. KNN (Md Sohel Rana - TP087437) performs best on Benign traffic (0.786) and R2L attacks (0.567)
+2. KNN (Md Sohel Rana - TP086217) performs best on Benign traffic (0.786) and R2L attacks (0.567)
 3. LDA (Muhammad Usama Fazal - TP086008) struggles across all attack types, with particularly poor performance on Probe (0.575)
 4. R2L detection remains challenging for all classifiers due to severe class imbalance
 
@@ -408,7 +408,7 @@ The results reveal that **KNN (Md Sohel Rana - TP087437) achieved the highest ov
 |------------|--------|---------|--------|--------|
 | LDA | Muhammad Usama Fazal (TP086008) | 0.931 | 0.003 | 0.931 +/- 0.005 |
 | Random Forest | Imran Shahadat Noble (TP087895) | **0.996** | **0.000** | 0.996 +/- 0.001 |
-| KNN | Md Sohel Rana (TP087437) | 0.992 | 0.001 | 0.992 +/- 0.001 |
+| KNN | Md Sohel Rana (TP086217) | 0.992 | 0.001 | 0.992 +/- 0.001 |
 
 Random Forest (Imran Shahadat Noble) demonstrates the highest cross-validation performance with the lowest variance, indicating excellent training set fitting. However, test set performance shows KNN (Md Sohel Rana) generalises better to unseen data.
 
@@ -434,7 +434,7 @@ Feature selection improved or maintained performance while reducing computationa
 
 ### 2.4.1 Key Insights
 
-1. **Best Overall Performer:** KNN (Md Sohel Rana - TP087437) with optimised parameters achieved the highest MCC (0.816), demonstrating that a well-tuned instance-based learner can outperform more complex ensemble methods for this dataset.
+1. **Best Overall Performer:** KNN (Md Sohel Rana - TP086217) with optimised parameters achieved the highest MCC (0.816), demonstrating that a well-tuned instance-based learner can outperform more complex ensemble methods for this dataset.
 
 2. **Linear Methods Limitation:** LDA (Muhammad Usama Fazal - TP086008) achieved an MCC of only 0.671, significantly lower than non-linear methods. This highlights the limitation of linear decision boundaries for capturing complex multi-class attack patterns.
 
@@ -459,14 +459,14 @@ Feature selection improved or maintained performance while reducing computationa
 
 | Rank | Classifier | Author | Category | MCC | Accuracy | Key Strength |
 |------|------------|--------|----------|-----|----------|--------------|
-| **1st** | KNN | **Md Sohel Rana (TP087437)** | Non-Linear | 0.816 | 87.5% | Best overall balance, highest accuracy |
+| **1st** | KNN | **Md Sohel Rana (TP086217)** | Non-Linear | 0.816 | 87.5% | Best overall balance, highest accuracy |
 | **2nd** | Random Forest | **Imran Shahadat Noble (TP087895)** | Ensemble | 0.810 | 86.8% | Fastest training, best DoS/Probe detection |
 | **3rd** | LDA | **Muhammad Usama Fazal (TP086008)** | Linear | 0.671 | 77.5% | Fast prediction, interpretable |
 
 ## 2.5 Recommendations for Deployment
 
 ### For Maximum Detection Accuracy:
-**Recommended Classifier:** K-Nearest Neighbors (Md Sohel Rana - TP087437)
+**Recommended Classifier:** K-Nearest Neighbors (Md Sohel Rana - TP086217)
 - Configuration: k=3, distance weighting, Manhattan distance (p=1)
 - Feature selection: correlation-based (threshold > 0.1), 30 features
 - Expected Performance: MCC 0.816, Accuracy 87.5%
@@ -841,17 +841,17 @@ Random Forest is recommended as:
 
 # CHAPTER 5: INDIVIDUAL CHAPTER - K-NEAREST NEIGHBORS (KNN)
 
-**Author:** Md Sohel Rana (TP087437)
+**Author:** Md Sohel Rana (TP086217)
 
 ## 5.1 Algorithm Overview
 
-K-Nearest Neighbors was selected as the representative non-linear, instance-based classifier by **Md Sohel Rana (TP087437)**. KNN classifies new observations based on the majority class among the k nearest training instances in the feature space, making no assumptions about the underlying data distribution.
+K-Nearest Neighbors was selected as the representative non-linear, instance-based classifier by **Md Sohel Rana (TP086217)**. KNN classifies new observations based on the majority class among the k nearest training instances in the feature space, making no assumptions about the underlying data distribution.
 
 For multi-class network intrusion detection, KNN's ability to capture complex decision boundaries makes it well-suited for identifying attack patterns that may not be linearly separable from normal traffic or from each other.
 
 ## 5.2 Baseline Comparison
 
-**Md Sohel Rana (TP087437)** evaluated three non-linear classifiers as baselines:
+**Md Sohel Rana (TP086217)** evaluated three non-linear classifiers as baselines:
 
 **Table 13: Non-Linear Classifier Baseline Comparison**
 
@@ -864,7 +864,7 @@ For multi-class network intrusion detection, KNN's ability to capture complex de
 ![Non-Linear Baseline Comparison](../../figures/nonlinear_baseline_comparison.png)
 *Figure 17: Non-linear classifier baseline comparison showing SVM-RBF achieving highest MCC*
 
-**Selection Rationale (Md Sohel Rana - TP087437):** Although SVM-RBF achieved the highest baseline MCC (0.769), KNN was selected for optimisation due to:
+**Selection Rationale (Md Sohel Rana - TP086217):** Although SVM-RBF achieved the highest baseline MCC (0.769), KNN was selected for optimisation due to:
 1. Dramatically faster training time (6.99s vs 113.23s)
 2. Higher F1-Macro (0.756 vs 0.751), indicating better balance across classes
 3. Greater potential for improvement through hyperparameter tuning
@@ -872,7 +872,7 @@ For multi-class network intrusion detection, KNN's ability to capture complex de
 
 ## 5.3 Optimisation Strategies Applied
 
-### 5.3.1 Strategy 1: Hyperparameter Tuning (Md Sohel Rana - TP087437)
+### 5.3.1 Strategy 1: Hyperparameter Tuning (Md Sohel Rana - TP086217)
 
 GridSearchCV was used for exhaustive hyperparameter search:
 
@@ -897,7 +897,7 @@ GridSearchCV was used for exhaustive hyperparameter search:
 | 9 | uniform | 1 | 0.9871 | Maximum smoothing |
 | 9 | uniform | 2 | 0.9865 | Lowest score |
 
-**Best Configuration (Md Sohel Rana - TP087437):**
+**Best Configuration (Md Sohel Rana - TP086217):**
 
 | Parameter | Values Tested | Best Value | Justification |
 |-----------|---------------|------------|---------------|
@@ -914,7 +914,7 @@ GridSearchCV was used for exhaustive hyperparameter search:
 3. Better suited for mixed feature types after one-hot encoding
 4. Treats each dimension equally rather than squaring differences
 
-### 5.3.2 Strategy 2: Feature Selection via Correlation Analysis (Md Sohel Rana - TP087437)
+### 5.3.2 Strategy 2: Feature Selection via Correlation Analysis (Md Sohel Rana - TP086217)
 
 Feature selection is particularly important for KNN due to its sensitivity to irrelevant features affecting distance calculations:
 
@@ -940,13 +940,13 @@ Feature selection is particularly important for KNN due to its sensitivity to ir
 **Result:** Reduced from 122 to 30 features (75.4% reduction).
 
 ![KNN Feature Correlation](../../figures/nonlinear_feature_correlation.png)
-*Figure 18: Top correlated features for KNN classification (Md Sohel Rana - TP087437)*
+*Figure 18: Top correlated features for KNN classification (Md Sohel Rana - TP086217)*
 
 The correlation-based approach ensures features that have no relationship with the target don't distort the distance calculations that form the basis of KNN classification.
 
 ## 5.4 Baseline vs Optimised Model Comparison
 
-**Table 14: KNN Baseline vs Optimised Performance (Md Sohel Rana - TP087437)**
+**Table 14: KNN Baseline vs Optimised Performance (Md Sohel Rana - TP086217)**
 
 | Metric | Baseline | Optimised | Change | % Change |
 |--------|----------|-----------|--------|----------|
@@ -966,7 +966,7 @@ The correlation-based approach ensures features that have no relationship with t
 | R2L | 0.349 | 0.567 | **+0.219** |
 | U2R | 0.863 | 0.572 | -0.291 |
 
-**Confusion Matrix - Optimised Model (Md Sohel Rana - TP087437):**
+**Confusion Matrix - Optimised Model (Md Sohel Rana - TP086217):**
 
 |  | Pred: Benign | Pred: DoS | Pred: Probe | Pred: R2L | Pred: U2R |
 |--|--------------|-----------|-------------|-----------|-----------|
@@ -977,11 +977,11 @@ The correlation-based approach ensures features that have no relationship with t
 | **U2R** | 75 | 0 | 1 | 1 | 123 |
 
 ![KNN Confusion Matrices](../../figures/nonlinear_confusion_matrices.png)
-*Figure 19: Confusion matrices for KNN baseline and optimised models (Md Sohel Rana - TP087437)*
+*Figure 19: Confusion matrices for KNN baseline and optimised models (Md Sohel Rana - TP086217)*
 
 ## 5.5 Analysis and Discussion
 
-### 5.5.1 Performance Interpretation (Md Sohel Rana - TP087437)
+### 5.5.1 Performance Interpretation (Md Sohel Rana - TP086217)
 
 KNN achieved the **most significant improvement** among all classifiers after optimisation:
 
@@ -993,7 +993,7 @@ KNN achieved the **most significant improvement** among all classifiers after op
 
 4. **Probe Detection (+5.4%):** Better identification of scanning/reconnaissance attacks.
 
-### 5.5.2 Improvement Analysis (Md Sohel Rana - TP087437)
+### 5.5.2 Improvement Analysis (Md Sohel Rana - TP086217)
 
 The substantial improvements can be attributed to:
 
@@ -1005,7 +1005,7 @@ The substantial improvements can be attributed to:
 
 4. **Feature Selection Impact:** Removing 92 features (75.4% reduction) eliminated noise that previously distorted distance calculations.
 
-### 5.5.3 U2R Detection Trade-off (Md Sohel Rana - TP087437)
+### 5.5.3 U2R Detection Trade-off (Md Sohel Rana - TP086217)
 
 The optimised model showed decreased U2R detection (0.572 vs 0.863):
 
@@ -1015,7 +1015,7 @@ The optimised model showed decreased U2R detection (0.572 vs 0.863):
 
 3. **Trade-off Accepted:** The gains in R2L (+21.9%), Benign (+7.3%), and Probe (+5.4%) outweigh the U2R loss in terms of overall MCC improvement.
 
-### 5.5.4 Why KNN Outperformed the Ensemble Method (Md Sohel Rana - TP087437)
+### 5.5.4 Why KNN Outperformed the Ensemble Method (Md Sohel Rana - TP086217)
 
 The superior performance of optimised KNN over Random Forest warrants explanation:
 
@@ -1027,7 +1027,7 @@ The superior performance of optimised KNN over Random Forest warrants explanatio
 
 4. **Local Decision Making:** KNN's instance-based approach captures local patterns that may be lost in Random Forest's global tree structure.
 
-### 5.5.5 Computational Considerations (Md Sohel Rana - TP087437)
+### 5.5.5 Computational Considerations (Md Sohel Rana - TP086217)
 
 While KNN achieved the best performance, it has computational trade-offs:
 
@@ -1042,14 +1042,14 @@ While KNN achieved the best performance, it has computational trade-offs:
 - Apply approximate nearest neighbour algorithms
 - Implement instance reduction techniques
 
-### 5.5.6 Recommendations (Md Sohel Rana - TP087437)
+### 5.5.6 Recommendations (Md Sohel Rana - TP086217)
 
 KNN is recommended as:
 1. The primary classifier when detection accuracy is paramount
 2. A second-stage classifier for cases flagged as borderline by faster methods
 3. A benchmark for evaluating other classifiers' ability to capture local patterns
 
-**Optimal Configuration (Md Sohel Rana - TP087437):**
+**Optimal Configuration (Md Sohel Rana - TP086217):**
 - k = 3 neighbours
 - Distance-weighted voting
 - Manhattan distance (p=1)
@@ -1062,7 +1062,7 @@ KNN is recommended as:
 
 # CHAPTER 6: CONCLUSIONS AND RECOMMENDATIONS
 
-**Contributors:** Muhammad Usama Fazal (TP086008), Imran Shahadat Noble (TP087895), Md Sohel Rana (TP087437)
+**Contributors:** Muhammad Usama Fazal (TP086008), Imran Shahadat Noble (TP087895), Md Sohel Rana (TP086217)
 
 ## 6.1 Summary of Findings
 
@@ -1074,7 +1074,7 @@ This study evaluated three machine learning classifiers for multi-class network 
 
 | Rank | Classifier | Author | Category | MCC | Accuracy | Key Strength |
 |------|------------|--------|----------|-----|----------|--------------|
-| **1st** | KNN | **Md Sohel Rana (TP087437)** | Non-Linear | 0.816 | 87.5% | Best overall balance, highest accuracy |
+| **1st** | KNN | **Md Sohel Rana (TP086217)** | Non-Linear | 0.816 | 87.5% | Best overall balance, highest accuracy |
 | **2nd** | Random Forest | **Imran Shahadat Noble (TP087895)** | Ensemble | 0.810 | 86.8% | Fastest training, best DoS/Probe detection |
 | **3rd** | LDA | **Muhammad Usama Fazal (TP086008)** | Linear | 0.671 | 77.5% | Fast prediction, interpretable |
 
@@ -1108,17 +1108,17 @@ This study evaluated three machine learning classifiers for multi-class network 
 
 | Attack Class | Best Classifier | Author | MCC | Notes |
 |--------------|-----------------|--------|-----|-------|
-| Benign | KNN | Md Sohel Rana (TP087437) | 0.786 | All models perform reasonably well |
+| Benign | KNN | Md Sohel Rana (TP086217) | 0.786 | All models perform reasonably well |
 | DoS | Random Forest | Imran Shahadat Noble (TP087895) | 0.984 | Excellent detection, large training sample |
 | Probe | Random Forest | Imran Shahadat Noble (TP087895) | 0.911 | Strong detection across all models |
-| R2L | KNN | Md Sohel Rana (TP087437) | 0.567 | Challenging due to distribution shift |
+| R2L | KNN | Md Sohel Rana (TP086217) | 0.567 | Challenging due to distribution shift |
 | U2R | Random Forest | Imran Shahadat Noble (TP087895) | 0.847 | Class weighting helps despite tiny sample |
 
 ## 6.2 Recommendations for Production Deployment
 
 ### 6.2.1 Primary Recommendation
 
-For network intrusion detection systems prioritising detection accuracy, **K-Nearest Neighbors (Md Sohel Rana - TP087437) with the following configuration** is recommended:
+For network intrusion detection systems prioritising detection accuracy, **K-Nearest Neighbors (Md Sohel Rana - TP086217) with the following configuration** is recommended:
 
 ```
 KNN Configuration:
@@ -1190,13 +1190,13 @@ For maximum coverage, consider a voting ensemble:
 
 ## 6.4 Concluding Remarks
 
-This study demonstrates that machine learning provides effective tools for multi-class network intrusion detection. The optimised KNN classifier (Md Sohel Rana - TP087437) achieving MCC of 0.816 represents strong performance suitable for practical deployment, successfully distinguishing between benign traffic and four attack categories.
+This study demonstrates that machine learning provides effective tools for multi-class network intrusion detection. The optimised KNN classifier (Md Sohel Rana - TP086217) achieving MCC of 0.816 represents strong performance suitable for practical deployment, successfully distinguishing between benign traffic and four attack categories.
 
 The varying responses to optimisation across algorithms highlight the importance of algorithm-specific tuning strategies rather than one-size-fits-all approaches. Feature selection proved universally beneficial, reducing dimensionality by 70-75% while maintaining or improving performance.
 
 The selection of classifiers from different algorithmic categories (linear, non-linear, and ensemble methods) ensures comprehensive coverage of available methodologies and provides insights into their relative strengths for cybersecurity applications.
 
-**Final Recommendation:** Deploy KNN (Md Sohel Rana - TP087437) for maximum accuracy, or Random Forest (Imran Shahadat Noble - TP087895) for balanced performance with faster training. Consider an ensemble approach for production systems requiring the highest possible detection rates across all attack categories.
+**Final Recommendation:** Deploy KNN (Md Sohel Rana - TP086217) for maximum accuracy, or Random Forest (Imran Shahadat Noble - TP087895) for balanced performance with faster training. Consider an ensemble approach for production systems requiring the highest possible detection rates across all attack categories.
 
 ---
 
@@ -1546,14 +1546,14 @@ with open('../results/ensemble_rf_results.json', 'w') as f:
     json.dump(results_dict, f, indent=2, default=str)
 ```
 
-### A.3 Non-Linear Classifier Code (Md Sohel Rana - TP087437)
+### A.3 Non-Linear Classifier Code (Md Sohel Rana - TP086217)
 
 **Notebook:** `03_NonLinear_Classifier.ipynb`
 
 ```python
 # ============================================================
 # INDIVIDUAL ASSIGNMENT: NON-LINEAR CLASSIFIER
-# Author: Md Sohel Rana (TP087437)
+# Author: Md Sohel Rana (TP086217)
 # Classifier Category: Non-Linear
 # Algorithms: KNN, Decision Tree, SVM-RBF
 # ============================================================
@@ -1685,7 +1685,7 @@ optimised_metrics = {
 # Save Results
 results_dict = {
     'classifier': 'K-Nearest Neighbors',
-    'author': 'Md Sohel Rana (TP087437)',
+    'author': 'Md Sohel Rana (TP086217)',
     'category': 'Non-Linear',
     'baseline_metrics': knn_metrics,
     'optimised_metrics': optimised_metrics,
@@ -1734,7 +1734,7 @@ with open('../results/nonlinear_knn_results.json', 'w') as f:
 | 9 | 100 | 20 | 5 | 2 | 0.9918 | No |
 | 10 | 150 | 20 | 5 | 2 | 0.9916 | No |
 
-### B.3 KNN Hyperparameter Tuning (Md Sohel Rana - TP087437)
+### B.3 KNN Hyperparameter Tuning (Md Sohel Rana - TP086217)
 
 **GridSearchCV Results (16 combinations, 3-fold CV):**
 
@@ -1800,7 +1800,7 @@ The following figures are generated from the Group Comparison notebook and indiv
 
 ![RF Confusion Matrix](../../figures/ensemble_confusion_matrices.png)
 
-**KNN Optimised Confusion Matrix (Md Sohel Rana - TP087437):**
+**KNN Optimised Confusion Matrix (Md Sohel Rana - TP086217):**
 
 ![KNN Confusion Matrix](../../figures/nonlinear_confusion_matrices.png)
 
@@ -1843,7 +1843,7 @@ All numerical results are saved in the `results/` directory:
 |------|--------|----------|
 | linear_lda_results.json | Muhammad Usama Fazal (TP086008) | LDA optimisation results |
 | ensemble_rf_results.json | Imran Shahadat Noble (TP087895) | Random Forest optimisation results |
-| nonlinear_knn_results.json | Md Sohel Rana (TP087437) | KNN optimisation results |
+| nonlinear_knn_results.json | Md Sohel Rana (TP086217) | KNN optimisation results |
 | group_comparison_results.json | Group | Final comparative analysis |
 | group_model_comparison.csv | Group | Model comparison table |
 | group_mcc_per_class.csv | Group | MCC per attack class table |
@@ -1861,6 +1861,6 @@ All numerical results are saved in the `results/` directory:
 **Authors:**
 - Muhammad Usama Fazal (TP086008) - Linear Classifier (LDA)
 - Imran Shahadat Noble (TP087895) - Ensemble Classifier (Random Forest)
-- Md Sohel Rana (TP087437) - Non-Linear Classifier (KNN)
+- Md Sohel Rana (TP086217) - Non-Linear Classifier (KNN)
 
 **Page Count:** Approximately 45-50 pages when formatted with 12pt font and 1.5 line spacing
