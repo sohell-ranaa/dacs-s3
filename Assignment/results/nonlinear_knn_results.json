@@ -1,7 +1,6 @@
 {
   "classifier": "K-Nearest Neighbors",
   "category": "Non-Linear",
-  "member": "Md Sohel Rana (TP087437)",
   "classification_type": "multi-class",
   "classes": [
     "benign",
@@ -13,56 +12,56 @@
   "baseline_comparison": [
     {
       "Algorithm": "KNN",
-      "accuracy": 0.836941,
-      "f1_weighted": 0.811963,
-      "f1_macro": 0.756495,
-      "mcc": 0.760186,
-      "train_time": 7.91996
+      "Accuracy": 0.8369410929737402,
+      "F1 (Weighted)": 0.8119629596819908,
+      "F1 (Macro)": 0.7564950888647546,
+      "MCC": 0.7601862969346245,
+      "Train Time (s)": 6.200249910354614
     },
     {
       "Algorithm": "Decision Tree",
-      "accuracy": 0.83357,
-      "f1_weighted": 0.812024,
-      "f1_macro": 0.708941,
-      "mcc": 0.754873,
-      "train_time": 0.878403
+      "Accuracy": 0.8335699077359829,
+      "F1 (Weighted)": 0.8120242713428636,
+      "F1 (Macro)": 0.7089411311390699,
+      "MCC": 0.7548731889349052,
+      "Train Time (s)": 0.7645266056060791
     },
     {
       "Algorithm": "SVM-RBF",
-      "accuracy": 0.842929,
-      "f1_weighted": 0.837349,
-      "f1_macro": 0.751024,
-      "mcc": 0.768514,
-      "train_time": 121.457353
+      "Accuracy": 0.8429293825408091,
+      "F1 (Weighted)": 0.8373492827782578,
+      "F1 (Macro)": 0.7510241166966419,
+      "MCC": 0.7685135858348214,
+      "Train Time (s)": 116.85110855102539
     }
   ],
   "baseline_metrics": {
-    "accuracy": 0.836941,
-    "f1_weighted": 0.811963,
-    "f1_macro": 0.756495,
-    "mcc": 0.760186,
-    "train_time": 7.91996
+    "accuracy": 0.8369410929737402,
+    "f1_weighted": 0.8119629596819908,
+    "f1_macro": 0.7564950888647546,
+    "mcc": 0.7601862969346245,
+    "train_time": 6.200249910354614
   },
   "optimised_metrics": {
-    "accuracy": 0.875177,
-    "f1_weighted": 0.865478,
-    "f1_macro": 0.770056,
-    "mcc": 0.816059,
-    "train_time": 19.474568
+    "accuracy": 0.8751774308019872,
+    "f1_weighted": 0.8654778429406811,
+    "f1_macro": 0.7700555887432005,
+    "mcc": 0.8160588737870642,
+    "train_time": 18.167392253875732
   },
   "baseline_mcc_per_class": {
-    "benign": 0.712995,
-    "dos": 0.936211,
-    "probe": 0.796488,
-    "r2l": 0.348606,
-    "u2r": 0.862762
+    "benign": 0.7129948126501047,
+    "dos": 0.9362110761292329,
+    "probe": 0.7964876984858367,
+    "r2l": 0.3486061639355964,
+    "u2r": 0.8627620380617838
   },
   "optimised_mcc_per_class": {
-    "benign": 0.786147,
-    "dos": 0.945974,
-    "probe": 0.850358,
-    "r2l": 0.567363,
-    "u2r": 0.571958
+    "benign": 0.7861474164855426,
+    "dos": 0.9459736590893898,
+    "probe": 0.8503583429067464,
+    "r2l": 0.5673633725878119,
+    "u2r": 0.5719575067147805
   },
   "optimisation_strategies": [
     "Hyperparameter Tuning",
@@ -70,8 +69,8 @@
   ],
   "best_params": {
     "algorithm": "auto",
-    "n_neighbors": 3,
-    "p": 1,
+    "n_neighbors": "3",
+    "p": "1",
     "weights": "distance"
   },
   "n_features_original": 122,
