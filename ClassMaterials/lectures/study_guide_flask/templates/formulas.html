@@ -58,6 +58,30 @@
         }
         .podcast-banner audio { width: 100%; }
     }
+    @media (max-width: 400px) {
+        .podcast-banner {
+            display: block;
+            padding: 0.5rem;
+        }
+        .podcast-banner > div:first-child {
+            margin-bottom: 0.5rem;
+        }
+        .podcast-banner h3 { font-size: 0.95rem; }
+        .podcast-banner p { font-size: 0.7rem; }
+        .podcast-banner audio {
+            display: block;
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 40px;
+        }
+        .generate-btn {
+            display: block;
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+    }
 </style>
 {% endblock %}
 

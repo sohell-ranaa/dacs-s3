@@ -23,12 +23,15 @@
         background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
         padding: 0.5rem 0.75rem;
         border-radius: 0.5rem;
-        flex-shrink: 0;
+        flex-shrink: 1;
+        min-width: 0;
+        overflow: visible;
     }
     .mini-player audio {
         height: 36px;
-        width: 200px;
+        width: 100%;
         max-width: 280px;
+        min-width: 150px;
         border-radius: 4px;
     }
     .mini-btn {
@@ -61,6 +64,35 @@
             width: 100%;
             max-width: none;
             min-width: 0;
+        }
+    }
+    @media (max-width: 400px) {
+        .section-header {
+            display: block;
+        }
+        .section-header h2 {
+            min-width: auto;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .mini-player {
+            display: block;
+            width: 100%;
+            padding: 0.4rem;
+        }
+        .mini-player audio {
+            display: block;
+            height: 40px;
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
+        }
+        .mini-btn {
+            display: block;
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 0.8rem;
+            text-align: center;
         }
     }
 </style>
