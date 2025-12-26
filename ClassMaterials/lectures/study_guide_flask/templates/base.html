@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}DACS Study Guide{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="{{ url_for('index') }}" class="nav-brand">ML Study Guide</a>
+            <button class="nav-toggle" onclick="document.getElementById('navLinks').classList.toggle('show')">☰</button>
+            <div class="nav-links" id="navLinks">
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('definitions') }}">Definitions</a>
+                <a href="{{ url_for('formulas') }}">Formulas</a>
+                <a href="{{ url_for('practice') }}">Practice</a>
+                <a href="{{ url_for('quick_reference') }}">Quick Ref</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% block scripts %}{% endblock %}
+
+<script>
+// Single audio playback - stop others when one plays
+document.addEventListener('play', function(e) {
+    const audios = document.querySelectorAll('audio');
+    audios.forEach(audio => {
+        if (audio !== e.target) {
+            audio.pause();
+            audio.currentTime = 0;
+        }
+    });
+}, true);
+</script>
+</body>
+</html>

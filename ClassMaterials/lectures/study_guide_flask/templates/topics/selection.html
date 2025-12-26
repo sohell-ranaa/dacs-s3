@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block title %}Topic 8: Model Selection - DACS Study Guide{% endblock %}
+
+{% block nav_links %}
+<a href="{{ url_for('topic', slug='optimization') }}">Prev</a>
+{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{{ url_for('index') }}">Home</a> &gt; <span>Topic 8: Model Selection</span>
+</div>
+
+<div class="hero" style="background: linear-gradient(135deg, #0891b2, #06b6d4);">
+    <h1>Topic 8: Model Selection</h1>
+    <p>Statistical hypothesis testing and model comparison techniques</p>
+</div>
+
+<div class="section" id="hypothesis-testing">
+    <h2>Statistical Hypothesis Testing</h2>
+
+    <div class="key-concept">
+        <h4>Why Statistical Tests?</h4>
+        <p>Differences in performance might be <strong>by chance</strong>, not because one model is actually better.</p>
+        <p>Statistical tests determine if differences are <strong>significant</strong>.</p>
+    </div>
+
+    <h3>Null Hypothesis</h3>
+    <p>The null hypothesis states that two data samples were drawn from the same distribution (no real difference).</p>
+    <ul>
+        <li><strong>Cannot reject null:</strong> Observed difference happened by chance</li>
+        <li><strong>Reject null:</strong> Observed difference is real</li>
+    </ul>
+
+    <div class="formula-box">
+        <h4>P-Value and Significance</h4>
+        <p>If p-value < α (typically 0.05), reject null hypothesis.</p>
+        <p>Low p-value = significant difference between models.</p>
+    </div>
+</div>
+
+<div class="section" id="tests">
+    <h2>Statistical Tests for Model Comparison</h2>
+
+    <h3>McNemar's Test</h3>
+    <div class="key-concept">
+        <h4>When to Use</h4>
+        <p>Compare predictions of two models on the <strong>same</strong> test set.</p>
+        <p>Unique: Uses actual predictions, not derived metrics!</p>
+    </div>
+
+    <h3>5x2CV Paired Test</h3>
+    <div class="key-concept">
+        <h4>How It Works</h4>
+        <ol>
+            <li>Split data 50/50 into train/test</li>
+            <li>Train both models, compute accuracy difference</li>
+            <li>Swap train/test, compute difference again</li>
+            <li>Repeat 5 times with different random splits</li>
+            <li>Compute mean and variance of differences</li>
+        </ol>
+    </div>
+
+    <h3>Wilcoxon Signed-Rank Test</h3>
+    <div class="key-concept">
+        <h4>When to Use</h4>
+        <ul>
+            <li>Non-parametric version of paired t-test</li>
+            <li>Small sample size</li>
+            <li>Data doesn't follow normal distribution</li>
+        </ul>
+    </div>
+</div>
+
+<div class="section" id="comparison">
+    <h2>Test Comparison Summary</h2>
+
+    <table>
+        <thead>
+            <tr><th>Test</th><th>Uses</th><th>Distribution</th><th>Best For</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>McNemar's</strong></td>
+                <td>Actual predictions</td>
+                <td>Chi-squared</td>
+                <td>Quick comparison, single test set</td>
+            </tr>
+            <tr>
+                <td><strong>5x2cv t-test</strong></td>
+                <td>Accuracy differences</td>
+                <td>t-distribution</td>
+                <td>When computation time OK</td>
+            </tr>
+            <tr>
+                <td><strong>5x2cv f-test</strong></td>
+                <td>Accuracy differences</td>
+                <td>f-distribution</td>
+                <td>Most robust option</td>
+            </tr>
+            <tr>
+                <td><strong>Wilcoxon</strong></td>
+                <td>CV accuracy scores</td>
+                <td>Non-parametric</td>
+                <td>Small samples, non-normal data</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="section" id="quiz">
+    <h2>Self-Test Quiz</h2>
+    <form class="quiz-form">
+        <div class="quiz-question" data-answer="b">
+            <h4>1. What makes McNemar's test unique?</h4>
+            <div class="quiz-options">
+                <label><input type="radio" name="q1" value="a"> It uses accuracy scores</label>
+                <label><input type="radio" name="q1" value="b"> It uses actual predictions from models</label>
+                <label><input type="radio" name="q1" value="c"> It doesn't need any data</label>
+                <label><input type="radio" name="q1" value="d"> It's the fastest test</label>
+            </div>
+        </div>
+
+        <div class="quiz-question" data-answer="a">
+            <h4>2. If p-value < 0.05, we:</h4>
+            <div class="quiz-options">
+                <label><input type="radio" name="q2" value="a"> Reject null hypothesis - difference is significant</label>
+                <label><input type="radio" name="q2" value="b"> Accept null hypothesis - no difference</label>
+                <label><input type="radio" name="q2" value="c"> Need more data</label>
+                <label><input type="radio" name="q2" value="d"> Models are identical</label>
+            </div>
+        </div>
+
+        <div class="quiz-question" data-answer="c">
+            <h4>3. Wilcoxon test is best when:</h4>
+            <div class="quiz-options">
+                <label><input type="radio" name="q3" value="a"> Data is normally distributed</label>
+                <label><input type="radio" name="q3" value="b"> You have very large datasets</label>
+                <label><input type="radio" name="q3" value="c"> Small samples and non-normal data</label>
+                <label><input type="radio" name="q3" value="d"> Only comparing neural networks</label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn">Check Answers</button>
+    </form>
+</div>
+
+<div class="section">
+    <h2>Key Takeaways</h2>
+    <div class="key-concept">
+        <h4>Remember These Points</h4>
+        <ul>
+            <li>Performance differences might be by chance - use statistical tests!</li>
+            <li>Null hypothesis: models perform the same</li>
+            <li>p-value < 0.05 → reject null → significant difference</li>
+            <li>McNemar: uses predictions, chi-squared distribution</li>
+            <li>5x2cv: more powerful, 10x more computation</li>
+            <li>Wilcoxon: non-parametric, good for small/non-normal data</li>
+            <li>Always use same random_state for fair comparison</li>
+        </ul>
+    </div>
+</div>
+
+<div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+    <a href="{{ url_for('topic', slug='optimization') }}" class="btn">Previous: Optimization</a>
+    <a href="{{ url_for('quick_reference') }}" class="btn">Quick Reference</a>
+</div>
+{% endblock %}

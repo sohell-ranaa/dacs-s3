@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block title %}Professor Tips - DACS Study Guide{% endblock %}
+
+{% block extra_head %}
+<style>
+    .hero {
+        background: linear-gradient(135deg, #dc2626, #ea580c);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .tips-container {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .tip-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tip-card.high {
+        border-left: 4px solid #dc2626;
+    }
+
+    .tip-card.medium {
+        border-left: 4px solid #f59e0b;
+    }
+
+    .priority-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .priority-badge.high {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .priority-badge.medium {
+        background: #fef3c7;
+        color: #d97706;
+    }
+
+    .tip-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        padding-right: 80px;
+    }
+
+    .tip-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .tip-source {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+    }
+
+    .tip-source span {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .tip-details {
+        background: #f8fafc;
+        padding: 1rem;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .slide-link {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+        background: var(--primary-color);
+        color: white;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        text-decoration: none;
+    }
+
+    .slide-link:hover {
+        background: #1d4ed8;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 2rem 0 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .section-header h2 {
+        margin: 0;
+    }
+
+    .count-badge {
+        background: var(--primary-color);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+    }
+
+    .summary-box {
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+    }
+
+    .summary-box h3 {
+        color: #92400e;
+        margin-bottom: 1rem;
+    }
+
+    .summary-box ul {
+        margin: 0;
+        padding-left: 1.5rem;
+    }
+
+    .summary-box li {
+        margin-bottom: 0.5rem;
+        color: #78350f;
+    }
+</style>
+{% endblock %}
+
+{% block nav_links %}
+<a href="{{ url_for('exam_practice') }}">Exam Practice</a>
+{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Professor Tips & Exam Hints</h1>
+    <p>Key concepts and hints extracted from lecture recordings</p>
+</div>
+
+<div class="summary-box">
+    <h3>Study Strategy</h3>
+    <ul>
+        <li><strong>HIGH priority tips</strong> - Concepts explicitly mentioned as likely test topics</li>
+        <li><strong>MEDIUM priority tips</strong> - Important concepts emphasized in lectures</li>
+        <li>Each tip is mapped to the specific slide/lecture for review</li>
+        <li>Focus on understanding concepts - no complex calculations required</li>
+    </ul>
+</div>
+
+<div class="section-header">
+    <h2>High Priority Tips</h2>
+    <span class="count-badge">{{ high_tips|length }} tips</span>
+</div>
+
+<div class="tips-container">
+    {% for tip in high_tips %}
+    <div class="tip-card high">
+        <span class="priority-badge high">HIGH</span>
+        <div class="tip-header">
+            <div class="tip-title">{{ tip.tip }}</div>
+            <div class="tip-source">
+                <span>Slide: {{ tip.slide }}</span>
+                <span>Source: {{ tip.source }}</span>
+            </div>
+        </div>
+        <div class="tip-details">
+            {{ tip.details }}
+        </div>
+        <a href="{{ url_for('topic', slug=tip.topic) }}" class="slide-link">
+            Study this topic
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="section-header">
+    <h2>Medium Priority Tips</h2>
+    <span class="count-badge">{{ medium_tips|length }} tips</span>
+</div>
+
+<div class="tips-container">
+    {% for tip in medium_tips %}
+    <div class="tip-card medium">
+        <span class="priority-badge medium">MEDIUM</span>
+        <div class="tip-header">
+            <div class="tip-title">{{ tip.tip }}</div>
+            <div class="tip-source">
+                <span>Slide: {{ tip.slide }}</span>
+                <span>Source: {{ tip.source }}</span>
+            </div>
+        </div>
+        <div class="tip-details">
+            {{ tip.details }}
+        </div>
+        <a href="{{ url_for('topic', slug=tip.topic) }}" class="slide-link">
+            Study this topic
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+<div style="text-align: center; margin-top: 2rem; padding: 2rem; background: #f0fdf4; border-radius: 12px;">
+    <h3>Ready to practice?</h3>
+    <p>Test your knowledge with written exam practice questions.</p>
+    <a href="{{ url_for('exam_practice') }}" class="btn" style="margin-top: 1rem;">Go to Exam Practice</a>
+</div>
+{% endblock %}

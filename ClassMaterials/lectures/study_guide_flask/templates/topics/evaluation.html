@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}Topic 5: Performance Evaluation - DACS Study Guide{% endblock %}
+
+{% block nav_links %}
+<a href="{{ url_for('topic', slug='preprocessing') }}">Prev</a>
+<a href="{{ url_for('topic', slug='algorithms') }}">Next</a>
+{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{{ url_for('index') }}">Home</a> &gt; <span>Topic 5: Performance Evaluation</span>
+</div>
+
+<div class="hero" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+    <h1>Topic 5: Performance Evaluation</h1>
+    <p>Confusion matrix, precision, recall, F1, ROC curves, and cross-validation</p>
+</div>
+
+<div class="section" id="confusion-matrix">
+    <h2>Confusion Matrix</h2>
+
+    <div class="diagram">
+        <svg width="500" height="280" viewBox="0 0 500 280">
+            <text x="250" y="30" text-anchor="middle" fill="#1e293b" font-weight="bold" font-size="16">Confusion Matrix</text>
+            <text x="300" y="60" text-anchor="middle" fill="#64748b" font-size="12">Predicted</text>
+
+            <text x="100" y="120" text-anchor="middle" fill="#64748b" font-size="12" transform="rotate(-90 100 120)">Actual</text>
+
+            <text x="200" y="80" text-anchor="middle" fill="#1e293b" font-size="11">Positive</text>
+            <text x="320" y="80" text-anchor="middle" fill="#1e293b" font-size="11">Negative</text>
+            <text x="120" y="140" text-anchor="middle" fill="#1e293b" font-size="11">Positive</text>
+            <text x="120" y="210" text-anchor="middle" fill="#1e293b" font-size="11">Negative</text>
+
+            <rect x="150" y="100" width="100" height="70" fill="#22c55e" stroke="#166534"/>
+            <text x="200" y="130" text-anchor="middle" fill="white" font-weight="bold">TP</text>
+            <text x="200" y="150" text-anchor="middle" fill="white" font-size="10">True Positive</text>
+
+            <rect x="270" y="100" width="100" height="70" fill="#f97316" stroke="#c2410c"/>
+            <text x="320" y="130" text-anchor="middle" fill="white" font-weight="bold">FN</text>
+            <text x="320" y="150" text-anchor="middle" fill="white" font-size="10">Type II Error</text>
+
+            <rect x="150" y="180" width="100" height="70" fill="#ef4444" stroke="#b91c1c"/>
+            <text x="200" y="210" text-anchor="middle" fill="white" font-weight="bold">FP</text>
+            <text x="200" y="230" text-anchor="middle" fill="white" font-size="10">Type I Error</text>
+
+            <rect x="270" y="180" width="100" height="70" fill="#22c55e" stroke="#166534"/>
+            <text x="320" y="210" text-anchor="middle" fill="white" font-weight="bold">TN</text>
+            <text x="320" y="230" text-anchor="middle" fill="white" font-size="10">True Negative</text>
+        </svg>
+    </div>
+
+    <div class="key-concept">
+        <h4>Key Terms</h4>
+        <ul>
+            <li><strong>TP (True Positive):</strong> Correctly predicted positive</li>
+            <li><strong>TN (True Negative):</strong> Correctly predicted negative</li>
+            <li><strong>FP (False Positive):</strong> Type I Error - predicted positive but actually negative</li>
+            <li><strong>FN (False Negative):</strong> Type II Error - predicted negative but actually positive</li>
+        </ul>
+    </div>
+</div>
+
+<div class="section" id="metrics">
+    <h2>Performance Metrics</h2>
+
+    <div class="formula-box">
+        <h4>Accuracy</h4>
+        <div class="formula">\[ Accuracy = \frac{TP + TN}{TP + TN + FP + FN} \]</div>
+        <p>Overall correctness - can be misleading with imbalanced data!</p>
+    </div>
+
+    <div class="formula-box">
+        <h4>Precision</h4>
+        <div class="formula">\[ Precision = \frac{TP}{TP + FP} \]</div>
+        <p>Of all positive predictions, how many were correct? (minimize FP)</p>
+    </div>
+
+    <div class="formula-box">
+        <h4>Recall (Sensitivity)</h4>
+        <div class="formula">\[ Recall = \frac{TP}{TP + FN} \]</div>
+        <p>Of all actual positives, how many did we find? (minimize FN)</p>
+    </div>
+
+    <div class="formula-box">
+        <h4>F1 Score</h4>
+        <div class="formula">\[ F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall} \]</div>
+        <p>Harmonic mean - balances precision and recall</p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Precision vs Recall Trade-off</h4>
+        <p>Increasing one typically decreases the other. Choose based on your application:</p>
+        <ul>
+            <li><strong>High Precision:</strong> Spam detection (don't want to lose important emails)</li>
+            <li><strong>High Recall:</strong> Disease detection (don't want to miss any cases)</li>
+        </ul>
+    </div>
+</div>
+
+<div class="section" id="roc">
+    <h2>ROC Curve and AUC</h2>
+
+    <div class="key-concept">
+        <h4>ROC Curve</h4>
+        <ul>
+            <li><strong>X-axis:</strong> False Positive Rate (FPR) = FP / (FP + TN)</li>
+            <li><strong>Y-axis:</strong> True Positive Rate (TPR) = TP / (TP + FN) = Recall</li>
+            <li><strong>Perfect model:</strong> Top-left corner (0,1)</li>
+            <li><strong>Random guess:</strong> Diagonal line</li>
+        </ul>
+    </div>
+
+    <div class="key-concept">
+        <h4>AUC (Area Under Curve)</h4>
+        <ul>
+            <li>AUC = 1.0: Perfect classifier</li>
+            <li>AUC = 0.5: Random classifier (no skill)</li>
+            <li>AUC > 0.7: Generally acceptable</li>
+            <li>AUC > 0.9: Excellent</li>
+        </ul>
+    </div>
+</div>
+
+<div class="section" id="cross-validation">
+    <h2>Cross-Validation</h2>
+
+    <div class="key-concept">
+        <h4>K-Fold Cross-Validation</h4>
+        <ol>
+            <li>Split data into K equal folds</li>
+            <li>Train on K-1 folds, test on remaining 1 fold</li>
+            <li>Repeat K times (each fold becomes test set once)</li>
+            <li>Average the results</li>
+        </ol>
+        <p>Common values: K=5 or K=10</p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Why Cross-Validation?</h4>
+        <p>Single train/test split may give optimistic results by chance. Cross-validation gives more reliable performance estimates.</p>
+    </div>
+</div>
+
+<div class="section" id="quiz">
+    <h2>Self-Test Quiz</h2>
+    <form class="quiz-form">
+        <div class="quiz-question" data-answer="b">
+            <h4>1. Which metric is best when you want to minimize false positives?</h4>
+            <div class="quiz-options">
+                <label><input type="radio" name="q1" value="a"> Recall</label>
+                <label><input type="radio" name="q1" value="b"> Precision</label>
+                <label><input type="radio" name="q1" value="c"> Accuracy</label>
+                <label><input type="radio" name="q1" value="d"> F1 Score</label>
+            </div>
+        </div>
+
+        <div class="quiz-question" data-answer="c">
+            <h4>2. For disease detection, which metric is most important?</h4>
+            <div class="quiz-options">
+                <label><input type="radio" name="q2" value="a"> Precision</label>
+                <label><input type="radio" name="q2" value="b"> Accuracy</label>
+                <label><input type="radio" name="q2" value="c"> Recall</label>
+                <label><input type="radio" name="q2" value="d"> Specificity</label>
+            </div>
+        </div>
+
+        <div class="quiz-question" data-answer="a">
+            <h4>3. In K-fold cross-validation with K=5:</h4>
+            <div class="quiz-options">
+                <label><input type="radio" name="q3" value="a"> Each fold is used as test set exactly once</label>
+                <label><input type="radio" name="q3" value="b"> Only one fold is ever used for testing</label>
+                <label><input type="radio" name="q3" value="c"> Data is split 50/50</label>
+                <label><input type="radio" name="q3" value="d"> We train 50 models</label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn">Check Answers</button>
+    </form>
+</div>
+
+<div class="section">
+    <h2>Key Takeaways</h2>
+    <div class="key-concept">
+        <h4>Remember These Points</h4>
+        <ul>
+            <li>Confusion Matrix: TP, TN, FP (Type I), FN (Type II)</li>
+            <li>Accuracy can be misleading with imbalanced data</li>
+            <li>Precision: TP/(TP+FP) - minimize false positives</li>
+            <li>Recall: TP/(TP+FN) - minimize false negatives</li>
+            <li>F1: Harmonic mean of precision and recall</li>
+            <li>ROC: TPR vs FPR, top-left is perfect</li>
+            <li>K-fold CV: More reliable than single split</li>
+        </ul>
+    </div>
+</div>
+
+<div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+    <a href="{{ url_for('topic', slug='preprocessing') }}" class="btn">Previous: Preprocessing</a>
+    <a href="{{ url_for('topic', slug='algorithms') }}" class="btn">Next: ML Algorithms</a>
+</div>
+{% endblock %}

@@ -1,0 +1,593 @@
+/* ============================================
+   DACS ML Study Guide - Clean Design System
+   Mobile-First, Definition & Math Focused
+   ============================================ */
+
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --bg: #ffffff;
+    --bg-alt: #f8fafc;
+    --text: #1e293b;
+    --text-light: #64748b;
+    --text-muted: #94a3b8;
+    --border: #e2e8f0;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg-alt);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 16px;
+}
+
+/* Typography */
+h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+h2 { font-size: 1.35rem; font-weight: 600; margin-bottom: 0.5rem; }
+h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+p { margin-bottom: 1rem; }
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Container */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+@media (min-width: 640px) {
+    .container { padding: 1.5rem; }
+    h1 { font-size: 2rem; }
+}
+
+/* ============================================
+   Navigation - Simple & Clean
+   ============================================ */
+.nav {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand {
+    font-weight: 700;
+    color: var(--text);
+    font-size: 1rem;
+}
+
+.nav-links {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.nav-links a {
+    padding: 0.5rem 0.75rem;
+    color: var(--text-light);
+    font-size: 0.875rem;
+    border-radius: 6px;
+}
+
+.nav-links a:hover, .nav-links a.active {
+    background: var(--bg-alt);
+    color: var(--text);
+    text-decoration: none;
+}
+
+.nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+@media (max-width: 600px) {
+    .nav-toggle { display: block; }
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        flex-direction: column;
+        padding: 0.5rem;
+    }
+    .nav-links.show { display: flex; }
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.btn:hover {
+    background: var(--primary-dark);
+    text-decoration: none;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--border);
+    color: var(--text);
+}
+
+.btn-outline:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: transparent;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+}
+
+.btn-block { width: 100%; justify-content: center; }
+
+/* ============================================
+   Cards
+   ============================================ */
+.card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+/* ============================================
+   DEFINITION CARDS - Primary Component
+   ============================================ */
+.def {
+    background: var(--bg);
+    border-left: 4px solid var(--primary);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: 0 8px 8px 0;
+    box-shadow: var(--shadow);
+}
+
+.def-term {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 1.05rem;
+    margin-bottom: 0.25rem;
+}
+
+.def-meaning {
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+.def-example {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed var(--border);
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+/* Definition grid */
+.def-grid {
+    display: grid;
+    gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+    .def-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ============================================
+   FORMULA CARDS - Math Emphasis
+   ============================================ */
+.formula {
+    background: linear-gradient(135deg, #1e3a5f, #2563eb);
+    color: white;
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.formula-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.8;
+    margin-bottom: 0.5rem;
+}
+
+.formula-math {
+    font-size: 1.1rem;
+    padding: 0.75rem;
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.formula-note {
+    font-size: 0.8rem;
+    opacity: 0.85;
+}
+
+/* Formula grid */
+.formula-grid {
+    display: grid;
+    gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+    .formula-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Inline formula */
+.math {
+    display: inline-block;
+    background: #f1f5f9;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'Cambria Math', Georgia, serif;
+}
+
+/* ============================================
+   Step Progress - Guided Navigation
+   ============================================ */
+.steps {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    flex: 1;
+    text-decoration: none;
+    color: var(--text-muted);
+}
+
+.step-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+}
+
+.step-label {
+    font-size: 0.7rem;
+    text-align: center;
+    display: none;
+}
+
+@media (min-width: 500px) {
+    .step-label { display: block; }
+}
+
+.step.active .step-num {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.step.done .step-num {
+    background: var(--success);
+    border-color: var(--success);
+    color: white;
+}
+
+/* ============================================
+   Topic Navigation
+   ============================================ */
+.topic-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg-alt);
+    border-radius: var(--radius);
+    margin: 1.5rem 0;
+}
+
+.topic-nav a {
+    padding: 0.75rem 1rem;
+    background: var(--bg);
+    border-radius: 8px;
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+
+.topic-nav a:hover {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+/* ============================================
+   Quiz
+   ============================================ */
+.quiz-q {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.quiz-q-num {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.quiz-q-text {
+    font-size: 1.05rem;
+    font-weight: 500;
+    margin: 0.5rem 0 1rem;
+}
+
+.quiz-opts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.quiz-opt {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    background: var(--bg-alt);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quiz-opt:hover { background: #f1f5f9; }
+.quiz-opt.selected { border-color: var(--primary); background: #eff6ff; }
+.quiz-opt.correct { border-color: var(--success); background: #ecfdf5; }
+.quiz-opt.wrong { border-color: var(--danger); background: #fef2f2; }
+
+.quiz-opt input { display: none; }
+
+.quiz-opt-letter {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.quiz-opt.selected .quiz-opt-letter { background: var(--primary); color: white; }
+.quiz-opt.correct .quiz-opt-letter { background: var(--success); color: white; }
+.quiz-opt.wrong .quiz-opt-letter { background: var(--danger); color: white; }
+
+/* ============================================
+   Tips & Alerts
+   ============================================ */
+.tip {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border-left: 4px solid;
+}
+
+.tip-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.tip-info { background: #eff6ff; border-color: var(--primary); }
+.tip-warn { background: #fffbeb; border-color: var(--warning); }
+.tip-ok { background: #ecfdf5; border-color: var(--success); }
+.tip-bad { background: #fef2f2; border-color: var(--danger); }
+
+/* ============================================
+   Tables
+   ============================================ */
+.table-wrap {
+    overflow-x: auto;
+    margin-bottom: 1rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+th {
+    background: var(--bg-alt);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-light);
+}
+
+/* ============================================
+   Hero
+   ============================================ */
+.hero {
+    background: linear-gradient(135deg, #1e3a5f, #2563eb);
+    color: white;
+    padding: 2rem 1.5rem;
+    border-radius: var(--radius);
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.hero h1 { color: white; }
+.hero p { opacity: 0.9; margin-bottom: 0; }
+
+/* ============================================
+   Section
+   ============================================ */
+.section {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.section h2 {
+    color: var(--primary);
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 1rem;
+}
+
+/* ============================================
+   Badges
+   ============================================ */
+.badge {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.badge-primary { background: #eff6ff; color: var(--primary); }
+.badge-success { background: #ecfdf5; color: var(--success); }
+.badge-warn { background: #fffbeb; color: #b45309; }
+.badge-danger { background: #fef2f2; color: var(--danger); }
+
+/* ============================================
+   Grid
+   ============================================ */
+.grid { display: grid; gap: 1rem; }
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+
+/* ============================================
+   Utilities
+   ============================================ */
+.text-center { text-align: center; }
+.text-muted { color: var(--text-light); }
+.text-sm { font-size: 0.875rem; }
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+
+/* Lists */
+ul, ol { margin: 1rem 0; padding-left: 1.5rem; }
+li { margin: 0.35rem 0; }
+
+/* Hidden */
+.hidden { display: none !important; }
+
+/* ============================================
+   Topic Cards - Home Page
+   ============================================ */
+.topic-card {
+    display: block;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s;
+}
+
+.topic-card:hover {
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    text-decoration: none;
+}
+
+.topic-card-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+.topic-card h3 {
+    color: var(--text);
+    margin-bottom: 0.25rem;
+}
+
+.topic-card p {
+    color: var(--text-light);
+    font-size: 0.85rem;
+    margin-bottom: 0;
+}
+
+/* ============================================
+   Print
+   ============================================ */
+@media print {
+    .nav, .topic-nav { display: none; }
+    body { background: white; }
+    .section { border: none; box-shadow: none; }
+}

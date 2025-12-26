@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+
+{% block title %}Topic 6: ML Algorithms - DACS Study Guide{% endblock %}
+
+{% block nav_links %}
+<a href="{{ url_for('topic', slug='evaluation') }}">Prev</a>
+<a href="{{ url_for('topic', slug='optimization') }}">Next</a>
+{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{{ url_for('index') }}">Home</a> &gt; <span>Topic 6: ML Algorithms</span>
+</div>
+
+<div class="hero" style="background: linear-gradient(135deg, #059669, #047857);">
+    <h1>Topic 6: ML Algorithms</h1>
+    <p>Linear models, SVM, decision trees, ensemble methods, and neural networks</p>
+</div>
+
+<div class="section" id="linear-models">
+    <h2>Linear Models</h2>
+
+    <h3>Linear Regression</h3>
+    <div class="formula-box">
+        <div class="formula">\[ y = a + bX \]</div>
+        <p>For continuous output prediction. Uses least squares to minimize error.</p>
+    </div>
+
+    <h3>Logistic Regression</h3>
+    <div class="key-concept">
+        <h4>Binary Classification</h4>
+        <p>Despite "regression" in name, used for classification. Outputs probability between 0 and 1 using sigmoid function.</p>
+        <p>Decision boundary: Predict 1 if probability > 0.5</p>
+    </div>
+
+    <h3>LDA (Linear Discriminant Analysis)</h3>
+    <div class="key-concept">
+        <h4>Dual Purpose</h4>
+        <ul>
+            <li>Classification: Finds linear boundary between classes</li>
+            <li>Dimensionality reduction: Projects data to lower dimensions</li>
+        </ul>
+        <p>Does NOT require feature scaling.</p>
+    </div>
+</div>
+
+<div class="section" id="svm">
+    <h2>Support Vector Machines (SVM)</h2>
+
+    <div class="key-concept">
+        <h4>Key Concepts</h4>
+        <ul>
+            <li><strong>Hyperplane:</strong> Decision boundary separating classes</li>
+            <li><strong>Support Vectors:</strong> Points closest to hyperplane that define margin</li>
+            <li><strong>Margin:</strong> Distance between hyperplane and support vectors</li>
+            <li><strong>Goal:</strong> Maximize margin for best generalization</li>
+        </ul>
+    </div>
+
+    <h3>Kernel Trick</h3>
+    <table>
+        <tr><th>Kernel</th><th>Use Case</th></tr>
+        <tr><td>Linear</td><td>Linearly separable data</td></tr>
+        <tr><td>Polynomial</td><td>Polynomial boundaries</td></tr>
+        <tr><td>RBF (Gaussian)</td><td>Complex, non-linear boundaries (most common)</td></tr>
+    </table>
+
+    <div class="warning-box">
+        <h4>Important</h4>
+        <p>SVM REQUIRES feature scaling (StandardScaler or MinMaxScaler).</p>
+    </div>
+</div>
+
+<div class="section" id="trees">
+    <h2>Decision Trees</h2>
+
+    <div class="key-concept">
+        <h4>How Decision Trees Work</h4>
+        <ul>
+            <li>Split data based on feature values</li>
+            <li>Creates if-then rules that are easy to interpret</li>
+            <li>Uses metrics like Gini impurity or Information Gain</li>
+        </ul>
+    </div>
+
+    <div class="warning-box">
+        <h4>Overfitting Problem</h4>
+        <p>Decision trees tend to overfit. Solutions:</p>
+        <ul>
+            <li>Limit max_depth</li>
+            <li>Use ensemble methods (Random Forest, Boosting)</li>
+        </ul>
+    </div>
+
+    <p><strong>Scaling NOT required</strong> for decision trees.</p>
+</div>
+
+<div class="section" id="ensemble">
+    <h2>Ensemble Methods</h2>
+
+    <h3>Bagging (Random Forest)</h3>
+    <div class="key-concept">
+        <h4>How It Works</h4>
+        <ul>
+            <li>Train multiple trees on different bootstrap samples</li>
+            <li>Each tree uses random subset of features</li>
+            <li>Final prediction: majority vote (classification) or average (regression)</li>
+            <li>Reduces variance and overfitting</li>
+        </ul>
+    </div>
+
+    <h3>Boosting (AdaBoost, Gradient Boosting)</h3>
+    <div class="key-concept">
+        <h4>How It Works</h4>
+        <ul>
+            <li>Train trees sequentially</li>
+            <li>Each tree focuses on errors of previous trees</li>
+            <li>Combines weak learners into strong learner</li>
+            <li>Often achieves highest accuracy</li>
+        </ul>
+    </div>
+
+    <table>
+        <thead>
+            <tr><th>Aspect</th><th>Bagging</th><th>Boosting</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Training</td><td>Parallel</td><td>Sequential</td></tr>
+            <tr><td>Focus</td><td>Reduce variance</td><td>Reduce bias</td></tr>
+            <tr><td>Overfitting</td><td>Less prone</td><td>Can overfit</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="section" id="other">
+    <h2>Other Algorithms</h2>
+
+    <h3>Naive Bayes</h3>
+    <ul>
+        <li>Based on Bayes' theorem</li>
+        <li>Assumes feature independence (naive assumption)</li>
+        <li>Very fast, good for text classification</li>
+        <li>Scaling NOT required</li>
+    </ul>
+
+    <h3>K-Nearest Neighbors (KNN)</h3>
+    <ul>
+        <li>Instance-based learning (no training phase)</li>
+        <li>Classifies based on K nearest neighbors</li>
+        <li>Scaling IS required (distance-based)</li>
+    </ul>
+
+    <h3>Neural Networks</h3>
+    <ul>
+        <li>Layers of interconnected neurons</li>
+        <li>Can learn complex patterns</li>
+        <li>Requires large datasets</li>
+        <li>Scaling IS required</li>
+    </ul>
+</div>
+
+<div class="section" id="summary">
+    <h2>Algorithm Summary Table</h2>
+    <table>
+        <thead>
+            <tr><th>Algorithm</th><th>Type</th><th>Best For</th><th>Scaling?</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Linear Regression</td><td>Linear</td><td>Continuous prediction</td><td>Yes</td></tr>
+            <tr><td>Logistic Regression</td><td>Linear</td><td>Binary classification</td><td>Yes</td></tr>
+            <tr><td>LDA</td><td>Linear</td><td>Classification + dim reduction</td><td>No</td></tr>
+            <tr><td>SVM</td><td>Linear/Kernel</td><td>High dimensions, clear margins</td><td>Yes</td></tr>
+            <tr><td>Naive Bayes</td><td>Non-linear</td><td>Text, real-time, fast</td><td>No</td></tr>
+            <tr><td>KNN</td><td>Non-linear</td><td>Small data, patterns</td><td>Yes</td></tr>
+            <tr><td>Decision Tree</td><td>Non-linear</td><td>Interpretable rules</td><td>No</td></tr>
+            <tr><td>Random Forest</td><td>Ensemble</td><td>Robust, general</td><td>No</td></tr>
+            <tr><td>Gradient Boosting</td><td>Ensemble</td><td>Highest accuracy</td><td>No</td></tr>
+            <tr><td>Neural Network</td><td>Deep Learning</td><td>Complex patterns</td><td>Yes</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="section" id="quiz">
+    <h2>Self-Test Quiz</h2>
+    <form class="quiz-form">
+        <div class="quiz-question" data-answer="c">
+            <h4>1. Support vectors are:</h4>
+            <div class="quiz-options">
+                <label><input type="radio" name="q1" value="a"> All data points</label>
+                <label><input type="radio" name="q1" value="b"> The hyperplane</label>
+                <label><input type="radio" name="q1" value="c"> Points closest to the decision boundary</label>
+                <label><input type="radio" name="q1" value="d"> Outliers only</label>
+            </div>
+        </div>
+
+        <div class="quiz-question" data-answer="b">
+            <h4>2. Random Forest reduces overfitting by:</h4>
+            <div class="quiz-options">
+                <label><input type="radio" name="q2" value="a"> Using only one tree</label>
+                <label><input type="radio" name="q2" value="b"> Training multiple trees on different samples</label>
+                <label><input type="radio" name="q2" value="c"> Removing all features</label>
+                <label><input type="radio" name="q2" value="d"> Increasing tree depth</label>
+            </div>
+        </div>
+
+        <div class="quiz-question" data-answer="a">
+            <h4>3. Which algorithm does NOT require scaling?</h4>
+            <div class="quiz-options">
+                <label><input type="radio" name="q3" value="a"> Decision Tree</label>
+                <label><input type="radio" name="q3" value="b"> SVM</label>
+                <label><input type="radio" name="q3" value="c"> KNN</label>
+                <label><input type="radio" name="q3" value="d"> Neural Network</label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn">Check Answers</button>
+    </form>
+</div>
+
+<div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+    <a href="{{ url_for('topic', slug='evaluation') }}" class="btn">Previous: Evaluation</a>
+    <a href="{{ url_for('topic', slug='optimization') }}" class="btn">Next: Optimization</a>
+</div>
+{% endblock %}

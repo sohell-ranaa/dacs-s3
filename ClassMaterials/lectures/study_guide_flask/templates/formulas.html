@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}Formulas - ML Study Guide{% endblock %}
+
+{% block head %}
+<style>
+    .podcast-banner {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border-radius: 1rem;
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 2rem;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    .podcast-banner h3 {
+        margin: 0;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .podcast-banner p {
+        margin: 0.25rem 0 0 0;
+        font-size: 0.85rem;
+        opacity: 0.9;
+    }
+    .podcast-banner audio {
+        height: 40px;
+        border-radius: 0.5rem;
+    }
+    .podcast-banner .generate-btn {
+        background: rgba(255,255,255,0.2);
+        color: white;
+        border: 1px solid rgba(255,255,255,0.3);
+        padding: 0.6rem 1.2rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+    .podcast-banner .generate-btn:hover {
+        background: rgba(255,255,255,0.3);
+    }
+    .podcast-banner .generate-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Formulas & Examples</h1>
+<p class="text-muted">All key formulas with worked examples</p>
+
+<!-- Podcast Player for Formulas -->
+<div class="podcast-banner" id="formulas-podcast">
+    <div>
+        <h3>Listen to Formula Explanations</h3>
+        <p>Two hosts walk through each formula with step-by-step examples</p>
+    </div>
+    <div id="player-formulas">
+        {% if podcast_exists %}
+        <audio controls preload="metadata">
+            <source src="{{ podcast_url }}" type="audio/mpeg">
+        </audio>
+        {% else %}
+        <button class="generate-btn" onclick="generatePodcast('formulas-all')">
+            Generate Audio (~2 min)
+        </button>
+        {% endif %}
+    </div>
+</div>
+
+{% for f in formulas %}
+<div class="section">
+    <div class="formula">
+        <div class="formula-label">{{ f.name }}</div>
+        <div class="formula-math">\[ {{ f.latex }} \]</div>
+        <div class="formula-note">{{ f.description }}</div>
+    </div>
+
+    {% if f.example %}
+    <div class="tip tip-ok">
+        <div class="tip-title">Example</div>
+        <p><strong>Q:</strong> {{ f.example.question }}</p>
+        <p style="margin-bottom:0"><strong>A:</strong> {{ f.example.solution }}</p>
+    </div>
+    {% endif %}
+</div>
+{% endfor %}
+
+<div class="topic-nav">
+    <a href="{{ url_for('definitions') }}">← Definitions</a>
+    <a href="{{ url_for('practice') }}">Practice →</a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function generatePodcast(topicId) {
+    const player = document.getElementById('player-formulas');
+    const btn = player.querySelector('button');
+
+    if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Generating...';
+    }
+
+    try {
+        const response = await fetch(`/api/podcast/generate/${topicId}`, {
+            method: 'POST'
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            player.innerHTML = `
+                <audio controls preload="metadata">
+                    <source src="${data.audio_url}" type="audio/mpeg">
+                </audio>
+            `;
+        } else {
+            alert('Error: ' + data.error);
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Generate Audio (~2 min)';
+            }
+        }
+    } catch (error) {
+        alert('Generation failed: ' + error.message);
+        if (btn) {
+            btn.disabled = false;
+            btn.textContent = 'Generate Audio (~2 min)';
+        }
+    }
+}
+</script>
+{% endblock %}

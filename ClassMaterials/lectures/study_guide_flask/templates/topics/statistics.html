@@ -1,0 +1,302 @@
+{% extends "base.html" %}
+
+{% block title %}Topic 2: Statistics & Model Logic - DACS Study Guide{% endblock %}
+
+{% block nav_links %}
+<a href="{{ url_for('topic', slug='ml-fundamentals') }}">Prev</a>
+<a href="{{ url_for('topic', slug='ml-pipeline') }}">Next</a>
+{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{{ url_for('index') }}">Home</a> &gt; <span>Topic 2: Statistics & Model Logic</span>
+</div>
+
+<div class="hero" style="background: linear-gradient(135deg, #10b981, #059669);">
+    <h1>Topic 2: Statistics & Model Logic</h1>
+    <p>Statistical concepts, measures of central tendency, and scientific reasoning</p>
+</div>
+
+<div class="section" id="why-statistics">
+    <h2>Why Do We Need Statistics?</h2>
+
+    <div class="key-concept">
+        <h4>Quote to Remember</h4>
+        <p><em>"Impossible things usually don't happen."</em> - Sam Treiman, Princeton University</p>
+        <p><strong>Statistics helps us quantify "usually."</strong></p>
+    </div>
+
+    <p>A <strong>statistic</strong> is "a quantity that is computed from a sample of data." Statistics help us:</p>
+    <ul>
+        <li>Draw conclusions from data</li>
+        <li>Summarize in a meaningful way in presence of noise</li>
+        <li>Make probabilistic statements about populations</li>
+    </ul>
+</div>
+
+<div class="section" id="central-tendency">
+    <h2>Measures of Central Tendency</h2>
+
+    <p>These summarize data with a single number. The three most popular are:</p>
+
+    <div class="diagram">
+        <svg width="700" height="200" viewBox="0 0 700 200">
+            <rect x="50" y="30" width="180" height="140" rx="10" fill="#2563eb"/>
+            <text x="140" y="70" text-anchor="middle" fill="white" font-weight="bold" font-size="18">MEAN</text>
+            <text x="140" y="100" text-anchor="middle" fill="white" font-size="12">Sum all observations,</text>
+            <text x="140" y="120" text-anchor="middle" fill="white" font-size="12">divide by number</text>
+            <text x="140" y="150" text-anchor="middle" fill="white" font-size="14">x&#772; = Σx / n</text>
+
+            <rect x="260" y="30" width="180" height="140" rx="10" fill="#10b981"/>
+            <text x="350" y="70" text-anchor="middle" fill="white" font-weight="bold" font-size="18">MEDIAN</text>
+            <text x="350" y="100" text-anchor="middle" fill="white" font-size="12">Midpoint value</text>
+            <text x="350" y="120" text-anchor="middle" fill="white" font-size="12">when sorted</text>
+            <text x="350" y="150" text-anchor="middle" fill="white" font-size="14">Middle position</text>
+
+            <rect x="470" y="30" width="180" height="140" rx="10" fill="#f59e0b"/>
+            <text x="560" y="70" text-anchor="middle" fill="white" font-weight="bold" font-size="18">MODE</text>
+            <text x="560" y="100" text-anchor="middle" fill="white" font-size="12">Most frequent</text>
+            <text x="560" y="120" text-anchor="middle" fill="white" font-size="12">value observed</text>
+            <text x="560" y="150" text-anchor="middle" fill="white" font-size="14">Highest count</text>
+        </svg>
+    </div>
+
+    <div class="example-box">
+        <h4>Example</h4>
+        <p>Dataset: 2, 3, 3, 4, 5, 5, 5, 7, 9</p>
+        <ul>
+            <li><strong>Mean:</strong> (2+3+3+4+5+5+5+7+9) / 9 = 43/9 = 4.78</li>
+            <li><strong>Median:</strong> 5 (middle value when sorted)</li>
+            <li><strong>Mode:</strong> 5 (appears most often - 3 times)</li>
+        </ul>
+    </div>
+
+    <h3>Distribution Types</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Distribution</th>
+                <th>Characteristics</th>
+                <th>Mean vs Median vs Mode</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Normal (Gaussian)</td>
+                <td>Symmetric bell curve</td>
+                <td>Mean = Median = Mode</td>
+            </tr>
+            <tr>
+                <td>Bimodal</td>
+                <td>Two peaks</td>
+                <td>Two modes</td>
+            </tr>
+            <tr>
+                <td>Positively Skewed</td>
+                <td>Tail extends right</td>
+                <td>Mode < Median < Mean</td>
+            </tr>
+            <tr>
+                <td>Negatively Skewed</td>
+                <td>Tail extends left</td>
+                <td>Mean < Median < Mode</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="section" id="variability">
+    <h2>Measures of Variability</h2>
+
+    <div class="warning-box">
+        <h4>Why Variability Matters</h4>
+        <p>Summarizing by a single number (mean) is rarely enough. If two systems have the same mean, we tend to prefer the one with <strong>less variability</strong>.</p>
+    </div>
+
+    <h3>Variance</h3>
+    <div class="formula-box">
+        <div class="formula">
+            \[ \sigma^2 = \frac{\sum(x_i - \bar{x})^2}{n} \]
+        </div>
+        <p>Variance is the average of squared distances from the mean.</p>
+        <p><strong>Problem:</strong> Units are squared (changing units changes the answer squared).</p>
+    </div>
+
+    <h3>Standard Deviation</h3>
+    <div class="formula-box">
+        <div class="formula">
+            \[ \sigma = \sqrt{\sigma^2} = \sqrt{\frac{\sum(x_i - \bar{x})^2}{n}} \]
+        </div>
+        <p>Same unit as mean, so we can compare to mean.</p>
+    </div>
+
+    <h3>Coefficient of Variation (C.O.V.)</h3>
+    <div class="formula-box">
+        <div class="formula">
+            \[ C.O.V. = \frac{\sigma}{\mu} \]
+        </div>
+        <p>Takes units out and shows relative magnitude of variation.</p>
+    </div>
+</div>
+
+<div class="section" id="correlation">
+    <h2>Correlation and Covariance</h2>
+
+    <h3>Pearson Correlation Coefficient</h3>
+    <div class="formula-box">
+        <div class="formula">
+            \[ \rho(X,Y) = \frac{cov(X,Y)}{\sigma_X \cdot \sigma_Y} \]
+        </div>
+        <p>Normalized covariance (ranges from -1 to +1):</p>
+        <ul>
+            <li><strong>+1:</strong> Perfect positive linear relationship</li>
+            <li><strong>0:</strong> No linear association (but may still be dependent!)</li>
+            <li><strong>-1:</strong> Perfect negative linear relationship</li>
+        </ul>
+    </div>
+
+    <div class="warning-box">
+        <h4>Important!</h4>
+        <p>A correlation of zero suggests no <strong>linear</strong> association, but does NOT mean two variables are independent! There may be non-linear relationships.</p>
+    </div>
+</div>
+
+<div class="section" id="scientific-methods">
+    <h2>Scientific Reasoning Methods</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Method</th>
+                <th>Direction</th>
+                <th>Description</th>
+                <th>Certainty</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Deductive</strong></td>
+                <td>General → Specific</td>
+                <td>If A and B, then <strong>always</strong> C</td>
+                <td>Guaranteed if premises true</td>
+            </tr>
+            <tr>
+                <td><strong>Inductive</strong></td>
+                <td>Specific → General</td>
+                <td>If A and B, then <strong>most probably</strong> C</td>
+                <td>Probable, not guaranteed</td>
+            </tr>
+            <tr>
+                <td><strong>Abductive</strong></td>
+                <td>Effect → Cause</td>
+                <td>If A and B, then C <strong>maybe</strong>?</td>
+                <td>Worthy of investigation</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="section" id="modeling">
+    <h2>Statistical Modeling vs Predictive Modeling</h2>
+
+    <div class="warning-box">
+        <h4>Test Tip</h4>
+        <p>The lecturer emphasized understanding these definitions for the test.</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr><th>Aspect</th><th>Statistical Modeling</th><th>Predictive Modeling</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Definition</strong></td>
+                <td>Formalizes relationship between variables in the form of <strong>mathematical equations</strong></td>
+                <td>Learns a target function that maps input to output, then makes predictions on new data</td>
+            </tr>
+            <tr>
+                <td><strong>Formula</strong></td>
+                <td>Explicitly defined by user (e.g., y = ax + b)</td>
+                <td>Learned from data by algorithm</td>
+            </tr>
+            <tr>
+                <td><strong>Coefficients</strong></td>
+                <td>Found using mathematical methods</td>
+                <td>Learned automatically from training</td>
+            </tr>
+            <tr>
+                <td><strong>Purpose</strong></td>
+                <td>Understand relationships</td>
+                <td>Make predictions on new data</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="key-concept">
+        <h4>Predictive Modeling - Two Steps</h4>
+        <ol>
+            <li><strong>Model the relationship</strong> between input (X) and output (Y) using machine learning</li>
+            <li><strong>Make predictions</strong> for new values of Y when given new values of X</li>
+        </ol>
+        <p>The purpose of machine learning IS predictive modeling!</p>
+    </div>
+</div>
+
+<div class="section" id="quiz">
+    <h2>Self-Test Quiz</h2>
+
+    <form class="quiz-form">
+        <div class="quiz-question" data-answer="c">
+            <h4>1. For a positively skewed distribution, which relationship is correct?</h4>
+            <div class="quiz-options">
+                <label><input type="radio" name="q1" value="a"> Mean = Median = Mode</label>
+                <label><input type="radio" name="q1" value="b"> Mean < Median < Mode</label>
+                <label><input type="radio" name="q1" value="c"> Mode < Median < Mean</label>
+                <label><input type="radio" name="q1" value="d"> Mode < Mean < Median</label>
+            </div>
+        </div>
+
+        <div class="quiz-question" data-answer="b">
+            <h4>2. A Pearson correlation of 0 means:</h4>
+            <div class="quiz-options">
+                <label><input type="radio" name="q2" value="a"> The variables are completely independent</label>
+                <label><input type="radio" name="q2" value="b"> No linear relationship (may still be dependent)</label>
+                <label><input type="radio" name="q2" value="c"> Perfect negative correlation</label>
+                <label><input type="radio" name="q2" value="d"> The data is invalid</label>
+            </div>
+        </div>
+
+        <div class="quiz-question" data-answer="a">
+            <h4>3. Which reasoning method goes from specific observations to general rules?</h4>
+            <div class="quiz-options">
+                <label><input type="radio" name="q3" value="a"> Inductive reasoning</label>
+                <label><input type="radio" name="q3" value="b"> Deductive reasoning</label>
+                <label><input type="radio" name="q3" value="c"> Abductive reasoning</label>
+                <label><input type="radio" name="q3" value="d"> Statistical reasoning</label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn">Check Answers</button>
+    </form>
+</div>
+
+<div class="section">
+    <h2>Key Takeaways</h2>
+    <div class="key-concept">
+        <h4>Remember These Points</h4>
+        <ul>
+            <li>Mean, Median, Mode = indices of central tendency</li>
+            <li>Variance and Standard Deviation = measures of variability</li>
+            <li>Pearson correlation ranges from -1 to +1</li>
+            <li>Correlation = 0 doesn't mean independence!</li>
+            <li>C.O.V. = σ/μ (removes units for comparison)</li>
+            <li>Deductive (general→specific), Inductive (specific→general), Abductive (suggests hypothesis)</li>
+        </ul>
+    </div>
+</div>
+
+<div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+    <a href="{{ url_for('topic', slug='ml-fundamentals') }}" class="btn">Previous: ML Fundamentals</a>
+    <a href="{{ url_for('topic', slug='ml-pipeline') }}" class="btn">Next: ML Pipeline</a>
+</div>
+{% endblock %}

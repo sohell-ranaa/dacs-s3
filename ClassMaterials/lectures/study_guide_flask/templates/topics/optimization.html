@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}Topic 7: Model Optimization - DACS Study Guide{% endblock %}
+
+{% block nav_links %}
+<a href="{{ url_for('topic', slug='algorithms') }}">Prev</a>
+<a href="{{ url_for('topic', slug='selection') }}">Next</a>
+{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{{ url_for('index') }}">Home</a> &gt; <span>Topic 7: Model Optimization</span>
+</div>
+
+<div class="hero" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+    <h1>Topic 7: Model Optimization Strategies</h1>
+    <p>Hyperparameter tuning, feature selection, and resampling</p>
+</div>
+
+<div class="section" id="hyperparameters">
+    <h2>1. Hyperparameter Tuning</h2>
+
+    <div class="key-concept">
+        <h4>Model Parameters vs Hyperparameters</h4>
+        <ul>
+            <li><strong>Model Parameters:</strong> Learned from data (weights, coefficients)</li>
+            <li><strong>Hyperparameters:</strong> Define model architecture, set before training</li>
+        </ul>
+    </div>
+
+    <h3>Tuning Methods</h3>
+    <table>
+        <tr><th>Method</th><th>How It Works</th><th>Pros/Cons</th></tr>
+        <tr>
+            <td><strong>Grid Search CV</strong></td>
+            <td>Evaluates ALL possible combinations</td>
+            <td>Exhaustive but slow</td>
+        </tr>
+        <tr>
+            <td><strong>Randomized Search CV</strong></td>
+            <td>Samples from distribution of values</td>
+            <td>Faster, samples parameter space</td>
+        </tr>
+    </table>
+
+    <div class="key-concept">
+        <h4>Best Practice</h4>
+        <p>Combine Grid Search with <strong>K-Fold Cross Validation</strong> to evaluate each parameter combination.</p>
+    </div>
+</div>
+
+<div class="section" id="feature-selection">
+    <h2>2. Feature Selection</h2>
+
+    <div class="key-concept">
+        <h4>Why Feature Selection?</h4>
+        <ul>
+            <li>More features = more complex model = more sensitive to variance</li>
+            <li>Curse of dimensionality: Error increases with features</li>
+            <li>Remove weak or redundant features to improve performance</li>
+        </ul>
+    </div>
+
+    <h3>Methods</h3>
+    <table>
+        <tr><th>Method</th><th>Description</th></tr>
+        <tr><td><strong>Correlation Filtering</strong></td><td>Remove features with low correlation to target</td></tr>
+        <tr><td><strong>Mutual Information</strong></td><td>Captures non-linear relationships (0-1 scale)</td></tr>
+        <tr><td><strong>Permutation Importance</strong></td><td>Shuffle feature, measure error increase</td></tr>
+        <tr><td><strong>Sequential Selection</strong></td><td>Forward (add) or Backward (remove) features</td></tr>
+    </table>
+</div>
+
+<div class="section" id="resampling">
+    <h2>3. Resampling Strategies</h2>
+
+    <div class="key-concept">
+        <h4>The Problem: Class Imbalance</h4>
+        <ul>
+            <li><strong>Test set imbalance:</strong> OK - reflects real distribution</li>
+            <li><strong>Train set imbalance:</strong> Problem - not enough minority examples</li>
+        </ul>
+    </div>
+
+    <table>
+        <tr><th>Strategy</th><th>Description</th><th>Notes</th></tr>
+        <tr>
+            <td><strong>Undersampling</strong></td>
+            <td>Reduce majority class</td>
+            <td>May lose information</td>
+        </tr>
+        <tr>
+            <td><strong>Oversampling</strong></td>
+            <td>Duplicate minority class</td>
+            <td>Risk of overfitting</td>
+        </tr>
+        <tr>
+            <td><strong>SMOTE</strong></td>
+            <td>Create synthetic minority samples</td>
+            <td>Better than duplication</td>
+        </tr>
+    </table>
+
+    <div class="key-concept">
+        <h4>SMOTE (Synthetic Minority Oversampling Technique)</h4>
+        <ul>
+            <li>Creates <strong>synthetic examples</strong> for minority class</li>
+            <li>New examples are similar to existing ones (not exact copies)</li>
+            <li>Adds new information to the model</li>
+            <li>Better than simple duplication</li>
+        </ul>
+    </div>
+</div>
+
+<div class="section" id="quiz">
+    <h2>Self-Test Quiz</h2>
+    <form class="quiz-form">
+        <div class="quiz-question" data-answer="b">
+            <h4>1. Hyperparameters are:</h4>
+            <div class="quiz-options">
+                <label><input type="radio" name="q1" value="a"> Learned from the training data</label>
+                <label><input type="radio" name="q1" value="b"> Set before training to define model architecture</label>
+                <label><input type="radio" name="q1" value="c"> The weights of neural networks</label>
+                <label><input type="radio" name="q1" value="d"> Same as model parameters</label>
+            </div>
+        </div>
+
+        <div class="quiz-question" data-answer="a">
+            <h4>2. SMOTE is used to:</h4>
+            <div class="quiz-options">
+                <label><input type="radio" name="q2" value="a"> Create synthetic examples for minority class</label>
+                <label><input type="radio" name="q2" value="b"> Remove outliers</label>
+                <label><input type="radio" name="q2" value="c"> Scale features</label>
+                <label><input type="radio" name="q2" value="d"> Tune hyperparameters</label>
+            </div>
+        </div>
+
+        <div class="quiz-question" data-answer="c">
+            <h4>3. In permutation feature importance, a feature is important if:</h4>
+            <div class="quiz-options">
+                <label><input type="radio" name="q3" value="a"> Shuffling it decreases error</label>
+                <label><input type="radio" name="q3" value="b"> Shuffling it has no effect</label>
+                <label><input type="radio" name="q3" value="c"> Shuffling it increases error</label>
+                <label><input type="radio" name="q3" value="d"> It has highest correlation</label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn">Check Answers</button>
+    </form>
+</div>
+
+<div class="section">
+    <h2>Key Takeaways</h2>
+    <div class="key-concept">
+        <h4>Remember These Points</h4>
+        <ul>
+            <li>Hyperparameters define architecture; Model parameters are learned</li>
+            <li>Grid Search: exhaustive | Randomized Search: samples</li>
+            <li>Combine hyperparameter tuning with k-fold CV</li>
+            <li>Feature selection: correlation, MI, permutation importance</li>
+            <li>Class imbalance: problem in training set, OK in test set</li>
+            <li>SMOTE creates synthetic minority examples (better than duplication)</li>
+        </ul>
+    </div>
+</div>
+
+<div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+    <a href="{{ url_for('topic', slug='algorithms') }}" class="btn">Previous: Algorithms</a>
+    <a href="{{ url_for('topic', slug='selection') }}" class="btn">Next: Model Selection</a>
+</div>
+{% endblock %}

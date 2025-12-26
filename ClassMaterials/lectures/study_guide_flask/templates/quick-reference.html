@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+{% block title %}Quick Reference - ML Study Guide{% endblock %}
+
+{% block head %}
+<style>
+@media print {
+    .nav, .topic-nav, .podcast-banner { display: none !important; }
+    .section { page-break-inside: avoid; }
+}
+.podcast-banner {
+    background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.podcast-banner h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+.podcast-banner p {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+.podcast-banner audio {
+    height: 40px;
+    border-radius: 0.5rem;
+}
+.podcast-banner .generate-btn {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+.podcast-banner .generate-btn:hover {
+    background: rgba(255,255,255,0.3);
+}
+.podcast-banner .generate-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+    <div>
+        <h1 style="margin-bottom: 0;">Quick Reference</h1>
+        <p class="text-muted text-sm">All key information on one page</p>
+    </div>
+    <button class="btn btn-sm btn-outline" onclick="window.print()">Print</button>
+</div>
+
+<!-- Podcast Player -->
+<div class="podcast-banner">
+    <div>
+        <h3>Complete Audio Review</h3>
+        <p>Rapid-fire review of all key concepts, formulas, and tips</p>
+    </div>
+    <div id="player-quickref">
+        {% if podcast_exists %}
+        <audio controls preload="metadata">
+            <source src="{{ podcast_url }}" type="audio/mpeg">
+        </audio>
+        {% else %}
+        <button class="generate-btn" onclick="generatePodcast('quickref-all')">
+            Generate Audio (~3 min)
+        </button>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Formulas -->
+<div class="section">
+    <h2>Essential Formulas</h2>
+    <div class="formula-grid">
+        {% for f in formulas %}
+        <div class="formula">
+            <div class="formula-label">{{ f.name }}</div>
+            <div class="formula-math">\[ {{ f.latex }} \]</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Confusion Matrix -->
+<div class="section">
+    <h2>Confusion Matrix</h2>
+    <div class="table-wrap">
+        <table>
+            <tr>
+                <th></th>
+                <th>Predicted +</th>
+                <th>Predicted -</th>
+            </tr>
+            <tr>
+                <td><strong>Actual +</strong></td>
+                <td style="background: #ecfdf5;">TP (True Positive)</td>
+                <td style="background: #fffbeb;">FN (Type II Error)</td>
+            </tr>
+            <tr>
+                <td><strong>Actual -</strong></td>
+                <td style="background: #fef2f2;">FP (Type I Error)</td>
+                <td style="background: #eff6ff;">TN (True Negative)</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="def-grid">
+        <div class="def">
+            <div class="def-term">Precision</div>
+            <div class="def-meaning">TP/(TP+FP) - Of predicted +, how many correct?</div>
+        </div>
+        <div class="def">
+            <div class="def-term">Recall</div>
+            <div class="def-meaning">TP/(TP+FN) - Of actual +, how many found?</div>
+        </div>
+    </div>
+</div>
+
+<!-- Key Definitions by Category -->
+{% for key, cat in definitions.items() %}
+<div class="section">
+    <h2>{{ cat.title }}</h2>
+    <div class="def-grid">
+        {% for t in cat.terms[:4] %}
+        <div class="def">
+            <div class="def-term">{{ t.term }}</div>
+            <div class="def-meaning">{{ t.meaning }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endfor %}
+
+<!-- Algorithms Reference -->
+<div class="section">
+    <h2>Algorithms - Scaling Required?</h2>
+    <div class="table-wrap">
+        <table>
+            <tr>
+                <th>Algorithm</th>
+                <th>Scaling?</th>
+                <th>Why</th>
+            </tr>
+            <tr>
+                <td>Linear/Logistic Regression</td>
+                <td style="color: var(--success);">Yes</td>
+                <td>Gradient descent</td>
+            </tr>
+            <tr>
+                <td>SVM</td>
+                <td style="color: var(--success);">Yes</td>
+                <td>Distance-based</td>
+            </tr>
+            <tr>
+                <td>KNN</td>
+                <td style="color: var(--success);">Yes</td>
+                <td>Distance-based</td>
+            </tr>
+            <tr>
+                <td>Neural Network</td>
+                <td style="color: var(--success);">Yes</td>
+                <td>Gradient descent</td>
+            </tr>
+            <tr>
+                <td>Decision Tree</td>
+                <td style="color: var(--danger);">No</td>
+                <td>Split-based</td>
+            </tr>
+            <tr>
+                <td>Random Forest</td>
+                <td style="color: var(--danger);">No</td>
+                <td>Tree-based</td>
+            </tr>
+            <tr>
+                <td>Naive Bayes</td>
+                <td style="color: var(--danger);">No</td>
+                <td>Probability-based</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Key Tips -->
+<div class="section">
+    <h2>Key Tips</h2>
+
+    <div class="tip tip-warn">
+        <div class="tip-title">Data Leakage Prevention</div>
+        <p style="margin-bottom:0">Always: Split → Fit on train → Transform both</p>
+    </div>
+
+    <div class="tip tip-info">
+        <div class="tip-title">Metric Selection</div>
+        <p style="margin-bottom:0"><strong>Recall</strong> for disease/fraud detection (don't miss positives)<br>
+        <strong>Precision</strong> for spam filters (don't bother users with false alarms)</p>
+    </div>
+
+    <div class="tip tip-ok">
+        <div class="tip-title">ML vs Deep Learning</div>
+        <p style="margin-bottom:0">ML: Less data, faster, manual features<br>
+        DL: More data, GPU needed, auto features</p>
+    </div>
+</div>
+
+<div class="topic-nav">
+    <a href="{{ url_for('practice') }}">← Practice</a>
+    <a href="{{ url_for('index') }}">Home →</a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function generatePodcast(topicId) {
+    const player = document.getElementById('player-quickref');
+    const btn = player.querySelector('button');
+
+    if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Generating...';
+    }
+
+    try {
+        const response = await fetch(`/api/podcast/generate/${topicId}`, {
+            method: 'POST'
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            player.innerHTML = `
+                <audio controls preload="metadata">
+                    <source src="${data.audio_url}" type="audio/mpeg">
+                </audio>
+            `;
+        } else {
+            alert('Error: ' + data.error);
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Generate Audio (~3 min)';
+            }
+        }
+    } catch (error) {
+        alert('Generation failed: ' + error.message);
+        if (btn) {
+            btn.disabled = false;
+            btn.textContent = 'Generate Audio (~3 min)';
+        }
+    }
+}
+</script>
+{% endblock %}

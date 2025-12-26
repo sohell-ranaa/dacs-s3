@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block title %}Practice - ML Study Guide{% endblock %}
+
+{% block head %}
+<style>
+    .podcast-banner {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        border-radius: 1rem;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    .podcast-banner h4 {
+        margin: 0;
+        font-size: 1rem;
+    }
+    .podcast-banner p {
+        margin: 0.25rem 0 0 0;
+        font-size: 0.8rem;
+        opacity: 0.9;
+    }
+    .podcast-banner audio {
+        height: 36px;
+        border-radius: 0.5rem;
+    }
+    .podcast-banner .generate-btn {
+        background: rgba(255,255,255,0.2);
+        color: white;
+        border: 1px solid rgba(255,255,255,0.3);
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-size: 0.85rem;
+    }
+    .podcast-banner .generate-btn:hover {
+        background: rgba(255,255,255,0.3);
+    }
+    .podcast-banner .generate-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    .problem-section {
+        border-left: 4px solid #f59e0b;
+        padding-left: 1rem;
+        margin-bottom: 2rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Practice Problems</h1>
+<p class="text-muted">Test your understanding with calculations</p>
+
+<!-- Practice Problems with Audio -->
+{% for p in problems %}
+<div class="problem-section">
+    <div class="badge badge-primary mb-1">{{ p.topic }}</div>
+    <h3>Problem {{ p.id }}</h3>
+
+    <!-- Podcast for this problem type -->
+    {% set podcast_key = p.topic|lower|replace(' ', '-') %}
+    {% set podcast_id = 'practice-' + podcast_key %}
+    <div class="podcast-banner" id="podcast-{{ p.id }}">
+        <div>
+            <h4>Listen to Solution Walkthrough</h4>
+            <p>Hosts explain step-by-step how to solve {{ p.topic }} problems</p>
+        </div>
+        <div id="player-{{ p.id }}">
+            {% if podcasts.get(podcast_id, {}).get('exists') %}
+            <audio controls preload="metadata">
+                <source src="{{ podcasts[podcast_id]['url'] }}" type="audio/mpeg">
+            </audio>
+            {% else %}
+            <button class="generate-btn" onclick="generatePodcast('{{ podcast_id }}', '{{ p.id }}')">
+                Generate Audio
+            </button>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card" style="background: #f8fafc; white-space: pre-line;">{{ p.question }}</div>
+
+    <details style="margin-top: 1rem;">
+        <summary style="cursor: pointer; padding: 0.75rem; background: var(--bg-alt); border-radius: 8px; font-weight: 500;">
+            Show Solution
+        </summary>
+        <div style="padding: 1rem; background: #ecfdf5; border-radius: 0 0 8px 8px; white-space: pre-line; margin-top: -4px;">
+            {{ p.solution }}
+        </div>
+    </details>
+
+    <div class="tip tip-info mt-2">
+        <div class="tip-title">Key Insight</div>
+        <p style="margin-bottom:0">{{ p.key_insight }}</p>
+    </div>
+</div>
+{% endfor %}
+
+<!-- Quizzes -->
+<div class="section">
+    <h2>Quick Quizzes</h2>
+    <p class="text-muted">Test specific topics</p>
+
+    <div class="grid grid-2">
+        {% for topic, questions in quizzes.items() %}
+        <a href="{{ url_for('quiz', topic=topic) }}" class="topic-card">
+            <h3>{{ topic|title }}</h3>
+            <p>{{ questions|length }} questions</p>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="topic-nav">
+    <a href="{{ url_for('formulas') }}">← Formulas</a>
+    <a href="{{ url_for('quick_reference') }}">Quick Reference →</a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function generatePodcast(topicId, problemId) {
+    const player = document.getElementById(`player-${problemId}`);
+    const btn = player.querySelector('button');
+
+    if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Generating...';
+    }
+
+    try {
+        const response = await fetch(`/api/podcast/generate/${topicId}`, {
+            method: 'POST'
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            player.innerHTML = `
+                <audio controls preload="metadata">
+                    <source src="${data.audio_url}" type="audio/mpeg">
+                </audio>
+            `;
+        } else {
+            alert('Error: ' + data.error);
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Generate Audio';
+            }
+        }
+    } catch (error) {
+        alert('Generation failed: ' + error.message);
+        if (btn) {
+            btn.disabled = false;
+            btn.textContent = 'Generate Audio';
+        }
+    }
+}
+</script>
+{% endblock %}

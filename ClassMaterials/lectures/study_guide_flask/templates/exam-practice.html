@@ -1,0 +1,546 @@
+{% extends "base.html" %}
+
+{% block title %}Exam Practice - DACS Study Guide{% endblock %}
+
+{% block extra_head %}
+<style>
+    .hero {
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .question-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        overflow: hidden;
+    }
+
+    .question-header {
+        background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .question-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .topic-badge {
+        background: var(--primary-color);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+    }
+
+    .marks-badge {
+        background: #10b981;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+    }
+
+    .question-text {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: var(--text-primary);
+        line-height: 1.5;
+        white-space: pre-line;
+    }
+
+    .answer-section {
+        padding: 1.5rem;
+    }
+
+    .answer-toggle {
+        width: 100%;
+        padding: 1rem 1.5rem;
+        background: #f8fafc;
+        border: 2px dashed var(--border-color);
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        color: var(--primary-color);
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+    .answer-toggle:hover {
+        background: #eef2ff;
+        border-color: var(--primary-color);
+    }
+
+    .sample-answer {
+        display: none;
+        margin-top: 1rem;
+        padding: 1.5rem;
+        background: #f0fdf4;
+        border-radius: 8px;
+        border-left: 4px solid #10b981;
+    }
+
+    .sample-answer.show {
+        display: block;
+    }
+
+    .sample-answer h4 {
+        color: #059669;
+        margin-bottom: 1rem;
+    }
+
+    .sample-answer-content {
+        white-space: pre-line;
+        line-height: 1.7;
+    }
+
+    .sample-answer-content strong {
+        color: var(--text-primary);
+    }
+
+    .keywords-section {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #d1fae5;
+    }
+
+    .keywords-section h5 {
+        color: #059669;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .keyword-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .keyword-tag {
+        background: #d1fae5;
+        color: #065f46;
+        padding: 0.25rem 0.75rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+    }
+
+    .practice-tips {
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+    }
+
+    .practice-tips h3 {
+        color: #92400e;
+        margin-bottom: 1rem;
+    }
+
+    .practice-tips ul {
+        margin: 0;
+        padding-left: 1.5rem;
+    }
+
+    .practice-tips li {
+        margin-bottom: 0.5rem;
+        color: #78350f;
+    }
+
+    .your-answer {
+        margin-bottom: 1rem;
+    }
+
+    .your-answer textarea {
+        width: 100%;
+        min-height: 150px;
+        padding: 1rem;
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 1rem;
+        font-family: inherit;
+        resize: vertical;
+    }
+
+    .your-answer textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+    }
+
+    .your-answer label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+    }
+
+    .question-number {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.25rem;
+    }
+
+    /* Do's and Don'ts */
+    .dos-donts-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+        .dos-donts-container {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .dos-box, .donts-box {
+        border-radius: 12px;
+        padding: 1.5rem;
+    }
+
+    .dos-box {
+        background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+        border: 2px solid #10b981;
+    }
+
+    .donts-box {
+        background: linear-gradient(135deg, #fee2e2, #fecaca);
+        border: 2px solid #ef4444;
+    }
+
+    .dos-box h3 {
+        color: #065f46;
+        margin-bottom: 1rem;
+    }
+
+    .donts-box h3 {
+        color: #991b1b;
+        margin-bottom: 1rem;
+    }
+
+    .tip-item {
+        background: rgba(255,255,255,0.7);
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        margin-bottom: 0.75rem;
+    }
+
+    .tip-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .tip-item strong {
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+
+    .tip-item p {
+        font-size: 0.85rem;
+        margin: 0;
+        color: #374151;
+    }
+
+    /* Section headers */
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 2.5rem 0 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 3px solid var(--primary-color);
+    }
+
+    .section-header h2 {
+        margin: 0;
+        color: var(--text-primary);
+    }
+
+    .section-badge {
+        background: var(--primary-color);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+    }
+
+    /* Mock exam styling */
+    .mock-exam-card {
+        background: var(--card-bg);
+        border: 2px solid #7c3aed;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        overflow: hidden;
+    }
+
+    .mock-exam-card .question-header {
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
+        color: white;
+    }
+
+    .mock-exam-card .question-meta .topic-badge {
+        background: rgba(255,255,255,0.2);
+    }
+
+    .mock-exam-card .marks-badge {
+        background: #fbbf24;
+        color: #1f2937;
+    }
+
+    .key-points-list {
+        background: #fef3c7;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+    }
+
+    .key-points-list h5 {
+        color: #92400e;
+        margin-bottom: 0.75rem;
+    }
+
+    .key-points-list ul {
+        margin: 0;
+        padding-left: 1.25rem;
+    }
+
+    .key-points-list li {
+        margin-bottom: 0.5rem;
+        color: #78350f;
+        font-size: 0.9rem;
+    }
+
+    .hint-box {
+        background: #e0f2fe;
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+        margin-top: 1rem;
+        border-left: 3px solid #0284c7;
+    }
+
+    .hint-box strong {
+        color: #0369a1;
+    }
+
+    /* Confusion matrix styling */
+    .confusion-matrix-display {
+        margin: 1rem 0;
+        overflow-x: auto;
+    }
+
+    .confusion-matrix-display table {
+        border-collapse: collapse;
+        margin: 0 auto;
+    }
+
+    .confusion-matrix-display th,
+    .confusion-matrix-display td {
+        border: 1px solid #d1d5db;
+        padding: 0.75rem 1rem;
+        text-align: center;
+    }
+
+    .confusion-matrix-display th {
+        background: #f3f4f6;
+        font-weight: 600;
+    }
+
+    .cm-tp { background: #d1fae5; }
+    .cm-tn { background: #dbeafe; }
+    .cm-fp { background: #fee2e2; }
+    .cm-fn { background: #fef3c7; }
+</style>
+{% endblock %}
+
+{% block nav_links %}
+<a href="{{ url_for('professor_tips') }}">Professor Tips</a>
+{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Written Exam Practice</h1>
+    <p>Practice answering questions in exam format with sample answers</p>
+</div>
+
+<!-- Do's and Don'ts Section -->
+<div class="section-header">
+    <h2>Professor's Exam Advice</h2>
+    <span class="section-badge">From Lecture Recording</span>
+</div>
+
+<div class="dos-donts-container">
+    <div class="dos-box">
+        <h3>DO's - What to Focus On</h3>
+        {% for item in dos_donts.dos %}
+        <div class="tip-item">
+            <strong>{{ item.tip }}</strong>
+            <p>{{ item.details }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="donts-box">
+        <h3>DON'Ts - Common Mistakes</h3>
+        {% for item in dos_donts.donts %}
+        <div class="tip-item">
+            <strong>{{ item.tip }}</strong>
+            <p>{{ item.details }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Mock Exam Questions -->
+<div class="section-header">
+    <h2>Official Mock Exam Questions</h2>
+    <span class="section-badge">{{ mock_questions|length }} Questions (100 Marks)</span>
+</div>
+
+{% for mq in mock_questions %}
+<div class="mock-exam-card">
+    <div class="question-header">
+        <div class="question-meta">
+            <span class="topic-badge">{{ mq.topic.replace('-', ' ').title() }}</span>
+            <span class="marks-badge">{{ mq.marks }} marks</span>
+        </div>
+        <div class="question-number">Mock Exam Question {{ mq.id }}</div>
+        <div class="question-text">{{ mq.question }}</div>
+    </div>
+
+    <div class="answer-section">
+        {% if mq.confusion_matrix %}
+        <div class="confusion-matrix-display">
+            <table>
+                <tr>
+                    <th></th>
+                    <th>Predicted Positive</th>
+                    <th>Predicted Negative</th>
+                </tr>
+                <tr>
+                    <th>Actual Positive</th>
+                    <td class="cm-tp">TP = {{ mq.confusion_matrix.TP }}</td>
+                    <td class="cm-fn">FN = {{ mq.confusion_matrix.FN }}</td>
+                </tr>
+                <tr>
+                    <th>Actual Negative</th>
+                    <td class="cm-fp">FP = {{ mq.confusion_matrix.FP }}</td>
+                    <td class="cm-tn">TN = {{ mq.confusion_matrix.TN }}</td>
+                </tr>
+            </table>
+        </div>
+        {% endif %}
+
+        <div class="hint-box">
+            <strong>Hint:</strong> {{ mq.hint }}
+        </div>
+
+        <div class="your-answer">
+            <label>Your Answer (practice writing here):</label>
+            <textarea placeholder="Write your answer here before revealing the key points..."></textarea>
+        </div>
+
+        <button class="answer-toggle" onclick="toggleAnswer(this)">
+            Click to Reveal Key Points
+        </button>
+
+        <div class="sample-answer">
+            <div class="key-points-list">
+                <h5>Key Points to Include:</h5>
+                <ul>
+                    {% for point in mq.key_points %}
+                    <li>{{ point }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<!-- Practice Questions -->
+<div class="section-header">
+    <h2>Additional Practice Questions</h2>
+    <span class="section-badge">{{ questions|length }} Questions</span>
+</div>
+
+<div class="practice-tips">
+    <h3>Exam Writing Tips</h3>
+    <ul>
+        <li><strong>Read carefully</strong> - Understand what the question is asking before writing</li>
+        <li><strong>Structure your answer</strong> - Use bullet points, numbered lists, or paragraphs</li>
+        <li><strong>Include keywords</strong> - Make sure to mention key terms shown below each answer</li>
+        <li><strong>Provide examples</strong> - Concrete examples strengthen your answers</li>
+        <li><strong>Match the marks</strong> - More marks = more detail expected</li>
+    </ul>
+</div>
+
+{% for question in questions %}
+<div class="question-card">
+    <div class="question-header">
+        <div class="question-meta">
+            <span class="topic-badge">{{ question.topic.replace('-', ' ').title() }}</span>
+            <span class="marks-badge">{{ question.marks }} marks</span>
+        </div>
+        <div class="question-number">Question {{ loop.index }}</div>
+        <div class="question-text">{{ question.question }}</div>
+    </div>
+
+    <div class="answer-section">
+        <div class="your-answer">
+            <label>Your Answer (practice writing here):</label>
+            <textarea placeholder="Write your answer here before revealing the sample answer..."></textarea>
+        </div>
+
+        <button class="answer-toggle" onclick="toggleAnswer(this)">
+            Click to Reveal Sample Answer
+        </button>
+
+        <div class="sample-answer">
+            <h4>Sample Answer:</h4>
+            <div class="sample-answer-content">{{ question.sample_answer|safe }}</div>
+
+            <div class="keywords-section">
+                <h5>Key Terms to Include:</h5>
+                <div class="keyword-tags">
+                    {% for keyword in question.keywords %}
+                    <span class="keyword-tag">{{ keyword }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<div style="text-align: center; margin-top: 2rem; padding: 2rem; background: #f8fafc; border-radius: 12px;">
+    <h3>Need more practice?</h3>
+    <p>Try the interactive quizzes for each topic.</p>
+    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap;">
+        <a href="{{ url_for('professor_tips') }}" class="btn">Review Professor Tips</a>
+        <a href="{{ url_for('quick_reference') }}" class="btn" style="background: #6366f1;">Quick Reference</a>
+    </div>
+</div>
+
+<script>
+function toggleAnswer(button) {
+    const answerDiv = button.nextElementSibling;
+    answerDiv.classList.toggle('show');
+
+    if (answerDiv.classList.contains('show')) {
+        button.textContent = 'Hide Sample Answer';
+        button.style.background = '#eef2ff';
+    } else {
+        button.textContent = 'Click to Reveal Sample Answer';
+        button.style.background = '#f8fafc';
+    }
+}
+</script>
+{% endblock %}

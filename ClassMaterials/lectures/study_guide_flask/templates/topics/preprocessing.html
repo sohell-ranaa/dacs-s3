@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}Topic 4: Data Preprocessing - DACS Study Guide{% endblock %}
+
+{% block nav_links %}
+<a href="{{ url_for('topic', slug='ml-pipeline') }}">Prev</a>
+<a href="{{ url_for('topic', slug='evaluation') }}">Next</a>
+{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{{ url_for('index') }}">Home</a> &gt; <span>Topic 4: Data Preprocessing</span>
+</div>
+
+<div class="hero" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+    <h1>Topic 4: Data Preprocessing</h1>
+    <p>Feature selection, EDA, encoding, and scaling techniques</p>
+</div>
+
+<div class="section" id="overview">
+    <h2>Why Data Preprocessing?</h2>
+    <div class="warning-box">
+        <h4>GIGO - Garbage In, Garbage Out</h4>
+        <p>Data preprocessing is the first and most critical step in any ML project. If we use unclean data, the results will not be satisfying.</p>
+    </div>
+</div>
+
+<div class="section" id="eda">
+    <h2>Exploratory Data Analysis (EDA)</h2>
+    <div class="key-concept">
+        <h4>What to Check in EDA</h4>
+        <ul>
+            <li><strong>Feature Distributions:</strong> Shape of data (normal, skewed)</li>
+            <li><strong>Class Balance:</strong> Are classes equally represented?</li>
+            <li><strong>Correlation with Target:</strong> Which features predict the output?</li>
+            <li><strong>Collinearity:</strong> Are input variables correlated with each other?</li>
+            <li><strong>Outliers:</strong> Anomalous values that might affect the model</li>
+        </ul>
+    </div>
+</div>
+
+<div class="section" id="missing-values">
+    <h2>Handling Missing Values</h2>
+    <table>
+        <tr><th>Method</th><th>When to Use</th><th>How</th></tr>
+        <tr><td><strong>Deletion</strong></td><td>If >30% missing in column</td><td>Remove rows or columns</td></tr>
+        <tr><td><strong>Direct Estimation</strong></td><td>Domain knowledge available</td><td>Use prior knowledge</td></tr>
+        <tr><td><strong>Imputation</strong></td><td>Most common method</td><td>Fill with mean/median/mode</td></tr>
+    </table>
+</div>
+
+<div class="section" id="categorical">
+    <h2>Encoding Categorical Data</h2>
+
+    <h3>One-Hot Encoding (Recommended)</h3>
+    <div class="example-box">
+        <h4>One-Hot Encoding Example</h4>
+        <table>
+            <tr><th>Original</th><th>dns</th><th>http</th><th>imap</th><th>smtp</th></tr>
+            <tr><td>dns</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>http</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+            <tr><td>imap</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr><td>smtp</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+        </table>
+        <p>Use <code>pandas.get_dummies()</code> in Python</p>
+    </div>
+</div>
+
+<div class="section" id="scaling">
+    <h2>Scaling Continuous Data</h2>
+    <div class="key-concept">
+        <h4>When Scaling is Required</h4>
+        <ul>
+            <li>Algorithms using gradient descent (Linear/Logistic Regression, Neural Networks)</li>
+            <li>Distance-based algorithms (KNN, K-means, SVM)</li>
+        </ul>
+        <h4>When Scaling is NOT Required</h4>
+        <ul>
+            <li>Decision Trees and tree-based ensembles (RF, XGBoost)</li>
+            <li>Naive Bayes, Fisher LDA</li>
+        </ul>
+    </div>
+
+    <div class="formula-box">
+        <h4>StandardScaler</h4>
+        <div class="formula">\[ x_{scaled} = \frac{x - \mu}{\sigma} \]</div>
+        <p>Result: mean=0, standard deviation=1</p>
+    </div>
+
+    <div class="formula-box">
+        <h4>MinMaxScaler</h4>
+        <div class="formula">\[ x_{scaled} = \frac{x - x_{min}}{x_{max} - x_{min}} \]</div>
+        <p>Result: all values between 0 and 1</p>
+    </div>
+
+    <div class="warning-box">
+        <h4>Critical Rule: Prevent Data Leakage</h4>
+        <p><strong>Fit scaler ONLY on training set, then transform both train and test sets.</strong></p>
+    </div>
+</div>
+
+<div class="section" id="quiz">
+    <h2>Self-Test Quiz</h2>
+    <form class="quiz-form">
+        <div class="quiz-question" data-answer="b">
+            <h4>1. One-Hot Encoding is preferred over Label Encoding because:</h4>
+            <div class="quiz-options">
+                <label><input type="radio" name="q1" value="a"> It uses less memory</label>
+                <label><input type="radio" name="q1" value="b"> It doesn't create false ordinal relationships</label>
+                <label><input type="radio" name="q1" value="c"> It's faster to compute</label>
+                <label><input type="radio" name="q1" value="d"> It works with all algorithms</label>
+            </div>
+        </div>
+
+        <div class="quiz-question" data-answer="c">
+            <h4>2. To prevent data leakage when scaling:</h4>
+            <div class="quiz-options">
+                <label><input type="radio" name="q2" value="a"> Scale before splitting data</label>
+                <label><input type="radio" name="q2" value="b"> Fit scaler on test set only</label>
+                <label><input type="radio" name="q2" value="c"> Fit scaler on train set, transform both</label>
+                <label><input type="radio" name="q2" value="d"> Don't use scaling at all</label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn">Check Answers</button>
+    </form>
+</div>
+
+<div class="section">
+    <h2>Key Takeaways</h2>
+    <div class="key-concept">
+        <h4>Remember These Points</h4>
+        <ul>
+            <li>Missing values: Delete (>30%), Estimate, or Impute (mean/median/mode)</li>
+            <li>Categorical: Use One-Hot Encoding (pandas.get_dummies())</li>
+            <li>Scaling: Required for gradient descent and distance-based algorithms</li>
+            <li>StandardScaler: mean=0, std=1 | MinMaxScaler: 0 to 1</li>
+            <li>ALWAYS fit scaler on training set only to prevent data leakage</li>
+        </ul>
+    </div>
+</div>
+
+<div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+    <a href="{{ url_for('topic', slug='ml-pipeline') }}" class="btn">Previous: ML Pipeline</a>
+    <a href="{{ url_for('topic', slug='evaluation') }}" class="btn">Next: Performance Evaluation</a>
+</div>
+{% endblock %}

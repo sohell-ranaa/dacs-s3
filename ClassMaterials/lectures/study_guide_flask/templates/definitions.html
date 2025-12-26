@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% block title %}Definitions - ML Study Guide{% endblock %}
+
+{% block head %}
+<style>
+    .podcast-player {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        border-radius: 1rem;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+        color: white;
+    }
+    .podcast-player h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .podcast-player audio {
+        width: 100%;
+        height: 40px;
+        border-radius: 0.5rem;
+    }
+    .podcast-player .podcast-info {
+        font-size: 0.85rem;
+        opacity: 0.9;
+        margin-bottom: 0.75rem;
+    }
+    .generate-btn {
+        background: rgba(255,255,255,0.2);
+        color: white;
+        border: 1px solid rgba(255,255,255,0.3);
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .generate-btn:hover {
+        background: rgba(255,255,255,0.3);
+    }
+    .generate-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    .generate-btn.loading::after {
+        content: '';
+        width: 14px;
+        height: 14px;
+        border: 2px solid white;
+        border-top-color: transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-left: 0.5rem;
+    }
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    .section-header h2 {
+        margin: 0;
+    }
+    .mini-player {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #f1f5f9;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+    }
+    .mini-player audio {
+        height: 32px;
+        width: 200px;
+    }
+    .mini-btn {
+        background: #6366f1;
+        color: white;
+        border: none;
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.4rem;
+        cursor: pointer;
+        font-size: 0.8rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Key Definitions</h1>
+<p class="text-muted">All important terms you need to know</p>
+
+{% for key, category in definitions.items() %}
+<div class="section">
+    <div class="section-header">
+        <h2>{{ category.title }}</h2>
+        {% set podcast_id = 'definitions-' + key %}
+        <div class="mini-player" id="player-{{ key }}">
+            {% if podcasts.get(podcast_id, {}).get('exists') %}
+            <audio controls preload="metadata">
+                <source src="{{ podcasts[podcast_id]['url'] }}" type="audio/mpeg">
+            </audio>
+            {% else %}
+            <button class="mini-btn" onclick="generatePodcast('{{ podcast_id }}', '{{ key }}')">
+                Generate Audio
+            </button>
+            {% endif %}
+        </div>
+    </div>
+
+    {% for term in category.terms %}
+    <div class="def">
+        <div class="def-term">{{ term.term }}</div>
+        <div class="def-meaning">{{ term.meaning }}</div>
+        {% if term.example %}
+        <div class="def-example">{{ term.example }}</div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endfor %}
+
+<div class="topic-nav">
+    <a href="{{ url_for('index') }}">← Home</a>
+    <a href="{{ url_for('formulas') }}">Formulas →</a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function generatePodcast(topicId, key) {
+    const player = document.getElementById(`player-${key}`);
+    const btn = player.querySelector('button');
+
+    if (btn) {
+        btn.disabled = true;
+        btn.classList.add('loading');
+        btn.textContent = 'Generating...';
+    }
+
+    try {
+        const response = await fetch(`/api/podcast/generate/${topicId}`, {
+            method: 'POST'
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            player.innerHTML = `
+                <audio controls preload="metadata">
+                    <source src="${data.audio_url}" type="audio/mpeg">
+                </audio>
+            `;
+        } else {
+            alert('Error: ' + data.error);
+            if (btn) {
+                btn.disabled = false;
+                btn.classList.remove('loading');
+                btn.textContent = 'Generate Audio';
+            }
+        }
+    } catch (error) {
+        alert('Generation failed: ' + error.message);
+        if (btn) {
+            btn.disabled = false;
+            btn.classList.remove('loading');
+            btn.textContent = 'Generate Audio';
+        }
+    }
+}
+</script>
+{% endblock %}

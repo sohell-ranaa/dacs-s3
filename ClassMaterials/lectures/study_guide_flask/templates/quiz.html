@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Quiz: {{ topic|title }} - ML Study Guide{% endblock %}
+
+{% block content %}
+<h1>Quiz: {{ topic|title }}</h1>
+<p class="text-muted">{{ questions|length }} questions</p>
+
+<div id="quiz">
+    {% for q in questions %}
+    {% set qnum = loop.index %}
+    <div class="quiz-q" data-correct="{{ q.ans }}">
+        <div class="quiz-q-num">Question {{ qnum }}</div>
+        <div class="quiz-q-text">{{ q.q }}</div>
+
+        <div class="quiz-opts">
+            {% for opt in q.opts %}
+            <label class="quiz-opt" data-idx="{{ loop.index0 }}">
+                <input type="radio" name="q{{ qnum }}" value="{{ loop.index0 }}">
+                <span class="quiz-opt-letter">{{ ['A','B','C','D'][loop.index0] }}</span>
+                <span>{{ opt }}</span>
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="card text-center">
+    <p id="result" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;"></p>
+    <button class="btn" onclick="checkAnswers()">Check Answers</button>
+    <button class="btn btn-outline" onclick="resetQuiz()">Reset</button>
+</div>
+
+<div class="topic-nav">
+    <a href="{{ url_for('practice') }}">← Back to Practice</a>
+</div>
+
+{% block scripts %}
+<script>
+document.querySelectorAll('.quiz-opt').forEach(opt => {
+    opt.addEventListener('click', function() {
+        const q = this.closest('.quiz-q');
+        q.querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('selected'));
+        this.classList.add('selected');
+    });
+});
+
+function checkAnswers() {
+    let score = 0;
+    const questions = document.querySelectorAll('.quiz-q');
+
+    questions.forEach(q => {
+        const correct = parseInt(q.dataset.correct);
+        const selected = q.querySelector('.quiz-opt.selected');
+
+        q.querySelectorAll('.quiz-opt').forEach((opt, idx) => {
+            opt.classList.remove('correct', 'wrong');
+            if (idx === correct) opt.classList.add('correct');
+        });
+
+        if (selected) {
+            const idx = parseInt(selected.dataset.idx);
+            if (idx === correct) {
+                score++;
+            } else {
+                selected.classList.add('wrong');
+            }
+        }
+    });
+
+    document.getElementById('result').textContent = `Score: ${score}/${questions.length}`;
+}
+
+function resetQuiz() {
+    document.querySelectorAll('.quiz-opt').forEach(opt => {
+        opt.classList.remove('selected', 'correct', 'wrong');
+    });
+    document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+    document.getElementById('result').textContent = '';
+}
+</script>
+{% endblock %}
+{% endblock %}
