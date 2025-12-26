@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 7: Model Optimization - DACS Study Guide</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <h1>DACS Study Guide</h1>
+            <div>
+                <a href="index.html">Home</a>
+                <a href="topic6-algorithms.html">Prev</a>
+                <a href="topic8-selection.html">Next</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a> &gt; <span>Topic 7: Model Optimization</span>
+        </div>
+
+        <div class="hero" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+            <h1>Topic 7: Model Optimization Strategies</h1>
+            <p>Hyperparameter tuning, feature selection, and resampling</p>
+        </div>
+
+        <div class="section" id="overview">
+            <h2>Three Optimization Strategies</h2>
+            <div class="diagram">
+                <svg width="700" height="120" viewBox="0 0 700 120">
+                    <rect x="50" y="30" width="180" height="70" rx="10" fill="#2563eb"/>
+                    <text x="140" y="65" text-anchor="middle" fill="white" font-weight="bold">Hyperparameter</text>
+                    <text x="140" y="85" text-anchor="middle" fill="white">Tuning</text>
+
+                    <rect x="260" y="30" width="180" height="70" rx="10" fill="#10b981"/>
+                    <text x="350" y="65" text-anchor="middle" fill="white" font-weight="bold">Feature</text>
+                    <text x="350" y="85" text-anchor="middle" fill="white">Selection</text>
+
+                    <rect x="470" y="30" width="180" height="70" rx="10" fill="#f59e0b"/>
+                    <text x="560" y="65" text-anchor="middle" fill="white" font-weight="bold">Resampling</text>
+                    <text x="560" y="85" text-anchor="middle" fill="white">Strategies</text>
+                </svg>
+            </div>
+        </div>
+
+        <div class="section" id="hyperparameters">
+            <h2>1. Hyperparameter Tuning</h2>
+
+            <div class="key-concept">
+                <h4>Model Parameters vs Hyperparameters</h4>
+                <ul>
+                    <li><strong>Model Parameters:</strong> Learned from data (weights, coefficients)</li>
+                    <li><strong>Hyperparameters:</strong> Define model architecture, set before training</li>
+                </ul>
+            </div>
+
+            <h3>Goal: Find Optimal Hyperparameters</h3>
+            <p>We want to find the combination of hyperparameters that gives <strong>minimum error</strong> (loss).</p>
+
+            <h3>Tuning Methods</h3>
+            <table>
+                <tr><th>Method</th><th>How It Works</th><th>Pros/Cons</th></tr>
+                <tr>
+                    <td><strong>Grid Search CV</strong></td>
+                    <td>Evaluates ALL possible combinations from a list</td>
+                    <td>Exhaustive but slow with many parameters</td>
+                </tr>
+                <tr>
+                    <td><strong>Randomized Search CV</strong></td>
+                    <td>Samples from distribution of possible values</td>
+                    <td>Faster, samples parameter space</td>
+                </tr>
+            </table>
+
+            <div class="key-concept">
+                <h4>Best Practice</h4>
+                <p>Combine Grid Search with <strong>K-Fold Cross Validation</strong> to evaluate each parameter combination.</p>
+                <ul>
+                    <li>Default scoring: accuracy (classification), r2 (regression)</li>
+                    <li>Time increases exponentially with number of parameters</li>
+                    <li>More parameters = more flexibility, but need right combination</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h4>Bias-Variance Connection</h4>
+                <p>Hyperparameter tuning is often a battle to find the right <strong>bias/variance tradeoff</strong>.</p>
+                <p>Use cross-validation to quantitatively evaluate overfitting/underfitting.</p>
+            </div>
+        </div>
+
+        <div class="section" id="feature-selection">
+            <h2>2. Feature Selection</h2>
+
+            <div class="key-concept">
+                <h4>Why Feature Selection?</h4>
+                <ul>
+                    <li>More features = more complex model = more sensitive to variance</li>
+                    <li>Curse of dimensionality: Error increases with features</li>
+                    <li>Remove weak or redundant features to improve performance</li>
+                </ul>
+            </div>
+
+            <h3>Method 1: Correlation Filtering</h3>
+            <div class="formula-box">
+                <h4>Pearson Correlation</h4>
+                <div class="formula">\[ \rho(X,Y) = \frac{cov(X,Y)}{\sigma_X \cdot \sigma_Y} \]</div>
+                <p>Remove features with low correlation to target (threshold typically < 0.1)</p>
+            </div>
+
+            <h3>Method 2: Mutual Information</h3>
+            <ul>
+                <li>Captures non-linear relationships (better than Pearson)</li>
+                <li>Scale 0-1: higher = better predictor</li>
+                <li>Pearson and MI are complementary - use both</li>
+            </ul>
+
+            <h3>Method 3: Permutation Feature Importance</h3>
+            <div class="key-concept">
+                <h4>How It Works</h4>
+                <ol>
+                    <li>Shuffle values of one feature</li>
+                    <li>Measure increase in model error</li>
+                    <li>Feature is "important" if shuffling increases error</li>
+                    <li>Feature is "unimportant" if error stays same</li>
+                </ol>
+                <p>Can run on test set with any classifier/regressor.</p>
+            </div>
+
+            <h3>Method 4: Sequential Feature Selection</h3>
+            <div class="key-concept">
+                <h4>Types</h4>
+                <ul>
+                    <li><strong>Forward Selection:</strong> Start empty, add features one by one</li>
+                    <li><strong>Backward Elimination:</strong> Start with all, remove features one by one</li>
+                </ul>
+                <p>Select based on performance metric (accuracy, AUC_ROC) rather than coefficients.</p>
+                <p>Negative importance = feature is worse than noise</p>
+            </div>
+        </div>
+
+        <div class="section" id="resampling">
+            <h2>3. Resampling Strategies</h2>
+
+            <div class="key-concept">
+                <h4>The Problem: Class Imbalance</h4>
+                <ul>
+                    <li><strong>Test set imbalance:</strong> OK - some classes naturally occur more</li>
+                    <li><strong>Train set imbalance:</strong> Problem - not enough examples to learn class characteristics</li>
+                </ul>
+            </div>
+
+            <div class="diagram">
+                <svg width="700" height="150" viewBox="0 0 700 150">
+                    <rect x="50" y="30" width="180" height="100" rx="10" fill="#ef4444"/>
+                    <text x="140" y="65" text-anchor="middle" fill="white" font-weight="bold">Undersampling</text>
+                    <text x="140" y="90" text-anchor="middle" fill="white" font-size="11">Reduce majority class</text>
+                    <text x="140" y="110" text-anchor="middle" fill="white" font-size="10">May lose information</text>
+
+                    <rect x="260" y="30" width="180" height="100" rx="10" fill="#10b981"/>
+                    <text x="350" y="65" text-anchor="middle" fill="white" font-weight="bold">Oversampling</text>
+                    <text x="350" y="90" text-anchor="middle" fill="white" font-size="11">Increase minority class</text>
+                    <text x="350" y="110" text-anchor="middle" fill="white" font-size="10">Duplicate or synthesize</text>
+
+                    <rect x="470" y="30" width="180" height="100" rx="10" fill="#8b5cf6"/>
+                    <text x="560" y="65" text-anchor="middle" fill="white" font-weight="bold">SMOTE</text>
+                    <text x="560" y="90" text-anchor="middle" fill="white" font-size="11">Synthetic Minority</text>
+                    <text x="560" y="110" text-anchor="middle" fill="white" font-size="10">Creates new similar examples</text>
+                </svg>
+            </div>
+
+            <h3>SMOTE (Synthetic Minority Oversampling Technique)</h3>
+            <div class="key-concept">
+                <h4>How SMOTE Works</h4>
+                <ul>
+                    <li>Creates <strong>synthetic examples</strong> for minority class</li>
+                    <li>New examples are similar to existing ones (not exact copies)</li>
+                    <li>Adds new information to the model</li>
+                    <li>Better than simple duplication</li>
+                </ul>
+            </div>
+
+            <h3>Class Separability</h3>
+            <table>
+                <tr><th>Separability</th><th>Description</th><th>Classifier Performance</th></tr>
+                <tr><td>Good</td><td>Classes don't overlap</td><td>Easy to classify</td></tr>
+                <tr><td>Medium</td><td>Some overlap</td><td>May confuse classifier</td></tr>
+                <tr><td>Bad</td><td>Intense overlap</td><td>Classes almost inseparable</td></tr>
+            </table>
+        </div>
+
+        <div class="section" id="quiz">
+            <h2>Self-Test Quiz</h2>
+            <form class="quiz-form">
+                <div class="quiz-question" data-answer="b">
+                    <h4>1. Hyperparameters are:</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q1" value="a"> Learned from the training data</label>
+                        <label><input type="radio" name="q1" value="b"> Set before training to define model architecture</label>
+                        <label><input type="radio" name="q1" value="c"> The weights of neural networks</label>
+                        <label><input type="radio" name="q1" value="d"> Same as model parameters</label>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="a">
+                    <h4>2. SMOTE is used to:</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q2" value="a"> Create synthetic examples for minority class</label>
+                        <label><input type="radio" name="q2" value="b"> Remove outliers</label>
+                        <label><input type="radio" name="q2" value="c"> Scale features</label>
+                        <label><input type="radio" name="q2" value="d"> Tune hyperparameters</label>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="c">
+                    <h4>3. In permutation feature importance, a feature is important if:</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q3" value="a"> Shuffling it decreases error</label>
+                        <label><input type="radio" name="q3" value="b"> Shuffling it has no effect</label>
+                        <label><input type="radio" name="q3" value="c"> Shuffling it increases error</label>
+                        <label><input type="radio" name="q3" value="d"> It has highest correlation</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Check Answers</button>
+            </form>
+        </div>
+
+        <div class="section">
+            <h2>Key Takeaways</h2>
+            <div class="key-concept">
+                <h4>Remember These Points</h4>
+                <ul>
+                    <li>Hyperparameters define architecture; Model parameters are learned</li>
+                    <li>Grid Search: exhaustive | Randomized Search: samples</li>
+                    <li>Combine hyperparameter tuning with k-fold CV</li>
+                    <li>Feature selection: correlation, MI, permutation importance, sequential</li>
+                    <li>Class imbalance: problem in training set, OK in test set</li>
+                    <li>SMOTE creates synthetic minority examples (better than duplication)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+            <a href="topic6-algorithms.html" class="btn">Previous: Algorithms</a>
+            <a href="topic8-selection.html" class="btn">Next: Model Selection</a>
+        </div>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

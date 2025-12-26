@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DACS Machine Learning - Class Test Preparation Guide</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <h1>CT115-3-M DACS Study Guide</h1>
+            <div>
+                <a href="index.html">Home</a>
+                <a href="#topics">Topics</a>
+                <a href="quick-reference.html">Quick Reference</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Data Analytics in Cyber Security</h1>
+            <p>Comprehensive Class Test Preparation Guide</p>
+            <p style="margin-top: 1rem; opacity: 0.8;">Machine Learning Concepts, Algorithms, Formulas & Examples</p>
+        </div>
+
+        <div class="section" id="overview">
+            <h2>Module Overview</h2>
+            <p>This study guide covers all essential topics for the CT115-3-M Data Analytics in Cyber Security class test. Each topic includes detailed explanations, formulas, diagrams, and examples.</p>
+
+            <div class="key-concept">
+                <h4>Learning Objectives</h4>
+                <ul>
+                    <li>Understand Machine Learning fundamentals and terminology</li>
+                    <li>Master the ML Pipeline from data collection to model validation</li>
+                    <li>Learn data preprocessing techniques (feature selection, scaling, encoding)</li>
+                    <li>Understand performance evaluation metrics (Confusion Matrix, ROC, F1)</li>
+                    <li>Know different ML algorithms and when to use them</li>
+                    <li>Apply model optimization strategies (hyperparameter tuning, resampling)</li>
+                    <li>Perform statistical model comparison and selection</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2 id="topics" style="margin-bottom: 2rem;">Study Topics</h2>
+
+        <div class="topics-grid">
+            <div class="topic-card">
+                <span class="topic-number">1</span>
+                <h3>Machine Learning Fundamentals</h3>
+                <p>Introduction to ML, supervised vs unsupervised learning, key terminology, and the mathematical foundations.</p>
+                <a href="topic1-ml-fundamentals.html" class="btn">Study Topic</a>
+            </div>
+
+            <div class="topic-card">
+                <span class="topic-number">2</span>
+                <h3>Statistics & Model Logic</h3>
+                <p>Statistical concepts, mean/median/mode, variance, correlation, and scientific reasoning methods.</p>
+                <a href="topic2-statistics.html" class="btn">Study Topic</a>
+            </div>
+
+            <div class="topic-card">
+                <span class="topic-number">3</span>
+                <h3>Machine Learning Pipeline</h3>
+                <p>Complete workflow from problem definition to model validation, including data collection and feature extraction.</p>
+                <a href="topic3-ml-pipeline.html" class="btn">Study Topic</a>
+            </div>
+
+            <div class="topic-card">
+                <span class="topic-number">4</span>
+                <h3>Data Preprocessing</h3>
+                <p>Feature selection, EDA, handling missing values, encoding categorical data, and scaling techniques.</p>
+                <a href="topic4-preprocessing.html" class="btn">Study Topic</a>
+            </div>
+
+            <div class="topic-card">
+                <span class="topic-number">5</span>
+                <h3>Performance Evaluation</h3>
+                <p>Confusion matrix, precision, recall, F1 score, ROC curves, AUC, and cross-validation techniques.</p>
+                <a href="topic5-evaluation.html" class="btn">Study Topic</a>
+            </div>
+
+            <div class="topic-card">
+                <span class="topic-number">6</span>
+                <h3>ML Algorithms</h3>
+                <p>Linear regression, logistic regression, SVM, decision trees, random forest, neural networks, and more.</p>
+                <a href="topic6-algorithms.html" class="btn">Study Topic</a>
+            </div>
+
+            <div class="topic-card">
+                <span class="topic-number">7</span>
+                <h3>Model Optimization</h3>
+                <p>Hyperparameter tuning, feature selection methods, resampling strategies, and SMOTE.</p>
+                <a href="topic7-optimization.html" class="btn">Study Topic</a>
+            </div>
+
+            <div class="topic-card">
+                <span class="topic-number">8</span>
+                <h3>Model Selection</h3>
+                <p>Statistical hypothesis testing, McNemar's test, Wilcoxon signed-rank test, and 5x2CV paired tests.</p>
+                <a href="topic8-selection.html" class="btn">Study Topic</a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Key Formulas Quick Reference</h2>
+
+            <div class="formula-box">
+                <h4>Accuracy</h4>
+                <div class="formula">
+                    \[ Accuracy = \frac{TP + TN}{TP + TN + FP + FN} \]
+                </div>
+            </div>
+
+            <div class="formula-box">
+                <h4>Precision</h4>
+                <div class="formula">
+                    \[ Precision = \frac{TP}{TP + FP} \]
+                </div>
+            </div>
+
+            <div class="formula-box">
+                <h4>Recall (Sensitivity)</h4>
+                <div class="formula">
+                    \[ Recall = \frac{TP}{TP + FN} \]
+                </div>
+            </div>
+
+            <div class="formula-box">
+                <h4>F1 Score</h4>
+                <div class="formula">
+                    \[ F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall} \]
+                </div>
+            </div>
+
+            <div class="formula-box">
+                <h4>Pearson Correlation</h4>
+                <div class="formula">
+                    \[ \rho(X,Y) = \frac{cov(X,Y)}{\sigma_X \cdot \sigma_Y} \]
+                </div>
+            </div>
+
+            <div class="formula-box">
+                <h4>Linear Regression</h4>
+                <div class="formula">
+                    \[ y = a + bX \]
+                </div>
+            </div>
+
+            <div class="formula-box">
+                <h4>Variance</h4>
+                <div class="formula">
+                    \[ \sigma^2 = \frac{\sum(x_i - \bar{x})^2}{n} \]
+                </div>
+            </div>
+
+            <div class="formula-box">
+                <h4>Standard Deviation</h4>
+                <div class="formula">
+                    \[ \sigma = \sqrt{\sigma^2} \]
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>ML Pipeline Overview</h2>
+            <div class="diagram">
+                <svg width="900" height="120" viewBox="0 0 900 120">
+                    <!-- Pipeline boxes -->
+                    <rect x="10" y="30" width="100" height="60" rx="8" fill="#2563eb"/>
+                    <text x="60" y="65" text-anchor="middle" fill="white" font-size="11">Problem</text>
+                    <text x="60" y="80" text-anchor="middle" fill="white" font-size="11">Definition</text>
+
+                    <rect x="130" y="30" width="100" height="60" rx="8" fill="#3b82f6"/>
+                    <text x="180" y="65" text-anchor="middle" fill="white" font-size="11">Data</text>
+                    <text x="180" y="80" text-anchor="middle" fill="white" font-size="11">Collection</text>
+
+                    <rect x="250" y="30" width="100" height="60" rx="8" fill="#60a5fa"/>
+                    <text x="300" y="65" text-anchor="middle" fill="white" font-size="11">Feature</text>
+                    <text x="300" y="80" text-anchor="middle" fill="white" font-size="11">Extraction</text>
+
+                    <rect x="370" y="30" width="100" height="60" rx="8" fill="#10b981"/>
+                    <text x="420" y="65" text-anchor="middle" fill="white" font-size="11">Data</text>
+                    <text x="420" y="80" text-anchor="middle" fill="white" font-size="11">Preparation</text>
+
+                    <rect x="490" y="30" width="100" height="60" rx="8" fill="#059669"/>
+                    <text x="540" y="65" text-anchor="middle" fill="white" font-size="11">Algorithm</text>
+                    <text x="540" y="80" text-anchor="middle" fill="white" font-size="11">Selection</text>
+
+                    <rect x="610" y="30" width="100" height="60" rx="8" fill="#f59e0b"/>
+                    <text x="660" y="65" text-anchor="middle" fill="white" font-size="11">Performance</text>
+                    <text x="660" y="80" text-anchor="middle" fill="white" font-size="11">Evaluation</text>
+
+                    <rect x="730" y="30" width="100" height="60" rx="8" fill="#d97706"/>
+                    <text x="780" y="65" text-anchor="middle" fill="white" font-size="11">Model</text>
+                    <text x="780" y="80" text-anchor="middle" fill="white" font-size="11">Validation</text>
+
+                    <!-- Arrows -->
+                    <path d="M112 60 L128 60" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+                    <path d="M232 60 L248 60" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+                    <path d="M352 60 L368 60" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+                    <path d="M472 60 L488 60" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+                    <path d="M592 60 L608 60" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+                    <path d="M712 60 L728 60" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+
+                    <!-- Feedback loop -->
+                    <path d="M780 95 C780 110 540 110 540 95" stroke="#ef4444" stroke-width="2" fill="none" stroke-dasharray="5,5" marker-end="url(#arrow-red)"/>
+                    <text x="660" y="115" text-anchor="middle" fill="#ef4444" font-size="10">Iteration</text>
+
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+                        </marker>
+                        <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#ef4444"/>
+                        </marker>
+                    </defs>
+                </svg>
+                <p class="diagram-caption">Machine Learning Pipeline - Iterative Process</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Confusion Matrix Explained</h2>
+            <div class="diagram">
+                <svg width="500" height="350" viewBox="0 0 500 350">
+                    <!-- Matrix grid -->
+                    <rect x="150" y="80" width="120" height="100" fill="#22c55e" stroke="#166534" stroke-width="2"/>
+                    <rect x="270" y="80" width="120" height="100" fill="#ef4444" stroke="#991b1b" stroke-width="2"/>
+                    <rect x="150" y="180" width="120" height="100" fill="#f97316" stroke="#c2410c" stroke-width="2"/>
+                    <rect x="270" y="180" width="120" height="100" fill="#22c55e" stroke="#166534" stroke-width="2"/>
+
+                    <!-- Labels -->
+                    <text x="210" y="140" text-anchor="middle" fill="white" font-size="16" font-weight="bold">TP</text>
+                    <text x="210" y="160" text-anchor="middle" fill="white" font-size="11">True Positive</text>
+
+                    <text x="330" y="140" text-anchor="middle" fill="white" font-size="16" font-weight="bold">FP</text>
+                    <text x="330" y="160" text-anchor="middle" fill="white" font-size="11">False Positive</text>
+                    <text x="330" y="175" text-anchor="middle" fill="white" font-size="10">(Type I Error)</text>
+
+                    <text x="210" y="240" text-anchor="middle" fill="white" font-size="16" font-weight="bold">FN</text>
+                    <text x="210" y="260" text-anchor="middle" fill="white" font-size="11">False Negative</text>
+                    <text x="210" y="275" text-anchor="middle" fill="white" font-size="10">(Type II Error)</text>
+
+                    <text x="330" y="240" text-anchor="middle" fill="white" font-size="16" font-weight="bold">TN</text>
+                    <text x="330" y="260" text-anchor="middle" fill="white" font-size="11">True Negative</text>
+
+                    <!-- Axis labels -->
+                    <text x="270" y="50" text-anchor="middle" fill="#1e293b" font-size="14" font-weight="bold">Predicted</text>
+                    <text x="210" y="70" text-anchor="middle" fill="#1e293b" font-size="12">Positive</text>
+                    <text x="330" y="70" text-anchor="middle" fill="#1e293b" font-size="12">Negative</text>
+
+                    <text x="80" y="170" text-anchor="middle" fill="#1e293b" font-size="14" font-weight="bold" transform="rotate(-90 80 170)">Actual</text>
+                    <text x="130" y="130" text-anchor="middle" fill="#1e293b" font-size="12">Positive</text>
+                    <text x="130" y="230" text-anchor="middle" fill="#1e293b" font-size="12">Negative</text>
+
+                    <!-- Legend -->
+                    <rect x="150" y="300" width="20" height="15" fill="#22c55e"/>
+                    <text x="180" y="312" fill="#1e293b" font-size="11">Correct Prediction</text>
+
+                    <rect x="300" y="300" width="20" height="15" fill="#ef4444"/>
+                    <text x="330" y="312" fill="#1e293b" font-size="11">Type I Error</text>
+
+                    <rect x="150" y="325" width="20" height="15" fill="#f97316"/>
+                    <text x="180" y="337" fill="#1e293b" font-size="11">Type II Error</text>
+                </svg>
+                <p class="diagram-caption">Confusion Matrix Components</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Algorithm Types Overview</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Algorithm</th>
+                        <th>Use Case</th>
+                        <th>Key Feature</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="3">Linear Models</td>
+                        <td>Linear Regression</td>
+                        <td>Continuous prediction</td>
+                        <td>y = a + bX</td>
+                    </tr>
+                    <tr>
+                        <td>Logistic Regression</td>
+                        <td>Binary classification</td>
+                        <td>Sigmoid function (0-1)</td>
+                    </tr>
+                    <tr>
+                        <td>LDA</td>
+                        <td>Classification + dimensionality reduction</td>
+                        <td>Projects to 1D</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">Support Vector</td>
+                        <td>Linear SVM</td>
+                        <td>Binary classification</td>
+                        <td>Maximum margin hyperplane</td>
+                    </tr>
+                    <tr>
+                        <td>Kernel SVM</td>
+                        <td>Non-linear separation</td>
+                        <td>Maps to higher dimensions</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="3">Non-Linear</td>
+                        <td>Naive Bayes</td>
+                        <td>Text classification, spam</td>
+                        <td>Fast, assumes independence</td>
+                    </tr>
+                    <tr>
+                        <td>KNN</td>
+                        <td>Pattern recognition</td>
+                        <td>Lazy learner, distance-based</td>
+                    </tr>
+                    <tr>
+                        <td>Decision Tree</td>
+                        <td>Rule-based classification</td>
+                        <td>Interpretable, binary splits</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="3">Ensemble</td>
+                        <td>Random Forest</td>
+                        <td>Robust classification</td>
+                        <td>Bagging + feature subspace</td>
+                    </tr>
+                    <tr>
+                        <td>AdaBoost</td>
+                        <td>Improved accuracy</td>
+                        <td>Weights misclassified samples</td>
+                    </tr>
+                    <tr>
+                        <td>Gradient Boosting</td>
+                        <td>High accuracy</td>
+                        <td>Fits errors sequentially</td>
+                    </tr>
+                    <tr>
+                        <td>Neural Network</td>
+                        <td>MLP</td>
+                        <td>Complex patterns</td>
+                        <td>Forward/backward propagation</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Quick Study Checklist</h2>
+            <div class="example-box">
+                <h4>Before the Test, Make Sure You Can:</h4>
+                <ul>
+                    <li>Explain the difference between supervised and unsupervised learning</li>
+                    <li>Describe each step of the ML pipeline</li>
+                    <li>Calculate accuracy, precision, recall, and F1 score from a confusion matrix</li>
+                    <li>Explain when to use different algorithms</li>
+                    <li>Understand bias-variance tradeoff</li>
+                    <li>Describe cross-validation and why it's used</li>
+                    <li>Explain hyperparameter tuning methods</li>
+                    <li>Understand resampling strategies for imbalanced data</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer style="text-align: center; padding: 2rem; color: var(--text-muted);">
+        <p>CT115-3-M Data Analytics in Cyber Security - Study Guide</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

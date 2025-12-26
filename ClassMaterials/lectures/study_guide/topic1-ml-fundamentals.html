@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 1: Machine Learning Fundamentals - DACS Study Guide</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <h1>DACS Study Guide</h1>
+            <div>
+                <a href="index.html">Home</a>
+                <a href="topic2-statistics.html">Next: Statistics</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a> &gt; <span>Topic 1: ML Fundamentals</span>
+        </div>
+
+        <div class="hero" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">
+            <h1>Topic 1: Machine Learning Fundamentals</h1>
+            <p>Understanding the core concepts, terminology, and types of machine learning</p>
+        </div>
+
+        <div class="section" id="what-is-ml">
+            <h2>What is Machine Learning?</h2>
+
+            <div class="key-concept">
+                <h4>Definition</h4>
+                <p>Machine Learning is an algorithm that optimizes a performance criterion using data of particular examples. Machines learn a selected model using training data to perform tasks autonomously.</p>
+            </div>
+
+            <h3>The Core Idea</h3>
+            <p>Machine learning algorithms are described as learning a <strong>target function (f)</strong> that best maps input variables (X) to an output variable (Y):</p>
+
+            <div class="formula-box">
+                <div class="formula">
+                    \[ Y = f(X) \]
+                </div>
+                <p>Where:</p>
+                <ul>
+                    <li><strong>X</strong> = Input variables (features/attributes)</li>
+                    <li><strong>Y</strong> = Output variable (target/label)</li>
+                    <li><strong>f</strong> = Unknown function we want to learn</li>
+                </ul>
+            </div>
+
+            <p>We don't know what the function (f) looks like or its form. If we did, we would use it directly. Machine learning algorithms try to approximate this unknown function from data.</p>
+        </div>
+
+        <div class="section" id="types-of-ml">
+            <h2>Types of Machine Learning</h2>
+
+            <div class="diagram">
+                <svg width="700" height="300" viewBox="0 0 700 300">
+                    <!-- Main box -->
+                    <rect x="250" y="20" width="200" height="50" rx="10" fill="#2563eb"/>
+                    <text x="350" y="52" text-anchor="middle" fill="white" font-weight="bold">Machine Learning</text>
+
+                    <!-- Lines -->
+                    <line x1="300" y1="70" x2="200" y2="120" stroke="#64748b" stroke-width="2"/>
+                    <line x1="350" y1="70" x2="350" y2="120" stroke="#64748b" stroke-width="2"/>
+                    <line x1="400" y1="70" x2="500" y2="120" stroke="#64748b" stroke-width="2"/>
+
+                    <!-- Supervised -->
+                    <rect x="100" y="120" width="180" height="50" rx="10" fill="#10b981"/>
+                    <text x="190" y="152" text-anchor="middle" fill="white" font-weight="bold">Supervised Learning</text>
+                    <rect x="100" y="180" width="180" height="90" rx="8" fill="#d1fae5" stroke="#10b981"/>
+                    <text x="190" y="205" text-anchor="middle" fill="#065f46" font-size="12">Uses labeled data</text>
+                    <text x="190" y="225" text-anchor="middle" fill="#065f46" font-size="12">Classification</text>
+                    <text x="190" y="245" text-anchor="middle" fill="#065f46" font-size="12">Regression</text>
+
+                    <!-- Unsupervised -->
+                    <rect x="260" y="120" width="180" height="50" rx="10" fill="#f59e0b"/>
+                    <text x="350" y="152" text-anchor="middle" fill="white" font-weight="bold">Unsupervised Learning</text>
+                    <rect x="260" y="180" width="180" height="90" rx="8" fill="#fef3c7" stroke="#f59e0b"/>
+                    <text x="350" y="205" text-anchor="middle" fill="#92400e" font-size="12">No labels</text>
+                    <text x="350" y="225" text-anchor="middle" fill="#92400e" font-size="12">Clustering</text>
+                    <text x="350" y="245" text-anchor="middle" fill="#92400e" font-size="12">Pattern discovery</text>
+
+                    <!-- Reinforcement -->
+                    <rect x="420" y="120" width="180" height="50" rx="10" fill="#8b5cf6"/>
+                    <text x="510" y="152" text-anchor="middle" fill="white" font-weight="bold">Reinforcement Learning</text>
+                    <rect x="420" y="180" width="180" height="90" rx="8" fill="#ede9fe" stroke="#8b5cf6"/>
+                    <text x="510" y="205" text-anchor="middle" fill="#5b21b6" font-size="12">Reward-based</text>
+                    <text x="510" y="225" text-anchor="middle" fill="#5b21b6" font-size="12">Agent learns from</text>
+                    <text x="510" y="245" text-anchor="middle" fill="#5b21b6" font-size="12">environment</text>
+                </svg>
+                <p class="diagram-caption">Three Main Types of Machine Learning</p>
+            </div>
+
+            <h3>Supervised Learning (Focus of this module)</h3>
+            <div class="key-concept">
+                <h4>How Supervised Learning Works</h4>
+                <ol>
+                    <li>Collect and <strong>label</strong> observations (human provides labels)</li>
+                    <li>Split into Training (70-80%) and Test (20-30%) datasets</li>
+                    <li>Pass the Training dataset to the Classifier</li>
+                    <li>Use the model to predict classes for Test dataset</li>
+                    <li>Use metrics to assess results</li>
+                </ol>
+            </div>
+
+            <div class="example-box">
+                <h4>Example: Health Prediction</h4>
+                <p>Features (X): Blood Pressure, Temperature, Age, Gender, Smoking status</p>
+                <p>Label (Y): Healthy (H) or Not Healthy (NH)</p>
+                <p>The <strong>labels come from human intelligence</strong> - a supervisor who knows the correct classification.</p>
+            </div>
+        </div>
+
+        <div class="section" id="terminology">
+            <h2>Key ML Terminology</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Term</th>
+                        <th>Definition</th>
+                        <th>Also Known As</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Dataset</strong></td>
+                        <td>A sample of real-world observations organized into a table (rows and columns)</td>
+                        <td>Data, Training data</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Feature</strong></td>
+                        <td>A column in the dataset table</td>
+                        <td>Predictor, Variable, Input, Attribute, Covariate</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Training Example</strong></td>
+                        <td>A row in the table representing a set of feature values</td>
+                        <td>Observation, Record, Instance</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Target</strong></td>
+                        <td>What we want to predict</td>
+                        <td>Ground truth, Label, Desired output, Response variable</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Model</strong></td>
+                        <td>A function y = f(x) that represents the relationship between target and observations</td>
+                        <td>Target function, Objective function</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Prediction</strong></td>
+                        <td>Outcome from applying the model to the dataset</td>
+                        <td>Output</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Classifier</strong></td>
+                        <td>Implementation combining Learning algorithm + Loss function + Optimizer</td>
+                        <td>Estimator</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section" id="model-components">
+            <h2>Model Components</h2>
+
+            <div class="diagram">
+                <svg width="700" height="200" viewBox="0 0 700 200">
+                    <!-- Dataset box -->
+                    <rect x="20" y="60" width="120" height="80" rx="8" fill="#e2e8f0" stroke="#64748b"/>
+                    <text x="80" y="100" text-anchor="middle" fill="#1e293b" font-weight="bold">Dataset</text>
+                    <text x="80" y="120" text-anchor="middle" fill="#64748b" font-size="11">(Features + Labels)</text>
+
+                    <!-- Arrow -->
+                    <path d="M145 100 L175 100" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+                    <!-- Classifier box -->
+                    <rect x="180" y="30" width="300" height="140" rx="10" fill="#2563eb" stroke="#1d4ed8" stroke-width="2"/>
+                    <text x="330" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="14">CLASSIFIER</text>
+
+                    <!-- Inner components -->
+                    <rect x="200" y="70" width="120" height="35" rx="5" fill="#60a5fa"/>
+                    <text x="260" y="93" text-anchor="middle" fill="white" font-size="11">Learning Algorithm</text>
+
+                    <rect x="200" y="115" width="120" height="35" rx="5" fill="#60a5fa"/>
+                    <text x="260" y="138" text-anchor="middle" fill="white" font-size="11">Loss Function</text>
+
+                    <rect x="340" y="70" width="120" height="35" rx="5" fill="#60a5fa"/>
+                    <text x="400" y="93" text-anchor="middle" fill="white" font-size="11">Optimizer</text>
+
+                    <rect x="340" y="115" width="120" height="35" rx="5" fill="#f59e0b"/>
+                    <text x="400" y="138" text-anchor="middle" fill="white" font-size="11">Hyperparameters</text>
+
+                    <!-- Arrow to model -->
+                    <path d="M485 100 L515 100" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+                    <!-- Model output -->
+                    <rect x="520" y="60" width="120" height="80" rx="8" fill="#10b981"/>
+                    <text x="580" y="100" text-anchor="middle" fill="white" font-weight="bold">MODEL</text>
+                    <text x="580" y="120" text-anchor="middle" fill="white" font-size="11">(Predictions)</text>
+
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+                        </marker>
+                    </defs>
+                </svg>
+                <p class="diagram-caption">Classifier Components</p>
+            </div>
+
+            <h3>Key Components Explained</h3>
+
+            <div class="accordion">
+                <div class="accordion-header">
+                    <strong>Learning Algorithm</strong>
+                    <span>+</span>
+                </div>
+                <div class="accordion-content">
+                    <p>A set of mathematical instructions that create a model using the training dataset. Most classifiers are named for the learning algorithm they implement (e.g., Decision Tree, Random Forest, SVM).</p>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <div class="accordion-header">
+                    <strong>Loss Function (Error Function)</strong>
+                    <span>+</span>
+                </div>
+                <div class="accordion-content">
+                    <p>Measures how far the predicted output for a single training example is from its true value. The loss function tells us how "wrong" our prediction is.</p>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <div class="accordion-header">
+                    <strong>Optimizer</strong>
+                    <span>+</span>
+                </div>
+                <div class="accordion-content">
+                    <p>An algorithm used to minimize the average loss (the Cost function) over the entire dataset. Common optimizers include Gradient Descent.</p>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <div class="accordion-header">
+                    <strong>Model Parameters vs Hyperparameters</strong>
+                    <span>+</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Model Parameters:</strong> What the algorithm "learns" from data (e.g., slope and intercept of a regression line)</p>
+                    <p><strong>Hyperparameters:</strong> Tuning parameters set by the programmer that affect algorithm behavior (e.g., number of iterations, learning rate)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="predictive-modeling">
+            <h2>Predictive Modeling</h2>
+
+            <p>There is a common principle underlying all supervised machine learning algorithms:</p>
+
+            <div class="key-concept">
+                <h4>The Goal</h4>
+                <p>Learn a target function (f) that best maps input variables (X) to an output variable (Y), allowing us to make predictions on new, unseen data.</p>
+            </div>
+
+            <h3>Statistical vs Machine Learning Approach</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Statistical Modeling</th>
+                        <th>Machine Learning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Assumptions</td>
+                        <td>Makes strong assumptions about data</td>
+                        <td>Minimal assumptions</td>
+                    </tr>
+                    <tr>
+                        <td>Human Effort</td>
+                        <td>Requires understanding of variable relationships</td>
+                        <td>Minimal human effort</td>
+                    </tr>
+                    <tr>
+                        <td>Process</td>
+                        <td>Mathematics intensive, coefficient estimation</td>
+                        <td>Iterative pattern discovery</td>
+                    </tr>
+                    <tr>
+                        <td>Data Requirements</td>
+                        <td>Can work with smaller datasets</td>
+                        <td>Generally needs more data</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="warning-box">
+                <h4>Important Principle</h4>
+                <p>"The fewer assumptions in a predictive model, the higher will be the predictive power."</p>
+            </div>
+        </div>
+
+        <div class="section" id="quiz">
+            <h2>Self-Test Quiz</h2>
+
+            <form class="quiz-form">
+                <div class="quiz-question" data-answer="b">
+                    <h4>1. What does supervised learning require that unsupervised learning does not?</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q1" value="a"> A large dataset</label>
+                        <label><input type="radio" name="q1" value="b"> Labeled data</label>
+                        <label><input type="radio" name="q1" value="c"> Neural networks</label>
+                        <label><input type="radio" name="q1" value="d"> Feature scaling</label>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="c">
+                    <h4>2. In the equation Y = f(X), what does f represent?</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q2" value="a"> The features</label>
+                        <label><input type="radio" name="q2" value="b"> The target variable</label>
+                        <label><input type="radio" name="q2" value="c"> The unknown function we want to learn</label>
+                        <label><input type="radio" name="q2" value="d"> The dataset</label>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="a">
+                    <h4>3. What is a "loss function"?</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q3" value="a"> Measures how far predicted output is from true value</label>
+                        <label><input type="radio" name="q3" value="b"> Splits data into training and test sets</label>
+                        <label><input type="radio" name="q3" value="c"> Selects the best features</label>
+                        <label><input type="radio" name="q3" value="d"> Determines the learning rate</label>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="d">
+                    <h4>4. Hyperparameters are:</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q4" value="a"> Learned from the training data</label>
+                        <label><input type="radio" name="q4" value="b"> The weights of a neural network</label>
+                        <label><input type="radio" name="q4" value="c"> The slope and intercept of regression</label>
+                        <label><input type="radio" name="q4" value="d"> Tuning parameters set by the programmer</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Check Answers</button>
+            </form>
+        </div>
+
+        <div class="section">
+            <h2>Key Takeaways</h2>
+            <div class="key-concept">
+                <h4>Remember These Points</h4>
+                <ul>
+                    <li>Machine Learning = Algorithm that learns from data to optimize performance</li>
+                    <li>Supervised Learning uses <strong>labeled data</strong> (labels from human intelligence)</li>
+                    <li>The goal is to learn function f where Y = f(X)</li>
+                    <li>Classifier = Learning Algorithm + Loss Function + Optimizer</li>
+                    <li>Model Parameters are learned; Hyperparameters are set</li>
+                    <li>Training/Test split: typically 70-80% / 20-30%</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+            <a href="index.html" class="btn">Back to Index</a>
+            <a href="topic2-statistics.html" class="btn">Next: Statistics & Model Logic</a>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

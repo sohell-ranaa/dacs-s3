@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 8: Model Selection - DACS Study Guide</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <h1>DACS Study Guide</h1>
+            <div>
+                <a href="index.html">Home</a>
+                <a href="topic7-optimization.html">Prev</a>
+                <a href="quick-reference.html">Quick Reference</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a> &gt; <span>Topic 8: Model Selection</span>
+        </div>
+
+        <div class="hero" style="background: linear-gradient(135deg, #0891b2, #06b6d4);">
+            <h1>Topic 8: Model Selection</h1>
+            <p>Statistical hypothesis testing and model comparison techniques</p>
+        </div>
+
+        <div class="section" id="final-model">
+            <h2>Selecting the Final Model</h2>
+
+            <div class="key-concept">
+                <h4>Key Principle</h4>
+                <p>The final model is prepared on the <strong>entire training dataset</strong> once we've chosen the best algorithm and configuration.</p>
+            </div>
+
+            <h3>Strategies for Robust Selection</h3>
+            <ol>
+                <li><strong>Multiple runs of k-fold CV:</strong> Get population of performance measures</li>
+                <li><strong>Ensemble of models:</strong> Each trained with different random seed</li>
+                <li><strong>Report summary statistics:</strong> Mean, standard deviation, range</li>
+                <li><strong>Use box-whisker plots:</strong> Visualize distribution of results</li>
+            </ol>
+
+            <div class="warning-box">
+                <h4>Stochastic Behavior</h4>
+                <p>Most classifiers use randomness - different model each run!</p>
+                <p>Set <code>random_state</code> for reproducible results.</p>
+                <p>Expect performance to be a <strong>range</strong>, not a single value.</p>
+            </div>
+        </div>
+
+        <div class="section" id="hypothesis-testing">
+            <h2>Statistical Hypothesis Testing</h2>
+
+            <div class="key-concept">
+                <h4>Why Statistical Tests?</h4>
+                <p>Differences in performance might be <strong>by chance</strong>, not because one model is actually better.</p>
+                <p>Statistical tests determine if differences are <strong>significant</strong>.</p>
+            </div>
+
+            <h3>Null Hypothesis</h3>
+            <p>The null hypothesis states that two data samples were drawn from the same distribution (no real difference).</p>
+            <ul>
+                <li><strong>Cannot reject null:</strong> Observed difference happened by chance</li>
+                <li><strong>Reject null:</strong> Observed difference is real</li>
+            </ul>
+
+            <div class="formula-box">
+                <h4>P-Value and Significance</h4>
+                <p>If p-value < α (typically 0.05), reject null hypothesis.</p>
+                <p>Low p-value = significant difference between models.</p>
+            </div>
+        </div>
+
+        <div class="section" id="mcnemar">
+            <h2>McNemar's Test</h2>
+
+            <div class="key-concept">
+                <h4>When to Use</h4>
+                <p>Compare predictions of two models on the <strong>same</strong> test set.</p>
+                <p>Unique: Uses actual predictions, not derived metrics!</p>
+            </div>
+
+            <div class="diagram">
+                <svg width="400" height="250" viewBox="0 0 400 250">
+                    <text x="200" y="30" text-anchor="middle" fill="#1e293b" font-weight="bold">McNemar's 2x2 Table</text>
+
+                    <rect x="100" y="80" width="90" height="70" fill="#22c55e" stroke="#166534"/>
+                    <rect x="190" y="80" width="90" height="70" fill="#fef3c7" stroke="#f59e0b"/>
+                    <rect x="100" y="150" width="90" height="70" fill="#fef3c7" stroke="#f59e0b"/>
+                    <rect x="190" y="150" width="90" height="70" fill="#22c55e" stroke="#166534"/>
+
+                    <text x="145" y="120" text-anchor="middle" fill="white" font-weight="bold">A</text>
+                    <text x="145" y="140" text-anchor="middle" fill="white" font-size="10">Both correct</text>
+
+                    <text x="235" y="120" text-anchor="middle" fill="#92400e" font-weight="bold">B</text>
+                    <text x="235" y="140" text-anchor="middle" fill="#92400e" font-size="10">M1 wrong, M2 right</text>
+
+                    <text x="145" y="190" text-anchor="middle" fill="#92400e" font-weight="bold">C</text>
+                    <text x="145" y="210" text-anchor="middle" fill="#92400e" font-size="10">M1 right, M2 wrong</text>
+
+                    <text x="235" y="190" text-anchor="middle" fill="white" font-weight="bold">D</text>
+                    <text x="235" y="210" text-anchor="middle" fill="white" font-size="10">Both wrong</text>
+
+                    <text x="200" y="60" text-anchor="middle" fill="#1e293b" font-size="12">Model 2</text>
+                    <text x="65" y="150" text-anchor="middle" fill="#1e293b" font-size="12" transform="rotate(-90 65 150)">Model 1</text>
+                </svg>
+            </div>
+
+            <div class="key-concept">
+                <h4>Key Insight</h4>
+                <p>Cells <strong>B and C</strong> (off-diagonal) tell us how models differ.</p>
+                <p>If p-value < 0.05, reject null hypothesis that models perform equally.</p>
+            </div>
+        </div>
+
+        <div class="section" id="5x2cv">
+            <h2>5x2CV Paired Test</h2>
+
+            <div class="key-concept">
+                <h4>How It Works</h4>
+                <ol>
+                    <li>Split data 50/50 into train/test</li>
+                    <li>Train both models, compute accuracy difference (DiffA)</li>
+                    <li>Swap train/test, compute difference again (DiffB)</li>
+                    <li>Repeat 5 times with different random splits</li>
+                    <li>Compute mean and variance of differences</li>
+                </ol>
+            </div>
+
+            <table>
+                <tr><th>Variant</th><th>Distribution</th><th>Notes</th></tr>
+                <tr><td>5x2cv paired t-test</td><td>t-distribution</td><td>Low false positive rate</td></tr>
+                <tr><td>5x2cv combined f-test</td><td>f-distribution</td><td>More robust</td></tr>
+            </table>
+
+            <p>More computationally expensive than McNemar (10x more computations) but more powerful.</p>
+        </div>
+
+        <div class="section" id="wilcoxon">
+            <h2>Wilcoxon Signed-Rank Test</h2>
+
+            <div class="key-concept">
+                <h4>When to Use</h4>
+                <ul>
+                    <li>Non-parametric version of paired t-test</li>
+                    <li>Small sample size</li>
+                    <li>Data doesn't follow normal distribution</li>
+                </ul>
+            </div>
+
+            <h3>Process</h3>
+            <ol>
+                <li>Create accuracy scores for each model using k-fold CV</li>
+                <li>This gives two samples (one per model)</li>
+                <li>Apply Wilcoxon test to see if samples differ significantly</li>
+            </ol>
+
+            <div class="warning-box">
+                <h4>Important</h4>
+                <p>Use the <strong>same folds</strong> (same random_state) for both models to ensure valid comparison.</p>
+            </div>
+        </div>
+
+        <div class="section" id="comparison-summary">
+            <h2>Test Comparison Summary</h2>
+
+            <table>
+                <thead>
+                    <tr><th>Test</th><th>Uses</th><th>Distribution</th><th>Best For</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>McNemar's</strong></td>
+                        <td>Actual predictions</td>
+                        <td>Chi-squared</td>
+                        <td>Quick comparison, single test set</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5x2cv t-test</strong></td>
+                        <td>Accuracy differences</td>
+                        <td>t-distribution</td>
+                        <td>When computation time OK</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5x2cv f-test</strong></td>
+                        <td>Accuracy differences</td>
+                        <td>f-distribution</td>
+                        <td>Most robust option</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Wilcoxon</strong></td>
+                        <td>CV accuracy scores</td>
+                        <td>Non-parametric</td>
+                        <td>Small samples, non-normal data</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section" id="quiz">
+            <h2>Self-Test Quiz</h2>
+            <form class="quiz-form">
+                <div class="quiz-question" data-answer="b">
+                    <h4>1. What makes McNemar's test unique?</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q1" value="a"> It uses accuracy scores</label>
+                        <label><input type="radio" name="q1" value="b"> It uses actual predictions from models</label>
+                        <label><input type="radio" name="q1" value="c"> It doesn't need any data</label>
+                        <label><input type="radio" name="q1" value="d"> It's the fastest test</label>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="a">
+                    <h4>2. If p-value < 0.05, we:</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q2" value="a"> Reject null hypothesis - difference is significant</label>
+                        <label><input type="radio" name="q2" value="b"> Accept null hypothesis - no difference</label>
+                        <label><input type="radio" name="q2" value="c"> Need more data</label>
+                        <label><input type="radio" name="q2" value="d"> Models are identical</label>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="c">
+                    <h4>3. Wilcoxon test is best when:</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q3" value="a"> Data is normally distributed</label>
+                        <label><input type="radio" name="q3" value="b"> You have very large datasets</label>
+                        <label><input type="radio" name="q3" value="c"> Small samples and non-normal data</label>
+                        <label><input type="radio" name="q3" value="d"> Only comparing neural networks</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Check Answers</button>
+            </form>
+        </div>
+
+        <div class="section">
+            <h2>Key Takeaways</h2>
+            <div class="key-concept">
+                <h4>Remember These Points</h4>
+                <ul>
+                    <li>Performance differences might be by chance - use statistical tests!</li>
+                    <li>Null hypothesis: models perform the same</li>
+                    <li>p-value < 0.05 → reject null → significant difference</li>
+                    <li>McNemar: uses predictions, chi-squared distribution</li>
+                    <li>5x2cv: more powerful, 10x more computation</li>
+                    <li>Wilcoxon: non-parametric, good for small/non-normal data</li>
+                    <li>Always use same random_state for fair comparison</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+            <a href="topic7-optimization.html" class="btn">Previous: Optimization</a>
+            <a href="quick-reference.html" class="btn">Quick Reference</a>
+        </div>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

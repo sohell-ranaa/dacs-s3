@@ -630,6 +630,65 @@ svg {
 }
 
 /* ============================================
+   Very Small Screens (< 400px)
+   ============================================ */
+@media (max-width: 400px) {
+    /* Container */
+    .container { padding: 0.5rem; }
+
+    /* Even smaller padding */
+    .hero { padding: 1rem 0.75rem; }
+    .section { padding: 0.75rem; }
+    .card { padding: 0.75rem; }
+    .def { padding: 0.5rem 0.75rem; }
+    .formula { padding: 0.75rem; }
+
+    /* Smaller typography */
+    h1 { font-size: 1.25rem; }
+    h2 { font-size: 1.1rem; }
+    h3 { font-size: 0.95rem; }
+    body { font-size: 14px; }
+
+    /* Navigation - top nav */
+    .nav-inner { padding: 0.5rem; }
+    .nav-brand { font-size: 0.85rem; }
+    .nav-toggle { font-size: 1.25rem; }
+
+    /* Steps - wrap to 2x2 grid */
+    .steps {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        justify-items: center;
+    }
+    .step { width: 100%; }
+    .step-num { width: 28px; height: 28px; font-size: 0.75rem; }
+
+    /* Formula grid - single column */
+    .formula-grid { grid-template-columns: 1fr; }
+    .formula { padding: 0.75rem; }
+    .formula-math { font-size: 0.9rem; padding: 0.5rem; }
+    .formula-label { font-size: 0.65rem; }
+    .formula-note { font-size: 0.7rem; }
+
+    /* Buttons */
+    .btn { padding: 0.5rem 0.75rem; font-size: 0.85rem; }
+    .topic-nav { padding: 0.75rem; }
+    .topic-nav a { padding: 0.5rem 0.75rem; font-size: 0.8rem; }
+
+    /* Topic cards */
+    .topic-card { padding: 1rem; }
+    .topic-card h3 { font-size: 0.95rem; }
+    .topic-card p { font-size: 0.8rem; }
+
+    /* Tables */
+    th, td { padding: 0.35rem; font-size: 0.8rem; }
+
+    /* Ensure no overflow */
+    * { word-wrap: break-word; overflow-wrap: break-word; }
+}
+
+/* ============================================
    Print
    ============================================ */
 @media print {

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 2: Statistics & Model Logic - DACS Study Guide</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <h1>DACS Study Guide</h1>
+            <div>
+                <a href="index.html">Home</a>
+                <a href="topic1-ml-fundamentals.html">Prev</a>
+                <a href="topic3-ml-pipeline.html">Next</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a> &gt; <span>Topic 2: Statistics & Model Logic</span>
+        </div>
+
+        <div class="hero" style="background: linear-gradient(135deg, #10b981, #059669);">
+            <h1>Topic 2: Statistics & Model Logic</h1>
+            <p>Statistical concepts, measures of central tendency, and scientific reasoning</p>
+        </div>
+
+        <div class="section" id="why-statistics">
+            <h2>Why Do We Need Statistics?</h2>
+
+            <div class="key-concept">
+                <h4>Quote to Remember</h4>
+                <p><em>"Impossible things usually don't happen."</em> - Sam Treiman, Princeton University</p>
+                <p><strong>Statistics helps us quantify "usually."</strong></p>
+            </div>
+
+            <p>A <strong>statistic</strong> is "a quantity that is computed from a sample of data." Statistics help us:</p>
+            <ul>
+                <li>Draw conclusions from data</li>
+                <li>Summarize in a meaningful way in presence of noise</li>
+                <li>Make probabilistic statements about populations</li>
+            </ul>
+        </div>
+
+        <div class="section" id="central-tendency">
+            <h2>Measures of Central Tendency</h2>
+
+            <p>These summarize data with a single number. The three most popular are:</p>
+
+            <div class="diagram">
+                <svg width="700" height="200" viewBox="0 0 700 200">
+                    <!-- Mean -->
+                    <rect x="50" y="30" width="180" height="140" rx="10" fill="#2563eb"/>
+                    <text x="140" y="70" text-anchor="middle" fill="white" font-weight="bold" font-size="18">MEAN</text>
+                    <text x="140" y="100" text-anchor="middle" fill="white" font-size="12">Sum all observations,</text>
+                    <text x="140" y="120" text-anchor="middle" fill="white" font-size="12">divide by number</text>
+                    <text x="140" y="150" text-anchor="middle" fill="white" font-size="14">x&#772; = &Sigma;x / n</text>
+
+                    <!-- Median -->
+                    <rect x="260" y="30" width="180" height="140" rx="10" fill="#10b981"/>
+                    <text x="350" y="70" text-anchor="middle" fill="white" font-weight="bold" font-size="18">MEDIAN</text>
+                    <text x="350" y="100" text-anchor="middle" fill="white" font-size="12">Midpoint value</text>
+                    <text x="350" y="120" text-anchor="middle" fill="white" font-size="12">when sorted</text>
+                    <text x="350" y="150" text-anchor="middle" fill="white" font-size="14">Middle position</text>
+
+                    <!-- Mode -->
+                    <rect x="470" y="30" width="180" height="140" rx="10" fill="#f59e0b"/>
+                    <text x="560" y="70" text-anchor="middle" fill="white" font-weight="bold" font-size="18">MODE</text>
+                    <text x="560" y="100" text-anchor="middle" fill="white" font-size="12">Most frequent</text>
+                    <text x="560" y="120" text-anchor="middle" fill="white" font-size="12">value observed</text>
+                    <text x="560" y="150" text-anchor="middle" fill="white" font-size="14">Highest count</text>
+                </svg>
+            </div>
+
+            <div class="example-box">
+                <h4>Example</h4>
+                <p>Dataset: 2, 3, 3, 4, 5, 5, 5, 7, 9</p>
+                <ul>
+                    <li><strong>Mean:</strong> (2+3+3+4+5+5+5+7+9) / 9 = 43/9 = 4.78</li>
+                    <li><strong>Median:</strong> 5 (middle value when sorted)</li>
+                    <li><strong>Mode:</strong> 5 (appears most often - 3 times)</li>
+                </ul>
+            </div>
+
+            <h3>Distribution Types</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Distribution</th>
+                        <th>Characteristics</th>
+                        <th>Mean vs Median vs Mode</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Normal (Gaussian)</td>
+                        <td>Symmetric bell curve</td>
+                        <td>Mean = Median = Mode</td>
+                    </tr>
+                    <tr>
+                        <td>Bimodal</td>
+                        <td>Two peaks</td>
+                        <td>Two modes</td>
+                    </tr>
+                    <tr>
+                        <td>Positively Skewed</td>
+                        <td>Tail extends right</td>
+                        <td>Mode < Median < Mean</td>
+                    </tr>
+                    <tr>
+                        <td>Negatively Skewed</td>
+                        <td>Tail extends left</td>
+                        <td>Mean < Median < Mode</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section" id="variability">
+            <h2>Measures of Variability</h2>
+
+            <div class="warning-box">
+                <h4>Why Variability Matters</h4>
+                <p>Summarizing by a single number (mean) is rarely enough. If two systems have the same mean, we tend to prefer the one with <strong>less variability</strong>.</p>
+            </div>
+
+            <h3>Variance</h3>
+            <div class="formula-box">
+                <div class="formula">
+                    \[ \sigma^2 = \frac{\sum(x_i - \bar{x})^2}{n} \]
+                </div>
+                <p>Variance is the average of squared distances from the mean.</p>
+                <p><strong>Problem:</strong> Units are squared (changing units changes the answer squared).</p>
+            </div>
+
+            <h3>Standard Deviation</h3>
+            <div class="formula-box">
+                <div class="formula">
+                    \[ \sigma = \sqrt{\sigma^2} = \sqrt{\frac{\sum(x_i - \bar{x})^2}{n}} \]
+                </div>
+                <p>Same unit as mean, so we can compare to mean.</p>
+            </div>
+
+            <h3>Coefficient of Variation (C.O.V.)</h3>
+            <div class="formula-box">
+                <div class="formula">
+                    \[ C.O.V. = \frac{\sigma}{\mu} \]
+                </div>
+                <p>Takes units out and shows relative magnitude of variation.</p>
+            </div>
+
+            <div class="example-box">
+                <h4>Example Calculation</h4>
+                <p>Dataset: 4, 6, 8, 10, 12</p>
+                <p><strong>Mean (μ):</strong> (4+6+8+10+12)/5 = 8</p>
+                <p><strong>Variance:</strong></p>
+                <ul>
+                    <li>(4-8)² = 16</li>
+                    <li>(6-8)² = 4</li>
+                    <li>(8-8)² = 0</li>
+                    <li>(10-8)² = 4</li>
+                    <li>(12-8)² = 16</li>
+                    <li>Sum = 40, Variance = 40/5 = 8</li>
+                </ul>
+                <p><strong>Standard Deviation:</strong> √8 ≈ 2.83</p>
+                <p><strong>C.O.V.:</strong> 2.83/8 = 0.354 or 35.4%</p>
+            </div>
+        </div>
+
+        <div class="section" id="correlation">
+            <h2>Correlation and Covariance</h2>
+
+            <h3>Key Concepts</h3>
+            <div class="key-concept">
+                <h4>Independent Events</h4>
+                <ul>
+                    <li>One event does not affect the other</li>
+                    <li>Knowing probability of one event does not change estimate of another</li>
+                    <li>Two independent variables have covariance of <strong>zero</strong></li>
+                </ul>
+            </div>
+
+            <h3>Covariance</h3>
+            <p>Measures the degree that two variables vary with each other.</p>
+
+            <h3>Pearson Correlation Coefficient</h3>
+            <div class="formula-box">
+                <div class="formula">
+                    \[ \rho(X,Y) = \frac{cov(X,Y)}{\sigma_X \cdot \sigma_Y} \]
+                </div>
+                <p>Normalized covariance (ranges from -1 to +1):</p>
+                <ul>
+                    <li><strong>+1:</strong> Perfect positive linear relationship</li>
+                    <li><strong>0:</strong> No linear association (but may still be dependent!)</li>
+                    <li><strong>-1:</strong> Perfect negative linear relationship</li>
+                </ul>
+            </div>
+
+            <div class="diagram">
+                <svg width="700" height="180" viewBox="0 0 700 180">
+                    <!-- Positive correlation -->
+                    <rect x="30" y="20" width="180" height="140" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+                    <text x="120" y="50" text-anchor="middle" fill="#10b981" font-weight="bold">Positive (r ≈ +1)</text>
+                    <line x1="60" y1="130" x2="180" y2="50" stroke="#10b981" stroke-width="3"/>
+                    <circle cx="70" cy="125" r="4" fill="#10b981"/>
+                    <circle cx="90" cy="110" r="4" fill="#10b981"/>
+                    <circle cx="120" cy="90" r="4" fill="#10b981"/>
+                    <circle cx="150" cy="70" r="4" fill="#10b981"/>
+                    <circle cx="170" cy="55" r="4" fill="#10b981"/>
+
+                    <!-- No correlation -->
+                    <rect x="260" y="20" width="180" height="140" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+                    <text x="350" y="50" text-anchor="middle" fill="#64748b" font-weight="bold">None (r ≈ 0)</text>
+                    <circle cx="280" cy="60" r="4" fill="#64748b"/>
+                    <circle cx="320" cy="130" r="4" fill="#64748b"/>
+                    <circle cx="350" cy="80" r="4" fill="#64748b"/>
+                    <circle cx="380" cy="110" r="4" fill="#64748b"/>
+                    <circle cx="410" cy="70" r="4" fill="#64748b"/>
+                    <circle cx="300" cy="100" r="4" fill="#64748b"/>
+                    <circle cx="400" cy="130" r="4" fill="#64748b"/>
+
+                    <!-- Negative correlation -->
+                    <rect x="490" y="20" width="180" height="140" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+                    <text x="580" y="50" text-anchor="middle" fill="#ef4444" font-weight="bold">Negative (r ≈ -1)</text>
+                    <line x1="520" y1="50" x2="640" y2="130" stroke="#ef4444" stroke-width="3"/>
+                    <circle cx="530" cy="55" r="4" fill="#ef4444"/>
+                    <circle cx="550" cy="70" r="4" fill="#ef4444"/>
+                    <circle cx="580" cy="90" r="4" fill="#ef4444"/>
+                    <circle cx="610" cy="110" r="4" fill="#ef4444"/>
+                    <circle cx="630" cy="125" r="4" fill="#ef4444"/>
+                </svg>
+                <p class="diagram-caption">Types of Correlation</p>
+            </div>
+
+            <div class="warning-box">
+                <h4>Important!</h4>
+                <p>A correlation of zero suggests no <strong>linear</strong> association, but does NOT mean two variables are independent! There may be non-linear relationships.</p>
+            </div>
+        </div>
+
+        <div class="section" id="scientific-methods">
+            <h2>Scientific Reasoning Methods</h2>
+
+            <div class="key-concept">
+                <h4>Quote from C.S. Peirce</h4>
+                <p><em>"Deduction proves that something must be;</em></p>
+                <p><em>Induction shows that something actually is operative;</em></p>
+                <p><em>Abduction merely suggests that something may be."</em></p>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Direction</th>
+                        <th>Description</th>
+                        <th>Certainty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Deductive</strong></td>
+                        <td>General → Specific</td>
+                        <td>If A and B, then <strong>always</strong> C. Start with hypothesis, predict observations, test with experiments.</td>
+                        <td>Guaranteed if premises true</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Inductive</strong></td>
+                        <td>Specific → General</td>
+                        <td>If A and B, then <strong>most probably</strong> C. Make observations, discern patterns, infer general rules.</td>
+                        <td>Probable, not guaranteed</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Abductive</strong></td>
+                        <td>Effect → Cause</td>
+                        <td>If A and B, then C <strong>maybe</strong>? Form hypothesis based on observations. Best explanation for facts.</td>
+                        <td>Worthy of investigation</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="example-box">
+                <h4>How They Connect</h4>
+                <p>In Machine Learning:</p>
+                <ul>
+                    <li><strong>Abduction:</strong> Problem Definition - "What might be causing this pattern?"</li>
+                    <li><strong>Induction:</strong> Training - Learn patterns from observed data</li>
+                    <li><strong>Deduction:</strong> Prediction - Apply learned model to new data</li>
+                </ul>
+                <p>Abduction is the end result of induction and the beginning of deduction.</p>
+            </div>
+        </div>
+
+        <div class="section" id="population-sample">
+            <h2>Population vs Sample</h2>
+
+            <div class="diagram">
+                <svg width="500" height="200" viewBox="0 0 500 200">
+                    <!-- Population circle -->
+                    <circle cx="180" cy="100" r="90" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+                    <text x="180" y="100" text-anchor="middle" fill="#1e40af" font-weight="bold">POPULATION</text>
+                    <text x="180" y="120" text-anchor="middle" fill="#1e40af" font-size="11">Entire group being studied</text>
+
+                    <!-- Sample circle -->
+                    <circle cx="150" cy="80" r="35" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+                    <text x="150" y="85" text-anchor="middle" fill="#92400e" font-size="11">Sample</text>
+
+                    <!-- Arrow and labels -->
+                    <path d="M280 100 L350 100" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+                    <text x="400" y="80" text-anchor="middle" fill="#1e293b" font-weight="bold">Analysis</text>
+                    <text x="400" y="100" text-anchor="middle" fill="#64748b" font-size="11">Statistics computed</text>
+                    <text x="400" y="120" text-anchor="middle" fill="#64748b" font-size="11">from sample</text>
+
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+
+            <div class="key-concept">
+                <h4>Key Insight</h4>
+                <p>The word "sample" comes from the same root as "example" - one sample does not prove a theory, but rather is an example.</p>
+                <p>We cannot make definite statements about all systems. Instead, we make <strong>probabilistic statements</strong> about the range of most systems using <strong>confidence intervals</strong>.</p>
+            </div>
+        </div>
+
+        <div class="section" id="quiz">
+            <h2>Self-Test Quiz</h2>
+
+            <form class="quiz-form">
+                <div class="quiz-question" data-answer="c">
+                    <h4>1. For a positively skewed distribution, which relationship is correct?</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q1" value="a"> Mean = Median = Mode</label>
+                        <label><input type="radio" name="q1" value="b"> Mean < Median < Mode</label>
+                        <label><input type="radio" name="q1" value="c"> Mode < Median < Mean</label>
+                        <label><input type="radio" name="q1" value="d"> Mode < Mean < Median</label>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="b">
+                    <h4>2. A Pearson correlation of 0 means:</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q2" value="a"> The variables are completely independent</label>
+                        <label><input type="radio" name="q2" value="b"> No linear relationship (may still be dependent)</label>
+                        <label><input type="radio" name="q2" value="c"> Perfect negative correlation</label>
+                        <label><input type="radio" name="q2" value="d"> The data is invalid</label>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="a">
+                    <h4>3. Which reasoning method goes from specific observations to general rules?</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q3" value="a"> Inductive reasoning</label>
+                        <label><input type="radio" name="q3" value="b"> Deductive reasoning</label>
+                        <label><input type="radio" name="q3" value="c"> Abductive reasoning</label>
+                        <label><input type="radio" name="q3" value="d"> Statistical reasoning</label>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="d">
+                    <h4>4. Standard deviation is preferred over variance because:</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q4" value="a"> It is always smaller</label>
+                        <label><input type="radio" name="q4" value="b"> It is easier to calculate</label>
+                        <label><input type="radio" name="q4" value="c"> It removes all outliers</label>
+                        <label><input type="radio" name="q4" value="d"> It has the same units as the mean</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Check Answers</button>
+            </form>
+        </div>
+
+        <div class="section">
+            <h2>Key Takeaways</h2>
+            <div class="key-concept">
+                <h4>Remember These Points</h4>
+                <ul>
+                    <li>Mean, Median, Mode = indices of central tendency</li>
+                    <li>Variance and Standard Deviation = measures of variability</li>
+                    <li>Pearson correlation ranges from -1 to +1</li>
+                    <li>Correlation = 0 doesn't mean independence!</li>
+                    <li>C.O.V. = σ/μ (removes units for comparison)</li>
+                    <li>Deductive (general→specific), Inductive (specific→general), Abductive (suggests hypothesis)</li>
+                    <li>Samples give probabilistic statements, not definite ones</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+            <a href="topic1-ml-fundamentals.html" class="btn">Previous: ML Fundamentals</a>
+            <a href="topic3-ml-pipeline.html" class="btn">Next: ML Pipeline</a>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

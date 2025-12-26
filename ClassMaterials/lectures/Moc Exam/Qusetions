@@ -1,0 +1,26 @@
+1. Flourishes of cyber security treats have forced organisations worldwide to constantly track and correlate millions of external and internal data points across their infrastructure and users. It is clearly not feasible to manage this volume of information with only a team of people. This will be the perfect application of machine-learning algorithms, because they can recognise patterns and predict threats from massive data sets with ambiguous information. By automating the analysis, cyber security experts can rapidly detect threats and isolate situations that need deeper human analysis and intervention. Summarise THREE (3) most common learning strategies in machine learning and how each type of learning works. [25 Marks]
+
+
+2. As a cyber security engineer, you are handed a dataset that has been retrieved from company servers that registers network activities over a duration of time. Apart from normal operation data, the dataset also contains a couple of incidences of cyber-attacks that the company is aware of and has investigated thoroughly. You have been requested to leverage on the power of machine-learning to develop an Intrusion Detection System (IDS) for the company.             
+
+Explain the Feature Extraction process in machine-learning pipeline by specifying the relevant goal, methods, and outcome from this process.  [6 Marks]
+Explain two methods that can be used to deal with pre-processing of categorical data to enable them to be used for training purposes.  [8 Marks]
+Describe the Exploratory Data Analysis (EDA) process and summarise THREE (3) tasks involved in EDA. [11 Marks]
+
+
+
+3. A data scientist builds a Random Forest classification model and achieved an accuracy of 96% on a phishing data set. However, the data scientist was not happy with the accuracy result when he implemented the model and decided to evaluate the accuracy. He plotted Confusion Matrix and found the following result.
+
+confusion matrix - Picture i.png in the folder
+
+Discuss the importance of Confusion Matrix with regards to accuracy evaluation. [7 Marks]
+Interpret the given matrix and describe the problem that you identified with the given matrix. [12 Marks]
+Evaluate the precision, recall and F1 scores based upon given matrix. [6 Marks]
+
+
+4. As a cyber security consultant, you have been tasked to develop a new system that can monitor and predict potential cyber-attacks that may harm the company assets. As data availability is not an issue and you have been able to sample plenty of data which are representative and balanced, you are able to develop the final dataset for the machine-learning model which contains 100 input features and one desired output label.                          
+
+Explain the role and methods involved for the Hyperparameter Tuning procedure in machine-learning. [12 Marks]
+Discuss the role of Feature Engineering to improve the performance of the machine-learning model. [13 Marks]
+
+

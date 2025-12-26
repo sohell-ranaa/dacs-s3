@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 3: Machine Learning Pipeline - DACS Study Guide</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <h1>DACS Study Guide</h1>
+            <div>
+                <a href="index.html">Home</a>
+                <a href="topic2-statistics.html">Prev</a>
+                <a href="topic4-preprocessing.html">Next</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a> &gt; <span>Topic 3: Machine Learning Pipeline</span>
+        </div>
+
+        <div class="hero" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+            <h1>Topic 3: Machine Learning Pipeline</h1>
+            <p>The complete workflow from problem definition to model validation</p>
+        </div>
+
+        <div class="section" id="overview">
+            <h2>Pipeline Overview</h2>
+
+            <div class="key-concept">
+                <h4>What is the ML Pipeline?</h4>
+                <p>Machine learning (ML) pipeline consists of several steps to train a model. It is <strong>iterative</strong> - steps are repeated to continuously improve the accuracy of the model.</p>
+            </div>
+
+            <div class="diagram">
+                <svg width="900" height="280" viewBox="0 0 900 280">
+                    <!-- Row 1 -->
+                    <rect x="20" y="30" width="130" height="70" rx="8" fill="#2563eb"/>
+                    <text x="85" y="60" text-anchor="middle" fill="white" font-weight="bold" font-size="11">1. Problem</text>
+                    <text x="85" y="78" text-anchor="middle" fill="white" font-size="11">Definition</text>
+
+                    <path d="M155 65 L175 65" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
+
+                    <rect x="180" y="30" width="130" height="70" rx="8" fill="#3b82f6"/>
+                    <text x="245" y="60" text-anchor="middle" fill="white" font-weight="bold" font-size="11">2. Data</text>
+                    <text x="245" y="78" text-anchor="middle" fill="white" font-size="11">Collection</text>
+
+                    <path d="M315 65 L335 65" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
+
+                    <rect x="340" y="30" width="130" height="70" rx="8" fill="#60a5fa"/>
+                    <text x="405" y="60" text-anchor="middle" fill="white" font-weight="bold" font-size="11">3. Feature</text>
+                    <text x="405" y="78" text-anchor="middle" fill="white" font-size="11">Extraction</text>
+
+                    <path d="M475 65 L495 65" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
+
+                    <rect x="500" y="30" width="130" height="70" rx="8" fill="#10b981"/>
+                    <text x="565" y="60" text-anchor="middle" fill="white" font-weight="bold" font-size="11">4. Data</text>
+                    <text x="565" y="78" text-anchor="middle" fill="white" font-size="11">Preparation</text>
+
+                    <!-- Row 2 -->
+                    <path d="M565 105 L565 130" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
+
+                    <rect x="500" y="135" width="130" height="70" rx="8" fill="#059669"/>
+                    <text x="565" y="165" text-anchor="middle" fill="white" font-weight="bold" font-size="11">5. Algorithm</text>
+                    <text x="565" y="183" text-anchor="middle" fill="white" font-size="11">Selection</text>
+
+                    <path d="M495 170 L475 170" stroke="#64748b" stroke-width="2" marker-end="url(#arr2)"/>
+
+                    <rect x="340" y="135" width="130" height="70" rx="8" fill="#f59e0b"/>
+                    <text x="405" y="165" text-anchor="middle" fill="white" font-weight="bold" font-size="11">6. Performance</text>
+                    <text x="405" y="183" text-anchor="middle" fill="white" font-size="11">Evaluation</text>
+
+                    <path d="M335 170 L315 170" stroke="#64748b" stroke-width="2" marker-end="url(#arr2)"/>
+
+                    <rect x="180" y="135" width="130" height="70" rx="8" fill="#d97706"/>
+                    <text x="245" y="165" text-anchor="middle" fill="white" font-weight="bold" font-size="11">7. Model</text>
+                    <text x="245" y="183" text-anchor="middle" fill="white" font-size="11">Validation</text>
+
+                    <!-- Iteration arrows -->
+                    <path d="M245 210 C245 250 405 250 405 210" stroke="#ef4444" stroke-width="2" fill="none" stroke-dasharray="5,5" marker-end="url(#arr-red)"/>
+                    <text x="325" y="260" text-anchor="middle" fill="#ef4444" font-size="12" font-weight="bold">Iteration Loop</text>
+
+                    <!-- EDA box -->
+                    <rect x="700" y="80" width="150" height="100" rx="8" fill="#8b5cf6"/>
+                    <text x="775" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="11">EDA</text>
+                    <text x="775" y="130" text-anchor="middle" fill="white" font-size="10">Exploratory Data</text>
+                    <text x="775" y="145" text-anchor="middle" fill="white" font-size="10">Analysis</text>
+                    <text x="775" y="165" text-anchor="middle" fill="white" font-size="9">(Throughout process)</text>
+
+                    <defs>
+                        <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+                        </marker>
+                        <marker id="arr2" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
+                            <path d="M9,0 L9,6 L0,3 z" fill="#64748b"/>
+                        </marker>
+                        <marker id="arr-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#ef4444"/>
+                        </marker>
+                    </defs>
+                </svg>
+                <p class="diagram-caption">Complete Machine Learning Pipeline with Iteration</p>
+            </div>
+        </div>
+
+        <div class="section" id="step1">
+            <h2>Step 1: Problem Definition</h2>
+            <table>
+                <tr><th>Aspect</th><th>Details</th></tr>
+                <tr><td><strong>Goal</strong></td><td>Decide what information is needed</td></tr>
+                <tr><td><strong>Methods</strong></td><td>Committee meetings, brainstorming, analysis of business objectives</td></tr>
+                <tr><td><strong>Outcome</strong></td><td>A project specification for the Data Scientists</td></tr>
+                <tr><td><strong>Key Questions</strong></td><td>What do I have? What do I need? What can I get?</td></tr>
+            </table>
+        </div>
+
+        <div class="section" id="step2">
+            <h2>Step 2: Data Collection</h2>
+            <table>
+                <tr><th>Aspect</th><th>Details</th></tr>
+                <tr><td><strong>Goal</strong></td><td>Representative sample of the population</td></tr>
+                <tr><td><strong>Methods</strong></td><td>Extract existing data from databases, gather new data</td></tr>
+                <tr><td><strong>Outcome</strong></td><td>A large dataset</td></tr>
+            </table>
+        </div>
+
+        <div class="section" id="step3">
+            <h2>Step 3: Feature Extraction</h2>
+            <table>
+                <tr><th>Aspect</th><th>Details</th></tr>
+                <tr><td><strong>Goal</strong></td><td>Specifying features useful for prediction</td></tr>
+                <tr><td><strong>Methods</strong></td><td>Check distributions, correlation/covariance checks, drop unique identifiers</td></tr>
+                <tr><td><strong>Outcome</strong></td><td>A "flat" (single table) dataset with selected features</td></tr>
+            </table>
+            <div class="key-concept">
+                <h4>Feature Selection Considerations</h4>
+                <ul>
+                    <li>Flattening: Convert complex data to tabular format</li>
+                    <li>Labeling: Assign target values</li>
+                    <li>Dimensionality reduction: Remove redundant features</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="step4">
+            <h2>Step 4: Data Preparation</h2>
+            <table>
+                <tr><th>Aspect</th><th>Details</th></tr>
+                <tr><td><strong>Goal</strong></td><td>Clean up (normalize, regularize) the data values</td></tr>
+                <tr><td><strong>Methods</strong></td><td>Scaling, dummy variables, interpolating missing values</td></tr>
+                <tr><td><strong>Outcome</strong></td><td>Normalized data in numeric form appropriate for modeling</td></tr>
+            </table>
+            <div class="warning-box">
+                <h4>GIGO Principle</h4>
+                <p><em>"Garbage In, Garbage Out"</em> - If we use unclean data for machine learning, the result will not be satisfying for our end application.</p>
+            </div>
+        </div>
+
+        <div class="section" id="step5">
+            <h2>Step 5: Algorithm Selection</h2>
+            <table>
+                <tr><th>Aspect</th><th>Details</th></tr>
+                <tr><td><strong>Goal</strong></td><td>No a-priori best algorithm; must experiment</td></tr>
+                <tr><td><strong>Methods</strong></td><td>Draw on problem statement, domain knowledge, knowledge of ML and statistical methods</td></tr>
+                <tr><td><strong>Outcome</strong></td><td>A set of algorithms appropriate for the analytical task</td></tr>
+            </table>
+        </div>
+
+        <div class="section" id="step6">
+            <h2>Step 6: Performance Evaluation</h2>
+            <table>
+                <tr><th>Aspect</th><th>Details</th></tr>
+                <tr><td><strong>Goal</strong></td><td>Test candidate algorithms and evaluate predictive accuracy</td></tr>
+                <tr><td><strong>Methods</strong></td><td>Fit each algorithm on training data, analyze confusion matrix and metrics</td></tr>
+                <tr><td><strong>Outcome</strong></td><td>Comparison of results from selected algorithms</td></tr>
+            </table>
+        </div>
+
+        <div class="section" id="step7">
+            <h2>Step 7: Model Validation</h2>
+            <table>
+                <tr><th>Aspect</th><th>Details</th></tr>
+                <tr><td><strong>Goal</strong></td><td>Evaluate robustness, check for over-fitting, refine hyperparameters</td></tr>
+                <tr><td><strong>Methods</strong></td><td>Grid search CV, k-fold CV</td></tr>
+                <tr><td><strong>Outcome</strong></td><td>Optimization of objective function, good generalization performance</td></tr>
+            </table>
+
+            <div class="key-concept">
+                <h4>The Iteration Cycle</h4>
+                <p>The model validation phase leads to new rounds of performance evaluation. The set of candidate algorithms is gradually reduced until one algorithm (or ensemble) is selected.</p>
+            </div>
+        </div>
+
+        <div class="section" id="terminology">
+            <h2>Essential ML Terminology</h2>
+            <table>
+                <thead>
+                    <tr><th>Term</th><th>Definition</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Dataset</strong></td><td>Sample of observations organized into rows and columns</td></tr>
+                    <tr><td><strong>Feature</strong></td><td>A column (predictor, variable, attribute)</td></tr>
+                    <tr><td><strong>Training Example</strong></td><td>A row (observation, record, instance)</td></tr>
+                    <tr><td><strong>Target</strong></td><td>What we predict (label, ground truth)</td></tr>
+                    <tr><td><strong>Model</strong></td><td>Function y = f(x) representing the relationship</td></tr>
+                    <tr><td><strong>Classifier</strong></td><td>Learning algorithm + Loss function + Optimizer</td></tr>
+                    <tr><td><strong>Learning Algorithm</strong></td><td>Instructions to create a model from training data</td></tr>
+                    <tr><td><strong>Loss Function</strong></td><td>Measures error for single training example</td></tr>
+                    <tr><td><strong>Cost Function</strong></td><td>Average loss over entire dataset</td></tr>
+                    <tr><td><strong>Optimizer</strong></td><td>Algorithm to minimize cost function</td></tr>
+                    <tr><td><strong>Model Parameters</strong></td><td>Learned from data (e.g., slope, weights)</td></tr>
+                    <tr><td><strong>Hyperparameters</strong></td><td>Set by programmer (e.g., learning rate, iterations)</td></tr>
+                    <tr><td><strong>Fitting</strong></td><td>Process of learning model parameters</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section" id="quiz">
+            <h2>Self-Test Quiz</h2>
+            <form class="quiz-form">
+                <div class="quiz-question" data-answer="b">
+                    <h4>1. What is the output of the Data Preparation step?</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q1" value="a"> Raw data from databases</label>
+                        <label><input type="radio" name="q1" value="b"> Normalized data in numeric form</label>
+                        <label><input type="radio" name="q1" value="c"> Selected features</label>
+                        <label><input type="radio" name="q1" value="d"> Trained model</label>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="c">
+                    <h4>2. "No a-priori best algorithm" means:</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q2" value="a"> Random Forest is always best</label>
+                        <label><input type="radio" name="q2" value="b"> Only use neural networks</label>
+                        <label><input type="radio" name="q2" value="c"> Must experiment to find the best algorithm</label>
+                        <label><input type="radio" name="q2" value="d"> Skip algorithm selection</label>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="a">
+                    <h4>3. The ML pipeline is iterative because:</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q3" value="a"> Steps are repeated to improve accuracy</label>
+                        <label><input type="radio" name="q3" value="b"> It only runs once</label>
+                        <label><input type="radio" name="q3" value="c"> Data collection is repeated daily</label>
+                        <label><input type="radio" name="q3" value="d"> Algorithms never change</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Check Answers</button>
+            </form>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+            <a href="topic2-statistics.html" class="btn">Previous: Statistics</a>
+            <a href="topic4-preprocessing.html" class="btn">Next: Data Preprocessing</a>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

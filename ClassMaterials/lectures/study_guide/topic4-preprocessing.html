@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 4: Data Preprocessing - DACS Study Guide</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <h1>DACS Study Guide</h1>
+            <div>
+                <a href="index.html">Home</a>
+                <a href="topic3-ml-pipeline.html">Prev</a>
+                <a href="topic5-evaluation.html">Next</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a> &gt; <span>Topic 4: Data Preprocessing</span>
+        </div>
+
+        <div class="hero" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+            <h1>Topic 4: Data Preprocessing</h1>
+            <p>Feature selection, EDA, encoding, and scaling techniques</p>
+        </div>
+
+        <div class="section" id="overview">
+            <h2>Why Data Preprocessing?</h2>
+            <div class="warning-box">
+                <h4>GIGO - Garbage In, Garbage Out</h4>
+                <p>Data preprocessing is the first and most critical step in any ML project. If we use unclean data, the results will not be satisfying.</p>
+            </div>
+            <p>Data preprocessing includes two main phases:</p>
+            <ul>
+                <li><strong>Feature Extraction:</strong> Selecting relevant features</li>
+                <li><strong>Data Preparation:</strong> Cleaning and transforming data</li>
+            </ul>
+        </div>
+
+        <div class="section" id="eda">
+            <h2>Exploratory Data Analysis (EDA)</h2>
+            <div class="key-concept">
+                <h4>What to Check in EDA</h4>
+                <ul>
+                    <li><strong>Feature Distributions:</strong> Shape of data (normal, skewed)</li>
+                    <li><strong>Class Balance:</strong> Are classes equally represented?</li>
+                    <li><strong>Correlation with Target:</strong> Which features predict the output?</li>
+                    <li><strong>Collinearity:</strong> Are input variables correlated with each other?</li>
+                    <li><strong>Outliers:</strong> Anomalous values that might affect the model</li>
+                </ul>
+            </div>
+            <p>Since datasets are large, <strong>visualization is essential</strong> - use histograms, box plots, heatmaps.</p>
+        </div>
+
+        <div class="section" id="feature-selection">
+            <h2>Feature Selection</h2>
+            <div class="key-concept">
+                <h4>Why Feature Selection?</h4>
+                <ul>
+                    <li>Not all features are relevant or significant</li>
+                    <li><strong>Curse of Dimensionality:</strong> Error increases with number of features</li>
+                    <li>Reduces computational overhead</li>
+                    <li>Also called "dimensionality reduction" or "feature engineering"</li>
+                </ul>
+            </div>
+
+            <h3>Feature Value Variance</h3>
+            <table>
+                <tr><th>Issue</th><th>Problem</th><th>Solution</th></tr>
+                <tr><td>Low Variance</td><td>Less information for distinguishing classes</td><td>Remove (e.g., unique identifiers)</td></tr>
+                <tr><td>High Variance</td><td>Too many unique values</td><td>Bin values to reduce uniqueness</td></tr>
+            </table>
+
+            <h3>Correlation Analysis</h3>
+            <div class="formula-box">
+                <h4>Pearson Correlation</h4>
+                <div class="formula">\[ \rho(X,Y) = \frac{cov(X,Y)}{\sigma_X \cdot \sigma_Y} \]</div>
+                <p>Check for correlations > 0.7 or < -0.7 to find redundant features</p>
+            </div>
+
+            <div class="key-concept">
+                <h4>Mutual Information vs Pearson</h4>
+                <ul>
+                    <li><strong>Pearson:</strong> Only captures linear relationships, assumes normality</li>
+                    <li><strong>Mutual Information:</strong> Captures all types of relationships (non-linear too)</li>
+                    <li>MI tells us how useful feature X is at predicting Y (scale 0-1)</li>
+                    <li>They are complementary - don't always move the same way</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="missing-values">
+            <h2>Handling Missing Values</h2>
+            <div class="diagram">
+                <svg width="700" height="180" viewBox="0 0 700 180">
+                    <rect x="50" y="30" width="180" height="120" rx="10" fill="#ef4444"/>
+                    <text x="140" y="60" text-anchor="middle" fill="white" font-weight="bold">Deletion</text>
+                    <text x="140" y="85" text-anchor="middle" fill="white" font-size="11">Remove rows with</text>
+                    <text x="140" y="100" text-anchor="middle" fill="white" font-size="11">missing values</text>
+                    <text x="140" y="125" text-anchor="middle" fill="white" font-size="10" font-style="italic">If >30% missing,</text>
+                    <text x="140" y="140" text-anchor="middle" fill="white" font-size="10" font-style="italic">discard column</text>
+
+                    <rect x="260" y="30" width="180" height="120" rx="10" fill="#f59e0b"/>
+                    <text x="350" y="60" text-anchor="middle" fill="white" font-weight="bold">Direct Estimation</text>
+                    <text x="350" y="85" text-anchor="middle" fill="white" font-size="11">Use prior knowledge</text>
+                    <text x="350" y="100" text-anchor="middle" fill="white" font-size="11">to estimate values</text>
+                    <text x="350" y="125" text-anchor="middle" fill="white" font-size="10" font-style="italic">Requires domain</text>
+                    <text x="350" y="140" text-anchor="middle" fill="white" font-size="10" font-style="italic">expertise</text>
+
+                    <rect x="470" y="30" width="180" height="120" rx="10" fill="#10b981"/>
+                    <text x="560" y="60" text-anchor="middle" fill="white" font-weight="bold">Imputation</text>
+                    <text x="560" y="85" text-anchor="middle" fill="white" font-size="11">Fill with mean/median</text>
+                    <text x="560" y="100" text-anchor="middle" fill="white" font-size="11">(numeric) or mode</text>
+                    <text x="560" y="115" text-anchor="middle" fill="white" font-size="11">(categorical)</text>
+                    <text x="560" y="140" text-anchor="middle" fill="white" font-size="10" font-style="italic">Most common method</text>
+                </svg>
+                <p class="diagram-caption">Three Methods for Handling Missing Values</p>
+            </div>
+        </div>
+
+        <div class="section" id="categorical">
+            <h2>Encoding Categorical Data</h2>
+            <h3>Three Types of Features</h3>
+            <table>
+                <tr><th>Type</th><th>Format</th><th>Example</th></tr>
+                <tr><td>Discrete/Binary</td><td>0 or 1</td><td>Yes/No, True/False</td></tr>
+                <tr><td>Continuous</td><td>Numeric range</td><td>Age, Temperature, Price</td></tr>
+                <tr><td>Categorical</td><td>Text</td><td>Color, Country, Protocol</td></tr>
+            </table>
+
+            <h3>Label Encoding</h3>
+            <div class="example-box">
+                <h4>Label Encoding Example</h4>
+                <p>Protocol: dns → 0, http → 1, imap → 2, smtp → 3</p>
+                <p><strong>Problem:</strong> Model may incorrectly assume dns < http < imap < smtp</p>
+            </div>
+
+            <h3>One-Hot Encoding (Recommended)</h3>
+            <div class="example-box">
+                <h4>One-Hot Encoding Example</h4>
+                <table>
+                    <tr><th>Original</th><th>dns</th><th>http</th><th>imap</th><th>smtp</th></tr>
+                    <tr><td>dns</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+                    <tr><td>http</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+                    <tr><td>imap</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+                    <tr><td>smtp</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+                </table>
+                <p>Creates dummy variables (one column per unique value)</p>
+                <p>Use <code>pandas.get_dummies()</code> in Python</p>
+            </div>
+
+            <div class="warning-box">
+                <h4>Dummy Variable Trap (Multicollinearity)</h4>
+                <p>Value of one column can be predicted from others. For linear regression without regularization, drop one column. In other cases, keep all columns.</p>
+            </div>
+        </div>
+
+        <div class="section" id="scaling">
+            <h2>Scaling Continuous Data</h2>
+            <div class="key-concept">
+                <h4>When Scaling is Required</h4>
+                <ul>
+                    <li>Algorithms using gradient descent (Linear/Logistic Regression, Neural Networks)</li>
+                    <li>Distance-based algorithms (KNN, K-means, SVM)</li>
+                </ul>
+                <h4>When Scaling is NOT Required</h4>
+                <ul>
+                    <li>Decision Trees and tree-based ensembles (RF, XGBoost)</li>
+                    <li>Naive Bayes, Fisher LDA</li>
+                </ul>
+            </div>
+
+            <h3>Scaling Methods</h3>
+            <div class="formula-box">
+                <h4>StandardScaler</h4>
+                <div class="formula">\[ x_{scaled} = \frac{x - \mu}{\sigma} \]</div>
+                <p>Result: mean=0, standard deviation=1</p>
+            </div>
+
+            <div class="formula-box">
+                <h4>MinMaxScaler</h4>
+                <div class="formula">\[ x_{scaled} = \frac{x - x_{min}}{x_{max} - x_{min}} \]</div>
+                <p>Result: all values between 0 and 1</p>
+            </div>
+
+            <div class="warning-box">
+                <h4>Critical Rule: Prevent Data Leakage</h4>
+                <p><strong>Fit scaler ONLY on training set, then transform both train and test sets.</strong></p>
+                <p>If scaling before split, test set information "leaks" into training, making predictions artificially accurate.</p>
+            </div>
+        </div>
+
+        <div class="section" id="data-splitting">
+            <h2>Data Splitting</h2>
+            <div class="diagram">
+                <svg width="600" height="100" viewBox="0 0 600 100">
+                    <rect x="50" y="30" width="350" height="50" rx="8" fill="#2563eb"/>
+                    <text x="225" y="60" text-anchor="middle" fill="white" font-weight="bold">Training Set (70-80%)</text>
+                    <rect x="400" y="30" width="150" height="50" rx="8" fill="#f59e0b"/>
+                    <text x="475" y="60" text-anchor="middle" fill="white" font-weight="bold">Test Set (20-30%)</text>
+                </svg>
+            </div>
+            <p>Typical split: 70/30 or 80/20 for Training/Test</p>
+        </div>
+
+        <div class="section" id="quiz">
+            <h2>Self-Test Quiz</h2>
+            <form class="quiz-form">
+                <div class="quiz-question" data-answer="b">
+                    <h4>1. One-Hot Encoding is preferred over Label Encoding because:</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q1" value="a"> It uses less memory</label>
+                        <label><input type="radio" name="q1" value="b"> It doesn't create false ordinal relationships</label>
+                        <label><input type="radio" name="q1" value="c"> It's faster to compute</label>
+                        <label><input type="radio" name="q1" value="d"> It works with all algorithms</label>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="c">
+                    <h4>2. To prevent data leakage when scaling:</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q2" value="a"> Scale before splitting data</label>
+                        <label><input type="radio" name="q2" value="b"> Fit scaler on test set only</label>
+                        <label><input type="radio" name="q2" value="c"> Fit scaler on train set, transform both</label>
+                        <label><input type="radio" name="q2" value="d"> Don't use scaling at all</label>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="a">
+                    <h4>3. Mutual Information correlation is better than Pearson because:</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q3" value="a"> It captures non-linear relationships</label>
+                        <label><input type="radio" name="q3" value="b"> It's faster to calculate</label>
+                        <label><input type="radio" name="q3" value="c"> It always gives higher values</label>
+                        <label><input type="radio" name="q3" value="d"> It requires less data</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Check Answers</button>
+            </form>
+        </div>
+
+        <div class="section">
+            <h2>Key Takeaways</h2>
+            <div class="key-concept">
+                <h4>Remember These Points</h4>
+                <ul>
+                    <li>Preprocessing = Feature Extraction + Data Preparation</li>
+                    <li>EDA: Check distributions, class balance, correlations, outliers</li>
+                    <li>Missing values: Delete (>30%), Estimate, or Impute (mean/median/mode)</li>
+                    <li>Categorical: Use One-Hot Encoding (pandas.get_dummies())</li>
+                    <li>Scaling: Required for gradient descent and distance-based algorithms</li>
+                    <li>StandardScaler: mean=0, std=1 | MinMaxScaler: 0 to 1</li>
+                    <li>ALWAYS fit scaler on training set only to prevent data leakage</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+            <a href="topic3-ml-pipeline.html" class="btn">Previous: ML Pipeline</a>
+            <a href="topic5-evaluation.html" class="btn">Next: Performance Evaluation</a>
+        </div>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

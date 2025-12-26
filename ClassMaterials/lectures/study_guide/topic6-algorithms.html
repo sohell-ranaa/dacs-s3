@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 6: ML Algorithms - DACS Study Guide</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <h1>DACS Study Guide</h1>
+            <div>
+                <a href="index.html">Home</a>
+                <a href="topic5-evaluation.html">Prev</a>
+                <a href="topic7-optimization.html">Next</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a> &gt; <span>Topic 6: ML Algorithms</span>
+        </div>
+
+        <div class="hero" style="background: linear-gradient(135deg, #059669, #10b981);">
+            <h1>Topic 6: Machine Learning Algorithms</h1>
+            <p>Linear models, SVM, tree-based, ensemble methods, and neural networks</p>
+        </div>
+
+        <div class="section" id="overview">
+            <h2>Algorithm Categories</h2>
+            <div class="diagram">
+                <svg width="800" height="200" viewBox="0 0 800 200">
+                    <rect x="20" y="30" width="140" height="80" rx="8" fill="#2563eb"/>
+                    <text x="90" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="12">Linear Models</text>
+                    <text x="90" y="85" text-anchor="middle" fill="white" font-size="10">Regression, LDA</text>
+
+                    <rect x="180" y="30" width="140" height="80" rx="8" fill="#7c3aed"/>
+                    <text x="250" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="12">Support Vector</text>
+                    <text x="250" y="85" text-anchor="middle" fill="white" font-size="10">SVM, Kernels</text>
+
+                    <rect x="340" y="30" width="140" height="80" rx="8" fill="#f59e0b"/>
+                    <text x="410" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="12">Non-Linear</text>
+                    <text x="410" y="85" text-anchor="middle" fill="white" font-size="10">NB, KNN, DT</text>
+
+                    <rect x="500" y="30" width="140" height="80" rx="8" fill="#10b981"/>
+                    <text x="570" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="12">Ensemble</text>
+                    <text x="570" y="85" text-anchor="middle" fill="white" font-size="10">RF, AdaBoost, GB</text>
+
+                    <rect x="660" y="30" width="120" height="80" rx="8" fill="#ef4444"/>
+                    <text x="720" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="12">Neural Net</text>
+                    <text x="720" y="85" text-anchor="middle" fill="white" font-size="10">MLP</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- LINEAR MODELS -->
+        <div class="section" id="linear-regression">
+            <h2>1. Linear Regression</h2>
+            <div class="formula-box">
+                <div class="formula">\[ y = a + bX \]</div>
+                <p>Where: <strong>b</strong> = slope, <strong>a</strong> = intercept (y when X=0)</p>
+            </div>
+            <div class="key-concept">
+                <h4>Key Points</h4>
+                <ul>
+                    <li>Used for <strong>continuous prediction</strong> (regression tasks)</li>
+                    <li>Fits a line that minimizes sum of squared errors</li>
+                    <li>Techniques: Ordinary Least Squares, Gradient Descent</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="logistic-regression">
+            <h2>2. Logistic Regression</h2>
+            <div class="key-concept">
+                <h4>Key Points</h4>
+                <ul>
+                    <li>Go-to method for <strong>binary classification</strong> (Pass/Fail, Yes/No)</li>
+                    <li>Uses <strong>sigmoid function</strong> to transform output to 0-1 range</li>
+                    <li>Output can be interpreted as probability</li>
+                    <li>Apply rule: IF output < 0.5 THEN predict 0, ELSE predict 1</li>
+                </ul>
+            </div>
+            <div class="diagram">
+                <svg width="400" height="150" viewBox="0 0 400 150">
+                    <text x="200" y="30" text-anchor="middle" fill="#1e293b" font-weight="bold">Sigmoid Function</text>
+                    <line x1="50" y1="75" x2="350" y2="75" stroke="#e2e8f0" stroke-width="1"/>
+                    <line x1="200" y1="30" x2="200" y2="120" stroke="#e2e8f0" stroke-width="1"/>
+                    <path d="M50 115 Q100 115 150 100 T200 75 T250 50 T300 40 T350 35" stroke="#2563eb" stroke-width="3" fill="none"/>
+                    <text x="360" y="40" fill="#1e293b" font-size="10">1</text>
+                    <text x="360" y="80" fill="#1e293b" font-size="10">0.5</text>
+                    <text x="360" y="120" fill="#1e293b" font-size="10">0</text>
+                </svg>
+            </div>
+        </div>
+
+        <div class="section" id="lda">
+            <h2>3. Linear Discriminant Analysis (LDA)</h2>
+            <div class="key-concept">
+                <h4>Key Points</h4>
+                <ul>
+                    <li>Identifies linear combination of features that separates classes</li>
+                    <li>Also performs <strong>dimensionality reduction</strong> (projects to 1D)</li>
+                    <li>Assumes: Gaussian distribution, equal covariance matrices, linear separability</li>
+                    <li>Two criteria: Maximize between-class variance, minimize within-class variance</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SVM -->
+        <div class="section" id="svm">
+            <h2>4. Support Vector Machine (SVM)</h2>
+            <div class="key-concept">
+                <h4>Key Concept: Maximum Margin</h4>
+                <p>SVM finds the <strong>hyperplane</strong> that maximizes the margin between classes.</p>
+                <p><strong>Support Vectors:</strong> Data points on the margin that define the optimal hyperplane.</p>
+            </div>
+
+            <div class="diagram">
+                <svg width="400" height="200" viewBox="0 0 400 200">
+                    <rect x="50" y="20" width="300" height="160" fill="#f8fafc" stroke="#e2e8f0"/>
+
+                    <!-- Hyperplane and margins -->
+                    <line x1="80" y1="180" x2="320" y2="20" stroke="#2563eb" stroke-width="3"/>
+                    <line x1="100" y1="180" x2="340" y2="20" stroke="#2563eb" stroke-width="1" stroke-dasharray="5,5"/>
+                    <line x1="60" y1="180" x2="300" y2="20" stroke="#2563eb" stroke-width="1" stroke-dasharray="5,5"/>
+
+                    <!-- Class 1 points -->
+                    <circle cx="150" cy="150" r="8" fill="#22c55e"/>
+                    <circle cx="120" cy="130" r="8" fill="#22c55e"/>
+                    <circle cx="100" cy="160" r="8" fill="#22c55e"/>
+                    <circle cx="130" cy="170" r="6" fill="#22c55e"/>
+
+                    <!-- Class 2 points -->
+                    <circle cx="280" cy="60" r="8" fill="#ef4444"/>
+                    <circle cx="300" cy="40" r="8" fill="#ef4444"/>
+                    <circle cx="260" cy="50" r="8" fill="#ef4444"/>
+                    <circle cx="290" cy="80" r="6" fill="#ef4444"/>
+
+                    <!-- Support vectors -->
+                    <circle cx="160" cy="140" r="10" fill="none" stroke="#f59e0b" stroke-width="3"/>
+                    <circle cx="250" cy="70" r="10" fill="none" stroke="#f59e0b" stroke-width="3"/>
+
+                    <text x="200" y="195" text-anchor="middle" fill="#1e293b" font-size="11">Yellow circles = Support Vectors</text>
+                </svg>
+                <p class="diagram-caption">SVM Maximum Margin Classification</p>
+            </div>
+
+            <h3>SVM Kernel Trick</h3>
+            <div class="key-concept">
+                <h4>When data isn't linearly separable:</h4>
+                <p><strong>Kernelization</strong> maps data to higher dimensions where it becomes separable.</p>
+                <p>Common kernels: Linear, Polynomial, RBF (Radial Basis Function)</p>
+            </div>
+
+            <div class="example-box">
+                <h4>Parameter C (Soft Margin)</h4>
+                <p><strong>Low C:</strong> Allows more outliers (softer margin)</p>
+                <p><strong>High C:</strong> Allows fewer outliers (stricter margin)</p>
+            </div>
+        </div>
+
+        <!-- NON-LINEAR -->
+        <div class="section" id="naive-bayes">
+            <h2>5. Naive Bayes</h2>
+            <div class="key-concept">
+                <h4>Key Points</h4>
+                <ul>
+                    <li>Based on <strong>Bayes Theorem</strong> - probability of class given features</li>
+                    <li>"Naive" because assumes features are <strong>independent</strong> (unrealistic but works!)</li>
+                    <li><strong>Very fast</strong> - good for real-time classification</li>
+                    <li>Excellent for <strong>text classification</strong>, spam filtering, sentiment analysis</li>
+                    <li>Common assumption: Gaussian distribution (bell curve)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="knn">
+            <h2>6. K-Nearest Neighbors (KNN)</h2>
+            <div class="key-concept">
+                <h4>Key Points</h4>
+                <ul>
+                    <li><strong>Lazy learner:</strong> Stores entire training dataset, learns at prediction time</li>
+                    <li>Finds K most similar instances, takes majority vote</li>
+                    <li>Similarity measured by <strong>distance</strong> (usually Euclidean)</li>
+                    <li>Requires feature scaling (distance-based)</li>
+                    <li>Choose K using cross-validation</li>
+                </ul>
+            </div>
+            <div class="warning-box">
+                <h4>Curse of Dimensionality</h4>
+                <p>Performance degrades with many features. Use feature selection!</p>
+            </div>
+        </div>
+
+        <div class="section" id="decision-tree">
+            <h2>7. Decision Trees</h2>
+            <div class="key-concept">
+                <h4>Key Points</h4>
+                <ul>
+                    <li>Represented as <strong>binary tree</strong></li>
+                    <li>Each node = feature + split point</li>
+                    <li>Leaf nodes = class predictions</li>
+                    <li><strong>Interpretable</strong> - can visualize decision rules</li>
+                    <li>Doesn't require feature scaling</li>
+                </ul>
+            </div>
+
+            <h3>Tree Growing Algorithm</h3>
+            <ol>
+                <li>Start with entire dataset at root</li>
+                <li>Select best attribute (based on metric like Gini or Entropy)</li>
+                <li>Split dataset into subsets</li>
+                <li>Create child nodes for each subset</li>
+                <li>Repeat until stopping criteria met</li>
+                <li>Assign class label to leaf nodes</li>
+            </ol>
+        </div>
+
+        <!-- ENSEMBLE -->
+        <div class="section" id="ensemble">
+            <h2>8. Ensemble Methods</h2>
+            <div class="key-concept">
+                <h4>Core Idea</h4>
+                <p>Combine multiple models to reduce variance and improve predictions.</p>
+            </div>
+
+            <table>
+                <tr><th>Method</th><th>Approach</th><th>Key Difference</th></tr>
+                <tr><td><strong>Bagging</strong></td><td>Train on random subsets (with replacement)</td><td>Models run in parallel, results aggregated</td></tr>
+                <tr><td><strong>Boosting</strong></td><td>Focus on misclassified examples</td><td>Models run sequentially, each fixes previous errors</td></tr>
+            </table>
+
+            <h3>Random Forest (Bagging)</h3>
+            <div class="key-concept">
+                <h4>Key Points</h4>
+                <ul>
+                    <li>Uses many deep decision trees on bootstrap samples</li>
+                    <li><strong>Random feature subspace</strong>: Each tree uses random subset of features</li>
+                    <li>Reduces correlation between trees</li>
+                    <li>Final prediction: Majority vote</li>
+                </ul>
+            </div>
+
+            <h3>AdaBoost (Boosting)</h3>
+            <ol>
+                <li>Train model with equal weights for all samples</li>
+                <li>Compute error</li>
+                <li>Increase weights on misclassified samples</li>
+                <li>Train new model on re-weighted data</li>
+                <li>Repeat 100+ times</li>
+            </ol>
+
+            <h3>Gradient Boosting</h3>
+            <div class="key-concept">
+                <h4>Key Points</h4>
+                <ul>
+                    <li>Similar to AdaBoost but uses different fitting process</li>
+                    <li>Each tree fits the <strong>errors (residuals)</strong> of previous trees</li>
+                    <li>Uses short decision trees (stumps)</li>
+                    <li>Often achieves highest accuracy</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- NEURAL NETWORKS -->
+        <div class="section" id="neural-network">
+            <h2>9. Neural Networks</h2>
+            <div class="key-concept">
+                <h4>Key Points</h4>
+                <ul>
+                    <li>Inspired by human brain neurons</li>
+                    <li>Multiple layers: Input → Hidden → Output</li>
+                    <li>Each layer transforms inputs using weights</li>
+                </ul>
+            </div>
+
+            <h3>Training Process (Three Steps)</h3>
+            <ol>
+                <li><strong>Forward Propagation:</strong> Input flows through network to produce output</li>
+                <li><strong>Loss Calculation:</strong> Measure error between prediction and actual</li>
+                <li><strong>Backward Propagation:</strong> Adjust weights to minimize loss</li>
+            </ol>
+        </div>
+
+        <div class="section" id="algorithm-selection">
+            <h2>Algorithm Selection Guide</h2>
+            <table>
+                <thead>
+                    <tr><th>Algorithm</th><th>Best For</th><th>Scaling Needed?</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Linear Regression</td><td>Continuous predictions</td><td>Yes</td></tr>
+                    <tr><td>Logistic Regression</td><td>Binary classification</td><td>Yes</td></tr>
+                    <tr><td>LDA</td><td>Classification + dim reduction</td><td>No</td></tr>
+                    <tr><td>SVM</td><td>High-dimensional, clear margins</td><td>Yes</td></tr>
+                    <tr><td>Naive Bayes</td><td>Text, real-time, fast</td><td>No</td></tr>
+                    <tr><td>KNN</td><td>Small datasets, pattern recognition</td><td>Yes</td></tr>
+                    <tr><td>Decision Tree</td><td>Interpretable rules</td><td>No</td></tr>
+                    <tr><td>Random Forest</td><td>Robust, general purpose</td><td>No</td></tr>
+                    <tr><td>Gradient Boosting</td><td>Highest accuracy</td><td>No</td></tr>
+                    <tr><td>Neural Network</td><td>Complex patterns, large data</td><td>Yes</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section" id="quiz">
+            <h2>Self-Test Quiz</h2>
+            <form class="quiz-form">
+                <div class="quiz-question" data-answer="b">
+                    <h4>1. What makes Naive Bayes "naive"?</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q1" value="a"> It's slow</label>
+                        <label><input type="radio" name="q1" value="b"> It assumes features are independent</label>
+                        <label><input type="radio" name="q1" value="c"> It requires scaling</label>
+                        <label><input type="radio" name="q1" value="d"> It uses neural networks</label>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="c">
+                    <h4>2. In SVM, support vectors are:</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q2" value="a"> All training points</label>
+                        <label><input type="radio" name="q2" value="b"> Points farthest from the hyperplane</label>
+                        <label><input type="radio" name="q2" value="c"> Points on the margin that define the hyperplane</label>
+                        <label><input type="radio" name="q2" value="d"> Outliers</label>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="a">
+                    <h4>3. The main difference between bagging and boosting:</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q3" value="a"> Bagging is parallel, boosting is sequential</label>
+                        <label><input type="radio" name="q3" value="b"> Boosting is faster</label>
+                        <label><input type="radio" name="q3" value="c"> Bagging uses neural networks</label>
+                        <label><input type="radio" name="q3" value="d"> They are the same</label>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="d">
+                    <h4>4. Which algorithm is a "lazy learner"?</h4>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q4" value="a"> Decision Tree</label>
+                        <label><input type="radio" name="q4" value="b"> SVM</label>
+                        <label><input type="radio" name="q4" value="c"> Random Forest</label>
+                        <label><input type="radio" name="q4" value="d"> KNN</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Check Answers</button>
+            </form>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+            <a href="topic5-evaluation.html" class="btn">Previous: Evaluation</a>
+            <a href="topic7-optimization.html" class="btn">Next: Optimization</a>
+        </div>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>
