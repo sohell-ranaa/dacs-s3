@@ -420,7 +420,7 @@ PODCAST_SCRIPTS = {
         ]
     },
 
-    'practice-imbalance': {
+    'practice-class-imbalance': {
         'title': 'Class Imbalance Practice',
         'section': 'practice',
         'dialogue': [
@@ -436,6 +436,29 @@ PODCAST_SCRIPTS = {
             ('B', "We catch exactly zero frauds. Completely useless for its purpose!"),
             ('A', "This is why with imbalanced data, use precision, recall, F1. Not just accuracy."),
             ('B', "Or use techniques like SMOTE to balance, or adjust class weights in your algorithm."),
+        ]
+    },
+
+    'practice-model-comparison': {
+        'title': 'Model Comparison Practice',
+        'section': 'practice',
+        'dialogue': [
+            ('A', "Model comparison time. How do we decide which model is actually better?"),
+            ('B', "We have two models. Model A: ninety-two percent accuracy. Model B: eighty-eight percent."),
+            ('A', "Seems obvious, right? Model A wins. But wait - what about variance?"),
+            ('B', "Model A: ninety-two percent accuracy but with plus or minus eight percent variance."),
+            ('A', "Model B: eighty-eight percent accuracy with only plus or minus two percent variance."),
+            ('B', "So Model A could perform anywhere from eighty-four to one hundred percent."),
+            ('A', "And Model B stays stable between eighty-six and ninety percent."),
+            ('B', "This is the bias-variance tradeoff in action!"),
+            ('A', "High variance means unstable predictions. Model performs differently on different data."),
+            ('B', "Low variance means consistent, reliable results. Even if slightly lower accuracy."),
+            ('A', "For production systems, consistency often matters more than peak performance."),
+            ('B', "Think about it: would you trust a model that's amazing sometimes but terrible other times?"),
+            ('A', "Cross-validation helps reveal this. If scores vary wildly across folds, high variance."),
+            ('B', "Always report both mean accuracy AND standard deviation from cross-validation."),
+            ('A', "The answer: Model B is often the better choice. Consistent and reliable."),
+            ('B', "Unless you can afford the risk of Model A's variance for its potential upside."),
         ]
     },
 
