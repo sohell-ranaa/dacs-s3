@@ -3,93 +3,63 @@
 
 {% block head %}
 <style>
-    .podcast-player {
-        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-        border-radius: 1rem;
-        padding: 1rem 1.5rem;
-        margin-bottom: 1.5rem;
-        color: white;
-    }
-    .podcast-player h3 {
-        margin: 0 0 0.5rem 0;
-        font-size: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-    .podcast-player audio {
-        width: 100%;
-        height: 40px;
-        border-radius: 0.5rem;
-    }
-    .podcast-player .podcast-info {
-        font-size: 0.85rem;
-        opacity: 0.9;
-        margin-bottom: 0.75rem;
-    }
-    .generate-btn {
-        background: rgba(255,255,255,0.2);
-        color: white;
-        border: 1px solid rgba(255,255,255,0.3);
-        padding: 0.5rem 1rem;
-        border-radius: 0.5rem;
-        cursor: pointer;
-        font-size: 0.9rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-    .generate-btn:hover {
-        background: rgba(255,255,255,0.3);
-    }
-    .generate-btn:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
-    .generate-btn.loading::after {
-        content: '';
-        width: 14px;
-        height: 14px;
-        border: 2px solid white;
-        border-top-color: transparent;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin-left: 0.5rem;
-    }
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
     .section-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        gap: 1rem;
+        gap: 0.75rem;
         margin-bottom: 1rem;
     }
     .section-header h2 {
         margin: 0;
+        flex: 1;
+        min-width: 150px;
     }
     .mini-player {
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        background: #f1f5f9;
-        padding: 0.5rem 1rem;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        padding: 0.5rem 0.75rem;
         border-radius: 0.5rem;
+        flex-shrink: 0;
     }
     .mini-player audio {
-        height: 32px;
-        width: 200px;
+        height: 36px;
+        min-width: 180px;
+        max-width: 280px;
+        border-radius: 4px;
     }
     .mini-btn {
-        background: #6366f1;
+        background: rgba(255,255,255,0.2);
         color: white;
-        border: none;
-        padding: 0.4rem 0.8rem;
+        border: 1px solid rgba(255,255,255,0.3);
+        padding: 0.5rem 1rem;
         border-radius: 0.4rem;
         cursor: pointer;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
+        white-space: nowrap;
+    }
+    .mini-btn:hover {
+        background: rgba(255,255,255,0.3);
+    }
+    .mini-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    @media (max-width: 600px) {
+        .section-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .mini-player {
+            width: 100%;
+        }
+        .mini-player audio {
+            width: 100%;
+            max-width: none;
+        }
     }
 </style>
 {% endblock %}
