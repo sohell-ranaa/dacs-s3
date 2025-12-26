@@ -27,7 +27,7 @@
     }
     .mini-player audio {
         height: 36px;
-        min-width: 180px;
+        width: 200px;
         max-width: 280px;
         border-radius: 4px;
     }
@@ -51,14 +51,16 @@
     @media (max-width: 600px) {
         .section-header {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: stretch;
         }
         .mini-player {
             width: 100%;
+            justify-content: center;
         }
         .mini-player audio {
             width: 100%;
             max-width: none;
+            min-width: 0;
         }
     }
 </style>

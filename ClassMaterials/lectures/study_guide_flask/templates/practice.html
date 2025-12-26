@@ -49,6 +49,15 @@
         padding-left: 1rem;
         margin-bottom: 2rem;
     }
+    @media (max-width: 480px) {
+        .podcast-banner {
+            flex-direction: column;
+            text-align: center;
+            padding: 0.75rem;
+        }
+        .podcast-banner audio { width: 100%; }
+        .problem-section { padding-left: 0.75rem; }
+    }
 </style>
 {% endblock %}
 

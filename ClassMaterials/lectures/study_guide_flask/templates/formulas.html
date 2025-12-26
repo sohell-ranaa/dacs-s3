@@ -50,6 +50,14 @@
     @keyframes spin {
         to { transform: rotate(360deg); }
     }
+    @media (max-width: 480px) {
+        .podcast-banner {
+            flex-direction: column;
+            text-align: center;
+            padding: 1rem;
+        }
+        .podcast-banner audio { width: 100%; }
+    }
 </style>
 {% endblock %}
 

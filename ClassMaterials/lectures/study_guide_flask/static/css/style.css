@@ -584,6 +584,52 @@ li { margin: 0.35rem 0; }
 }
 
 /* ============================================
+   SVG Responsiveness
+   ============================================ */
+svg {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ============================================
+   Mobile Responsive (Small Screens)
+   ============================================ */
+@media (max-width: 480px) {
+    /* Reduce padding */
+    .hero { padding: 1.5rem 1rem; }
+    .section { padding: 1rem; }
+    .card { padding: 1rem; }
+    .def { padding: 0.75rem 1rem; }
+    .formula { padding: 1rem; }
+
+    /* Scale typography */
+    h1 { font-size: 1.4rem; }
+    h2 { font-size: 1.15rem; }
+    h3 { font-size: 1rem; }
+
+    /* Stack navigation buttons vertically */
+    .topic-nav {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .topic-nav a {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Grid adjustments */
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+
+    /* Smaller table padding */
+    th, td { padding: 0.5rem; }
+
+    /* Quiz options */
+    .quiz-opt { padding: 0.75rem; }
+}
+
+/* ============================================
    Print
    ============================================ */
 @media print {
