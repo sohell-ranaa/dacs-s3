@@ -1,0 +1,4 @@
+Model,Accuracy,Balanced_Acc,F1_Score,Precision,Recall,MCC
+Ensemble_Bagging,0.91,0.916,0.9104,0.9164,0.91,0.8244
+NonLinear_DecisionTree,0.9057,0.9119,0.9061,0.9124,0.9057,0.816
+SupportVector_Ridge,0.7727,0.7918,0.7716,0.8152,0.7727,0.5894

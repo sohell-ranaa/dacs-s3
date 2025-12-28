@@ -1,0 +1,4 @@
+Model,Attack_Detection_Rate,False_Alarm_Rate,Attack_Precision,Attacks_Detected,Attacks_Missed,False_Alarms
+Ensemble_Bagging,0.872,0.04,0.9665,11191,1642,388
+NonLinear_DecisionTree,0.8671,0.0434,0.9635,11127,1706,421
+SupportVector_Ridge,0.6536,0.07,0.925,8388,4445,680
