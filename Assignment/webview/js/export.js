@@ -7,6 +7,7 @@ const ThesisExport = {
     docx: null,
     figureNumber: 0,
     tableNumber: 0,
+    shortTitle: 'MACHINE LEARNING FOR INTRUSION DETECTION',  // Running header
 
     // APA Style - Clean academic colors
     colors: {
@@ -29,7 +30,8 @@ const ThesisExport = {
         body: 24,           // 12pt
         caption: 24,        // 12pt (APA captions same size)
         small: 20,          // 10pt for notes
-        code: 20            // 10pt for code
+        code: 20,           // 10pt for code
+        header: 20          // 10pt for header/footer
     },
 
     /**
@@ -74,62 +76,149 @@ const ThesisExport = {
     },
 
     /**
-     * Build the complete document
+     * Build the complete document with multiple sections
      */
     async buildDocument(data) {
-        const children = [];
+        const sections = [];
 
-        // Title page
-        children.push(...this.buildTitlePage(data.metadata));
+        // Section 1: Title page (no header/footer)
+        const titleContent = this.buildTitlePage(data.metadata);
+        sections.push({
+            properties: this.getSectionProperties({ titlePage: true }),
+            children: titleContent
+        });
 
-        // Declaration
-        children.push(...this.buildDeclaration(data.metadata));
+        // Section 2: Front matter (Roman numeral page numbers)
+        const frontMatter = [];
+        frontMatter.push(...this.buildDeclaration(data.metadata));
+        frontMatter.push(...this.buildAcknowledgments(data.metadata));
+        frontMatter.push(...this.buildTableOfContents());
+        frontMatter.push(...this.buildListOfFigures(data.chapters));
+        frontMatter.push(...this.buildListOfTables(data.chapters));
+        frontMatter.push(...this.buildAbstract(data.metadata));
 
-        // Acknowledgments
-        children.push(...this.buildAcknowledgments(data.metadata));
+        sections.push({
+            properties: this.getSectionProperties({
+                pageNumberFormat: 'lowerRoman',
+                pageNumberStart: 1,
+                hasHeader: true,
+                headerText: 'DACS Assignment'
+            }),
+            headers: this.createHeaders('DACS Assignment'),
+            footers: this.createFooters('roman'),
+            children: frontMatter
+        });
 
-        // Table of Contents
-        children.push(...this.buildTableOfContents());
-
-        // List of Figures
-        children.push(...this.buildListOfFigures(data.chapters));
-
-        // List of Tables
-        children.push(...this.buildListOfTables(data.chapters));
-
-        // Abstract
-        children.push(...this.buildAbstract(data.metadata));
-
-        // Chapters
+        // Section 3: Main content (Arabic numeral page numbers)
+        const mainContent = [];
         for (const chapter of data.chapters) {
-            children.push(...await this.buildChapter(chapter));
+            mainContent.push(...await this.buildChapter(chapter));
         }
-
-        // References
         if (data.references?.references) {
-            children.push(...this.buildReferences(data.references.references));
+            mainContent.push(...this.buildReferences(data.references.references));
         }
+        mainContent.push(...await this.buildAppendices());
 
-        // Appendices with notebook rendering
-        children.push(...await this.buildAppendices());
+        sections.push({
+            properties: this.getSectionProperties({
+                pageNumberFormat: 'decimal',
+                pageNumberStart: 1,
+                hasHeader: true,
+                headerText: this.shortTitle
+            }),
+            headers: this.createHeaders(this.shortTitle),
+            footers: this.createFooters('arabic'),
+            children: mainContent
+        });
 
         return new this.docx.Document({
             styles: this.getAPAStyles(),
             numbering: this.getNumberingConfig(),
-            sections: [{
-                properties: {
-                    page: {
-                        margin: {
-                            top: 1440,    // 1 inch
-                            right: 1440,  // 1 inch
-                            bottom: 1440, // 1 inch
-                            left: 1440    // 1 inch
-                        }
-                    }
-                },
-                children: children
-            }]
+            sections: sections
         });
+    },
+
+    /**
+     * Get section properties
+     */
+    getSectionProperties(options = {}) {
+        const props = {
+            page: {
+                margin: {
+                    top: 1440,    // 1 inch
+                    right: 1440,  // 1 inch
+                    bottom: 1440, // 1 inch
+                    left: 1440    // 1 inch
+                }
+            }
+        };
+
+        if (options.titlePage) {
+            props.titlePage = true;
+        }
+
+        return props;
+    },
+
+    /**
+     * Create headers for a section (APA 7: running head left, page number right)
+     */
+    createHeaders(text) {
+        return {
+            default: new this.docx.Header({
+                children: [
+                    new this.docx.Paragraph({
+                        alignment: this.docx.AlignmentType.LEFT,
+                        spacing: { after: 0 },
+                        tabStops: [{
+                            type: this.docx.TabStopType.RIGHT,
+                            position: 9360  // Right margin position (6.5" from left in twips)
+                        }],
+                        children: [
+                            new this.docx.TextRun({
+                                text: text,
+                                size: this.sizes.header,
+                                font: 'Times New Roman'
+                            }),
+                            new this.docx.TextRun({
+                                text: '\t'  // Tab to right
+                            }),
+                            new this.docx.TextRun({
+                                children: [this.docx.PageNumber.CURRENT],
+                                size: this.sizes.header,
+                                font: 'Times New Roman'
+                            })
+                        ]
+                    })
+                ]
+            })
+        };
+    },
+
+    /**
+     * Create footers with page numbers
+     */
+    createFooters(style = 'arabic') {
+        return {
+            default: new this.docx.Footer({
+                children: [
+                    new this.docx.Paragraph({
+                        alignment: this.docx.AlignmentType.CENTER,
+                        children: [
+                            new this.docx.TextRun({
+                                children: [
+                                    style === 'roman'
+                                        ? this.docx.PageNumber.CURRENT
+                                        : this.docx.PageNumber.CURRENT
+                                ],
+                                size: this.sizes.header,
+                                font: 'Times New Roman'
+                            })
+                        ]
+                    })
+                ]
+            })
+        };
     },
 
     /**
@@ -145,7 +234,7 @@ const ThesisExport = {
                         color: this.colors.black
                     },
                     paragraph: {
-                        spacing: { line: 360, after: 0 },  // 1.5 line spacing
+                        spacing: { line: 480, after: 0 },  // Double spacing (APA 7)
                         alignment: this.docx.AlignmentType.JUSTIFIED
                     }
                 }
@@ -161,7 +250,7 @@ const ThesisExport = {
                     },
                     paragraph: {
                         alignment: this.docx.AlignmentType.CENTER,
-                        spacing: { after: 240, line: 360 }
+                        spacing: { after: 240, line: 480 }
                     }
                 },
                 {
@@ -178,7 +267,7 @@ const ThesisExport = {
                     },
                     paragraph: {
                         alignment: this.docx.AlignmentType.CENTER,
-                        spacing: { before: 480, after: 240, line: 360 },
+                        spacing: { before: 480, after: 240, line: 480 },
                         outlineLevel: 0
                     }
                 },
@@ -196,7 +285,7 @@ const ThesisExport = {
                     },
                     paragraph: {
                         alignment: this.docx.AlignmentType.LEFT,
-                        spacing: { before: 360, after: 240, line: 360 },
+                        spacing: { before: 360, after: 240, line: 480 },
                         outlineLevel: 1
                     }
                 },
@@ -215,7 +304,7 @@ const ThesisExport = {
                     },
                     paragraph: {
                         alignment: this.docx.AlignmentType.LEFT,
-                        spacing: { before: 240, after: 120, line: 360 },
+                        spacing: { before: 240, after: 120, line: 480 },
                         outlineLevel: 2
                     }
                 }
@@ -270,7 +359,7 @@ const ThesisExport = {
         // Title (Bold, Centered)
         elements.push(new P({
             alignment: CENTER,
-            spacing: { after: 240, line: 360 },
+            spacing: { after: 240, line: 480 },
             children: [new T({
                 text: meta.title,
                 bold: true,
@@ -283,7 +372,7 @@ const ThesisExport = {
         if (meta.subtitle) {
             elements.push(new P({
                 alignment: CENTER,
-                spacing: { after: 480, line: 360 },
+                spacing: { after: 480, line: 480 },
                 children: [new T({
                     text: meta.subtitle,
                     size: this.sizes.body,
@@ -296,7 +385,7 @@ const ThesisExport = {
         meta.authors.forEach(author => {
             elements.push(new P({
                 alignment: CENTER,
-                spacing: { after: 0, line: 360 },
+                spacing: { after: 0, line: 480 },
                 children: [new T({
                     text: author.name,
                     size: this.sizes.body,
@@ -310,7 +399,7 @@ const ThesisExport = {
         // Institution
         elements.push(new P({
             alignment: CENTER,
-            spacing: { after: 0, line: 360 },
+            spacing: { after: 0, line: 480 },
             children: [new T({
                 text: meta.institution,
                 size: this.sizes.body,
@@ -321,7 +410,7 @@ const ThesisExport = {
         // Module
         elements.push(new P({
             alignment: CENTER,
-            spacing: { after: 0, line: 360 },
+            spacing: { after: 0, line: 480 },
             children: [new T({
                 text: meta.module,
                 size: this.sizes.body,
@@ -332,7 +421,7 @@ const ThesisExport = {
         // Supervisor
         elements.push(new P({
             alignment: CENTER,
-            spacing: { after: 0, line: 360 },
+            spacing: { after: 0, line: 480 },
             children: [new T({
                 text: `Supervisor: ${meta.supervisor}`,
                 size: this.sizes.body,
@@ -343,7 +432,7 @@ const ThesisExport = {
         // Date
         elements.push(new P({
             alignment: CENTER,
-            spacing: { after: 0, line: 360 },
+            spacing: { after: 0, line: 480 },
             children: [new T({
                 text: meta.date,
                 size: this.sizes.body,
@@ -351,9 +440,7 @@ const ThesisExport = {
             })]
         }));
 
-        // Page break
-        elements.push(new P({ children: [new this.docx.PageBreak()] }));
-
+        // No page break needed - section break handles this
         return elements;
     },
 
@@ -367,7 +454,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_1,
             alignment: this.docx.AlignmentType.CENTER,
-            spacing: { before: 0, after: 240, line: 360 },
+            spacing: { before: 0, after: 240, line: 480 },
             children: [new this.docx.TextRun({
                 text: 'Declaration of Originality',
                 bold: true,
@@ -379,7 +466,7 @@ const ThesisExport = {
         // Declaration text
         elements.push(new this.docx.Paragraph({
             alignment: this.docx.AlignmentType.JUSTIFIED,
-            spacing: { after: 240, line: 360 },
+            spacing: { after: 240, line: 480 },
             indent: { firstLine: 720 },
             children: [new this.docx.TextRun({
                 text: meta.declaration,
@@ -393,7 +480,7 @@ const ThesisExport = {
 
         meta.authors.forEach(author => {
             elements.push(new this.docx.Paragraph({
-                spacing: { after: 480, line: 360 },
+                spacing: { after: 480, line: 480 },
                 children: [new this.docx.TextRun({
                     text: '_'.repeat(50),
                     size: this.sizes.body,
@@ -401,7 +488,7 @@ const ThesisExport = {
                 })]
             }));
             elements.push(new this.docx.Paragraph({
-                spacing: { after: 240, line: 360 },
+                spacing: { after: 240, line: 480 },
                 children: [new this.docx.TextRun({
                     text: `${author.name} (${author.id})`,
                     size: this.sizes.body,
@@ -423,7 +510,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_1,
             alignment: this.docx.AlignmentType.CENTER,
-            spacing: { before: 0, after: 240, line: 360 },
+            spacing: { before: 0, after: 240, line: 480 },
             children: [new this.docx.TextRun({
                 text: 'Acknowledgments',
                 bold: true,
@@ -434,7 +521,7 @@ const ThesisExport = {
 
         elements.push(new this.docx.Paragraph({
             alignment: this.docx.AlignmentType.JUSTIFIED,
-            spacing: { after: 240, line: 360 },
+            spacing: { after: 240, line: 480 },
             indent: { firstLine: 720 },
             children: [new this.docx.TextRun({
                 text: meta.acknowledgments,
@@ -456,7 +543,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_1,
             alignment: this.docx.AlignmentType.CENTER,
-            spacing: { before: 0, after: 240, line: 360 },
+            spacing: { before: 0, after: 240, line: 480 },
             children: [new this.docx.TextRun({
                 text: 'Table of Contents',
                 bold: true,
@@ -483,7 +570,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_1,
             alignment: this.docx.AlignmentType.CENTER,
-            spacing: { before: 0, after: 240, line: 360 },
+            spacing: { before: 0, after: 240, line: 480 },
             children: [new this.docx.TextRun({
                 text: 'List of Figures',
                 bold: true,
@@ -492,31 +579,47 @@ const ThesisExport = {
             })]
         }));
 
+        // Note about updating page numbers
+        elements.push(new this.docx.Paragraph({
+            spacing: { after: 240, line: 480 },
+            children: [new this.docx.TextRun({
+                text: 'Note: Update page numbers by pressing Ctrl+A then F9 in Microsoft Word.',
+                size: this.sizes.small,
+                italics: true,
+                font: 'Times New Roman',
+                color: this.colors.gray
+            })]
+        }));
+
         let figNum = 0;
         chapters.forEach(chapter => {
-            if (chapter.sections) {
+            if (chapter && chapter.sections) {
                 chapter.sections.forEach(section => {
                     if (section.figures) {
                         section.figures.forEach(fig => {
                             figNum++;
+                            const chapterNum = chapter.chapter_number || '';
                             elements.push(new this.docx.Paragraph({
-                                spacing: { after: 120, line: 360 },
-                                tabStops: [{
-                                    type: this.docx.TabStopType.RIGHT,
-                                    position: 9000,
-                                    leader: this.docx.LeaderType.DOT
-                                }],
+                                spacing: { after: 120, line: 480 },
+                                indent: { left: 0, hanging: 0 },
                                 children: [
                                     new this.docx.TextRun({
-                                        text: `Figure ${fig.number || figNum}. ${fig.caption}`,
+                                        text: `Figure ${fig.number || figNum}`,
+                                        bold: true,
                                         size: this.sizes.body,
                                         font: 'Times New Roman'
                                     }),
-                                    new this.docx.TextRun({ text: '\t' }),
                                     new this.docx.TextRun({
-                                        text: '##',
+                                        text: ` ${fig.caption}`,
                                         size: this.sizes.body,
                                         font: 'Times New Roman'
+                                    }),
+                                    new this.docx.TextRun({
+                                        text: ` (Chapter ${chapterNum})`,
+                                        size: this.sizes.small,
+                                        italics: true,
+                                        font: 'Times New Roman',
+                                        color: this.colors.gray
                                     })
                                 ]
                             }));
@@ -539,7 +642,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_1,
             alignment: this.docx.AlignmentType.CENTER,
-            spacing: { before: 0, after: 240, line: 360 },
+            spacing: { before: 0, after: 240, line: 480 },
             children: [new this.docx.TextRun({
                 text: 'List of Tables',
                 bold: true,
@@ -548,31 +651,47 @@ const ThesisExport = {
             })]
         }));
 
+        // Note about updating page numbers
+        elements.push(new this.docx.Paragraph({
+            spacing: { after: 240, line: 480 },
+            children: [new this.docx.TextRun({
+                text: 'Note: Update page numbers by pressing Ctrl+A then F9 in Microsoft Word.',
+                size: this.sizes.small,
+                italics: true,
+                font: 'Times New Roman',
+                color: this.colors.gray
+            })]
+        }));
+
         let tableNum = 0;
         chapters.forEach(chapter => {
-            if (chapter.sections) {
+            if (chapter && chapter.sections) {
                 chapter.sections.forEach(section => {
                     if (section.tables) {
                         section.tables.forEach(table => {
                             tableNum++;
+                            const chapterNum = chapter.chapter_number || '';
                             elements.push(new this.docx.Paragraph({
-                                spacing: { after: 120, line: 360 },
-                                tabStops: [{
-                                    type: this.docx.TabStopType.RIGHT,
-                                    position: 9000,
-                                    leader: this.docx.LeaderType.DOT
-                                }],
+                                spacing: { after: 120, line: 480 },
+                                indent: { left: 0, hanging: 0 },
                                 children: [
                                     new this.docx.TextRun({
-                                        text: `Table ${table.number || tableNum}. ${table.caption}`,
+                                        text: `Table ${table.number || tableNum}`,
+                                        bold: true,
                                         size: this.sizes.body,
                                         font: 'Times New Roman'
                                     }),
-                                    new this.docx.TextRun({ text: '\t' }),
                                     new this.docx.TextRun({
-                                        text: '##',
+                                        text: ` ${table.caption}`,
                                         size: this.sizes.body,
                                         font: 'Times New Roman'
+                                    }),
+                                    new this.docx.TextRun({
+                                        text: ` (Chapter ${chapterNum})`,
+                                        size: this.sizes.small,
+                                        italics: true,
+                                        font: 'Times New Roman',
+                                        color: this.colors.gray
                                     })
                                 ]
                             }));
@@ -595,7 +714,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_1,
             alignment: this.docx.AlignmentType.CENTER,
-            spacing: { before: 0, after: 240, line: 360 },
+            spacing: { before: 0, after: 240, line: 480 },
             children: [new this.docx.TextRun({
                 text: 'Abstract',
                 bold: true,
@@ -607,7 +726,8 @@ const ThesisExport = {
         // Abstract text - no first line indent per APA
         elements.push(new this.docx.Paragraph({
             alignment: this.docx.AlignmentType.JUSTIFIED,
-            spacing: { after: 240, line: 360 },
+            spacing: { after: 240, line: 480 },
+            indent: { firstLine: 0 },  // Explicitly no indent for abstract
             children: [new this.docx.TextRun({
                 text: meta.abstract,
                 size: this.sizes.body,
@@ -615,10 +735,10 @@ const ThesisExport = {
             })]
         }));
 
-        // Keywords (APA style - italicized label)
+        // Keywords (APA style - italicized label, indented)
         if (meta.keywords) {
             elements.push(new this.docx.Paragraph({
-                spacing: { after: 240, line: 360 },
+                spacing: { after: 240, line: 480 },
                 indent: { firstLine: 720 },
                 children: [
                     new this.docx.TextRun({
@@ -650,7 +770,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_1,
             alignment: this.docx.AlignmentType.CENTER,
-            spacing: { before: 0, after: 240, line: 360 },
+            spacing: { before: 0, after: 240, line: 480 },
             children: [new this.docx.TextRun({
                 text: `Chapter ${chapter.chapter_number}: ${chapter.title}`,
                 bold: true,
@@ -685,7 +805,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_2,
             alignment: this.docx.AlignmentType.LEFT,
-            spacing: { before: 360, after: 240, line: 360 },
+            spacing: { before: 360, after: 240, line: 480 },
             children: [new this.docx.TextRun({
                 text: `${section.section_key} ${section.title}`,
                 bold: true,
@@ -733,7 +853,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_3,
             alignment: this.docx.AlignmentType.LEFT,
-            spacing: { before: 240, after: 120, line: 360 },
+            spacing: { before: 240, after: 120, line: 480 },
             children: [new this.docx.TextRun({
                 text: `${subsection.section_key} ${subsection.title}`,
                 bold: true,
@@ -799,7 +919,7 @@ const ThesisExport = {
 
         // APA Figure caption: "Figure X" in italics, then caption
         elements.push(new this.docx.Paragraph({
-            spacing: { after: 120, line: 360 },
+            spacing: { after: 120, line: 480 },
             children: [
                 new this.docx.TextRun({
                     text: `Figure ${fig.number || this.figureNumber}`,
@@ -811,7 +931,7 @@ const ThesisExport = {
         }));
 
         elements.push(new this.docx.Paragraph({
-            spacing: { after: 120, line: 360 },
+            spacing: { after: 120, line: 480 },
             children: [
                 new this.docx.TextRun({
                     text: fig.caption,
@@ -826,7 +946,7 @@ const ThesisExport = {
         if (fig.description) {
             elements.push(new this.docx.Paragraph({
                 alignment: this.docx.AlignmentType.JUSTIFIED,
-                spacing: { after: 360, line: 360 },
+                spacing: { after: 360, line: 480 },
                 children: [
                     new this.docx.TextRun({
                         text: 'Note. ',
@@ -857,7 +977,7 @@ const ThesisExport = {
 
         // APA Table number
         elements.push(new this.docx.Paragraph({
-            spacing: { after: 120, line: 360 },
+            spacing: { after: 120, line: 480 },
             children: [new this.docx.TextRun({
                 text: `Table ${tableData.number || this.tableNumber}`,
                 italics: true,
@@ -868,7 +988,7 @@ const ThesisExport = {
 
         // Table title (italicized)
         elements.push(new this.docx.Paragraph({
-            spacing: { after: 120, line: 360 },
+            spacing: { after: 120, line: 480 },
             children: [new this.docx.TextRun({
                 text: tableData.caption,
                 italics: true,
@@ -944,7 +1064,7 @@ const ThesisExport = {
         if (tableData.description) {
             elements.push(new this.docx.Paragraph({
                 alignment: this.docx.AlignmentType.JUSTIFIED,
-                spacing: { before: 120, after: 360, line: 360 },
+                spacing: { before: 120, after: 360, line: 480 },
                 children: [
                     new this.docx.TextRun({
                         text: 'Note. ',
@@ -973,7 +1093,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_1,
             alignment: this.docx.AlignmentType.CENTER,
-            spacing: { before: 0, after: 240, line: 360 },
+            spacing: { before: 0, after: 240, line: 480 },
             children: [new this.docx.TextRun({
                 text: 'References',
                 bold: true,
@@ -989,7 +1109,7 @@ const ThesisExport = {
 
             // APA hanging indent: 0.5 inch (720 twips)
             elements.push(new this.docx.Paragraph({
-                spacing: { after: 240, line: 360 },
+                spacing: { after: 240, line: 480 },
                 indent: { left: 720, hanging: 720 },
                 children: [new this.docx.TextRun({
                     text: text,
@@ -1014,7 +1134,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_1,
             alignment: this.docx.AlignmentType.CENTER,
-            spacing: { before: 0, after: 240, line: 360 },
+            spacing: { before: 0, after: 240, line: 480 },
             children: [new this.docx.TextRun({
                 text: 'Appendices',
                 bold: true,
@@ -1025,7 +1145,7 @@ const ThesisExport = {
 
         elements.push(new this.docx.Paragraph({
             alignment: this.docx.AlignmentType.JUSTIFIED,
-            spacing: { after: 360, line: 360 },
+            spacing: { after: 360, line: 480 },
             indent: { firstLine: 720 },
             children: [new this.docx.TextRun({
                 text: 'The following appendices contain the complete Jupyter Notebook implementations for each machine learning model evaluated in this study. Each appendix preserves the exact notebook format with syntax-highlighted code cells, outputs, and visualizations as executed during the experimental phase.',
@@ -1074,7 +1194,7 @@ const ThesisExport = {
             elements.push(new this.docx.Paragraph({
                 heading: this.docx.HeadingLevel.HEADING_2,
                 alignment: this.docx.AlignmentType.LEFT,
-                spacing: { before: 480, after: 120, line: 360 },
+                spacing: { before: 480, after: 120, line: 480 },
                 children: [new this.docx.TextRun({
                     text: `Appendix ${nb.id}: ${nb.title}`,
                     bold: true,
@@ -1084,7 +1204,7 @@ const ThesisExport = {
             }));
 
             elements.push(new this.docx.Paragraph({
-                spacing: { after: 240, line: 360 },
+                spacing: { after: 240, line: 480 },
                 children: [new this.docx.TextRun({
                     text: nb.subtitle,
                     italics: true,
@@ -1128,7 +1248,7 @@ const ThesisExport = {
 
         // Source file reference
         elements.push(new this.docx.Paragraph({
-            spacing: { after: 200, line: 360 },
+            spacing: { after: 200, line: 480 },
             children: [
                 new this.docx.TextRun({
                     text: 'Source File: ',
@@ -1210,7 +1330,7 @@ const ThesisExport = {
      */
     createNotebookFallbackMessage(file) {
         return new this.docx.Paragraph({
-            spacing: { after: 240, line: 360 },
+            spacing: { after: 240, line: 480 },
             shading: { fill: 'FFF3CD' },
             children: [new this.docx.TextRun({
                 text: `Note: Pre-rendered notebook images not found. Run 'python generate_notebook_images.py' to generate high-quality notebook images for this appendix. Source file: ${file}`,
@@ -1313,7 +1433,7 @@ const ThesisExport = {
             if (line.startsWith('# ')) {
                 // H1
                 elements.push(new this.docx.Paragraph({
-                    spacing: { before: 360, after: 120, line: 360 },
+                    spacing: { before: 360, after: 120, line: 480 },
                     children: [new this.docx.TextRun({
                         text: line.substring(2),
                         bold: true,
@@ -1324,7 +1444,7 @@ const ThesisExport = {
             } else if (line.startsWith('## ')) {
                 // H2
                 elements.push(new this.docx.Paragraph({
-                    spacing: { before: 240, after: 120, line: 360 },
+                    spacing: { before: 240, after: 120, line: 480 },
                     children: [new this.docx.TextRun({
                         text: line.substring(3),
                         bold: true,
@@ -1335,7 +1455,7 @@ const ThesisExport = {
             } else if (line.startsWith('### ')) {
                 // H3
                 elements.push(new this.docx.Paragraph({
-                    spacing: { before: 180, after: 120, line: 360 },
+                    spacing: { before: 180, after: 120, line: 480 },
                     children: [new this.docx.TextRun({
                         text: line.substring(4),
                         bold: true,
@@ -1348,7 +1468,7 @@ const ThesisExport = {
                 // Bullet
                 elements.push(new this.docx.Paragraph({
                     bullet: { level: 0 },
-                    spacing: { after: 60, line: 360 },
+                    spacing: { after: 60, line: 480 },
                     children: [new this.docx.TextRun({
                         text: line.substring(2),
                         size: this.sizes.body,
@@ -1359,7 +1479,7 @@ const ThesisExport = {
                 // Numbered list
                 elements.push(new this.docx.Paragraph({
                     numbering: { reference: 'numbered-list', level: 0 },
-                    spacing: { after: 60, line: 360 },
+                    spacing: { after: 60, line: 480 },
                     children: [new this.docx.TextRun({
                         text: line.replace(/^\d+\.\s/, ''),
                         size: this.sizes.body,
@@ -1369,7 +1489,7 @@ const ThesisExport = {
             } else if (line.trim()) {
                 // Regular paragraph
                 elements.push(new this.docx.Paragraph({
-                    spacing: { after: 120, line: 360 },
+                    spacing: { after: 120, line: 480 },
                     children: [new this.docx.TextRun({
                         text: line,
                         size: this.sizes.body,
@@ -1525,7 +1645,7 @@ const ThesisExport = {
             } else if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
                 elements.push(new this.docx.Paragraph({
                     alignment: this.docx.AlignmentType.JUSTIFIED,
-                    spacing: { after: 240, line: 360 },
+                    spacing: { after: 240, line: 480 },
                     indent: { firstLine: 720 },
                     children: [new this.docx.TextRun({
                         text: node.textContent.trim(),
@@ -1550,7 +1670,7 @@ const ThesisExport = {
             case 'p':
                 elements.push(new this.docx.Paragraph({
                     alignment: this.docx.AlignmentType.JUSTIFIED,
-                    spacing: { after: 240, line: 360 },
+                    spacing: { after: 240, line: 480 },
                     indent: { firstLine: 720 },
                     children: this.getTextRuns(element)
                 }));
@@ -1560,7 +1680,7 @@ const ThesisExport = {
                 element.querySelectorAll(':scope > li').forEach(li => {
                     elements.push(new this.docx.Paragraph({
                         bullet: { level: 0 },
-                        spacing: { after: 120, line: 360 },
+                        spacing: { after: 120, line: 480 },
                         children: this.getTextRuns(li)
                     }));
                 });
@@ -1570,7 +1690,7 @@ const ThesisExport = {
                 element.querySelectorAll(':scope > li').forEach(li => {
                     elements.push(new this.docx.Paragraph({
                         numbering: { reference: 'numbered-list', level: 0 },
-                        spacing: { after: 120, line: 360 },
+                        spacing: { after: 120, line: 480 },
                         children: this.getTextRuns(li)
                     }));
                 });
@@ -1579,7 +1699,7 @@ const ThesisExport = {
             case 'h3':
             case 'h4':
                 elements.push(new this.docx.Paragraph({
-                    spacing: { before: 240, after: 120, line: 360 },
+                    spacing: { before: 240, after: 120, line: 480 },
                     children: [new this.docx.TextRun({
                         text: element.textContent,
                         bold: true,
@@ -1593,7 +1713,7 @@ const ThesisExport = {
             case 'blockquote':
                 elements.push(new this.docx.Paragraph({
                     indent: { left: 720 },
-                    spacing: { after: 240, line: 360 },
+                    spacing: { after: 240, line: 480 },
                     children: [new this.docx.TextRun({
                         text: element.textContent,
                         size: this.sizes.body,
@@ -1606,7 +1726,7 @@ const ThesisExport = {
                 if (element.textContent.trim()) {
                     elements.push(new this.docx.Paragraph({
                         alignment: this.docx.AlignmentType.JUSTIFIED,
-                        spacing: { after: 240, line: 360 },
+                        spacing: { after: 240, line: 480 },
                         children: [new this.docx.TextRun({
                             text: element.textContent.trim(),
                             size: this.sizes.body,

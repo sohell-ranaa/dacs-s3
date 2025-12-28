@@ -149,6 +149,31 @@
       "id": 30,
       "citation": "Canadian Institute for Cybersecurity. (n.d.). NSL-KDD Dataset. University of New Brunswick.",
       "url": "https://www.unb.ca/cic/datasets/nsl.html"
+    },
+    {
+      "id": 31,
+      "citation": "DeLong, E. R., DeLong, D. M., & Clarke-Pearson, D. L. (1988). Comparing the areas under two or more correlated receiver operating characteristic curves: A nonparametric approach. Biometrics, 44(3), 837-845.",
+      "doi": "10.2307/2531595"
+    },
+    {
+      "id": 32,
+      "citation": "Sarker, I. H. (2021). Machine learning: Algorithms, real-world applications and research directions. SN Computer Science, 2(3), 1-21.",
+      "doi": "10.1007/s42979-021-00592-x"
+    },
+    {
+      "id": 33,
+      "citation": "Thakkar, A., & Lohiya, R. (2023). A survey on intrusion detection system: Feature selection, model, performance measures, application perspective, challenges, and future research directions. Artificial Intelligence Review, 55(1), 453-563.",
+      "doi": "10.1007/s10462-021-10037-9"
+    },
+    {
+      "id": 34,
+      "citation": "Alrowais, F., Alotaibi, S. S., Marzouk, R., Salama, A. S., Rizwanullah, M., & Zamani, A. S. (2023). Hybrid leader based optimization with deep learning driven intrusion detection in cyber-physical systems. IEEE Access, 11, 60122-60132.",
+      "doi": "10.1109/ACCESS.2023.3279355"
+    },
+    {
+      "id": 35,
+      "citation": "Liu, H., & Lang, B. (2019). Machine learning and deep learning methods for intrusion detection systems: A survey. Applied Sciences, 9(20), 4396.",
+      "doi": "10.3390/app9204396"
     }
   ]
 }
