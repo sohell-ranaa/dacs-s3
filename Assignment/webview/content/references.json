@@ -1,0 +1,154 @@
+{
+  "references": [
+    {
+      "id": 1,
+      "citation": "Denning, D. E. (1987). An intrusion-detection model. IEEE Transactions on Software Engineering, SE-13(2), 222-232.",
+      "doi": "10.1109/TSE.1987.232894"
+    },
+    {
+      "id": 2,
+      "citation": "Anderson, J. P. (1980). Computer security threat monitoring and surveillance (Technical Report). James P. Anderson Company.",
+      "url": "https://csrc.nist.gov/csrc/media/publications/conference-paper/1998/10/08/proceedings-of-the-21st-nissc-1998/documents/early-cs-papers/ande80.pdf"
+    },
+    {
+      "id": 3,
+      "citation": "Tavallaee, M., Bagheri, E., Lu, W., & Ghorbani, A. A. (2009). A detailed analysis of the KDD CUP 99 data set. In 2009 IEEE Symposium on Computational Intelligence for Security and Defense Applications (pp. 1-6). IEEE.",
+      "doi": "10.1109/CISDA.2009.5356528"
+    },
+    {
+      "id": 4,
+      "citation": "Stolfo, S. J., Fan, W., Lee, W., Prodromidis, A., & Chan, P. K. (2000). Cost-based modeling for fraud and intrusion detection: Results from the JAM project. In Proceedings of DARPA Information Survivability Conference and Exposition (Vol. 2, pp. 130-144). IEEE.",
+      "doi": "10.1109/DISCEX.2000.821515"
+    },
+    {
+      "id": 5,
+      "citation": "Breiman, L. (1996). Bagging predictors. Machine Learning, 24(2), 123-140.",
+      "doi": "10.1007/BF00058655"
+    },
+    {
+      "id": 6,
+      "citation": "Breiman, L. (2001). Random forests. Machine Learning, 45(1), 5-32.",
+      "doi": "10.1023/A:1010933404324"
+    },
+    {
+      "id": 7,
+      "citation": "Breiman, L., Friedman, J., Stone, C. J., & Olshen, R. A. (1984). Classification and Regression Trees. CRC Press.",
+      "doi": "10.1201/9781315139470"
+    },
+    {
+      "id": 8,
+      "citation": "Quinlan, J. R. (1986). Induction of decision trees. Machine Learning, 1(1), 81-106.",
+      "doi": "10.1007/BF00116251"
+    },
+    {
+      "id": 9,
+      "citation": "Quinlan, J. R. (1993). C4.5: Programs for Machine Learning. Morgan Kaufmann Publishers.",
+      "url": "https://dl.acm.org/doi/10.5555/152181"
+    },
+    {
+      "id": 10,
+      "citation": "Hoerl, A. E., & Kennard, R. W. (1970). Ridge regression: Biased estimation for nonorthogonal problems. Technometrics, 12(1), 55-67.",
+      "doi": "10.1080/00401706.1970.10488634"
+    },
+    {
+      "id": 11,
+      "citation": "Cortes, C., & Vapnik, V. (1995). Support-vector networks. Machine Learning, 20(3), 273-297.",
+      "doi": "10.1007/BF00994018"
+    },
+    {
+      "id": 12,
+      "citation": "Buczak, A. L., & Guven, E. (2016). A survey of data mining and machine learning methods for cyber security intrusion detection. IEEE Communications Surveys & Tutorials, 18(2), 1153-1176.",
+      "doi": "10.1109/COMST.2015.2494502"
+    },
+    {
+      "id": 13,
+      "citation": "Khraisat, A., Gondal, I., Vamplew, P., & Kamruzzaman, J. (2019). Survey of intrusion detection systems: Techniques, datasets and challenges. Cybersecurity, 2(1), 1-22.",
+      "doi": "10.1186/s42400-019-0038-7"
+    },
+    {
+      "id": 14,
+      "citation": "Ahmad, I., Basheri, M., Iqbal, M. J., & Rahim, A. (2018). Performance comparison of support vector machine, random forest, and extreme learning machine for intrusion detection. IEEE Access, 6, 33789-33795.",
+      "doi": "10.1109/ACCESS.2018.2841987"
+    },
+    {
+      "id": 15,
+      "citation": "Aburomman, A. A., & Reaz, M. B. I. (2017). A survey of intrusion detection systems based on ensemble and hybrid classifiers. Computers & Security, 65, 135-152.",
+      "doi": "10.1016/j.cose.2016.11.004"
+    },
+    {
+      "id": 16,
+      "citation": "Panigrahi, R., & Borah, S. (2018). A detailed analysis of CICIDS2017 dataset for designing intrusion detection systems. International Journal of Engineering & Technology, 7(3.24), 479-482.",
+      "doi": "10.14419/ijet.v7i3.24.18750"
+    },
+    {
+      "id": 17,
+      "citation": "Moustafa, N., & Slay, J. (2015). UNSW-NB15: A comprehensive data set for network intrusion detection systems. In 2015 Military Communications and Information Systems Conference (MilCIS) (pp. 1-6). IEEE.",
+      "doi": "10.1109/MilCIS.2015.7348942"
+    },
+    {
+      "id": 18,
+      "citation": "Dhanabal, L., & Shantharajah, S. P. (2015). A study on NSL-KDD dataset for intrusion detection system based on classification algorithms. International Journal of Advanced Research in Computer and Communication Engineering, 4(6), 446-452.",
+      "url": "https://ijarcce.com/upload/2015/june-15/IJARCCE%20117.pdf"
+    },
+    {
+      "id": 19,
+      "citation": "Revathi, S., & Malathi, A. (2013). A detailed analysis on NSL-KDD dataset using various machine learning techniques for intrusion detection. International Journal of Engineering Research & Technology, 2(12), 1848-1853.",
+      "url": "https://www.ijert.org/"
+    },
+    {
+      "id": 20,
+      "citation": "Geman, S., Bienenstock, E., & Doursat, R. (1992). Neural networks and the bias/variance dilemma. Neural Computation, 4(1), 1-58.",
+      "doi": "10.1162/neco.1992.4.1.1"
+    },
+    {
+      "id": 21,
+      "citation": "Kohavi, R. (1995). A study of cross-validation and bootstrap for accuracy estimation and model selection. In Proceedings of the 14th International Joint Conference on Artificial Intelligence (Vol. 2, pp. 1137-1143).",
+      "url": "https://dl.acm.org/doi/10.5555/1643031.1643047"
+    },
+    {
+      "id": 22,
+      "citation": "Efron, B., & Tibshirani, R. J. (1994). An Introduction to the Bootstrap. CRC Press.",
+      "doi": "10.1201/9780429246593"
+    },
+    {
+      "id": 23,
+      "citation": "Matthews, B. W. (1975). Comparison of the predicted and observed secondary structure of T4 phage lysozyme. Biochimica et Biophysica Acta (BBA)-Protein Structure, 405(2), 442-451.",
+      "doi": "10.1016/0005-2795(75)90109-9"
+    },
+    {
+      "id": 24,
+      "citation": "Chicco, D., & Jurman, G. (2020). The advantages of the Matthews correlation coefficient (MCC) over F1 score and accuracy in binary classification evaluation. BMC Genomics, 21(1), 1-13.",
+      "doi": "10.1186/s12864-019-6413-7"
+    },
+    {
+      "id": 25,
+      "citation": "Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., ... & Duchesnay, E. (2011). Scikit-learn: Machine learning in Python. Journal of Machine Learning Research, 12, 2825-2830.",
+      "url": "https://jmlr.org/papers/v12/pedregosa11a.html"
+    },
+    {
+      "id": 26,
+      "citation": "Vinayakumar, R., Alazab, M., Soman, K. P., Poornachandran, P., Al-Nemrat, A., & Venkatraman, S. (2019). Deep learning approach for intelligent intrusion detection system. IEEE Access, 7, 41525-41550.",
+      "doi": "10.1109/ACCESS.2019.2895334"
+    },
+    {
+      "id": 27,
+      "citation": "Gu, J., & Lu, S. (2021). An effective intrusion detection approach using SVM with naive Bayes feature embedding. Computers & Security, 103, 102158.",
+      "doi": "10.1016/j.cose.2020.102158"
+    },
+    {
+      "id": 28,
+      "citation": "Halimaa, A., & Sundarakantham, K. (2019). Machine learning based intrusion detection system. In 2019 3rd International Conference on Trends in Electronics and Informatics (ICOEI) (pp. 916-920). IEEE.",
+      "doi": "10.1109/ICOEI.2019.8862784"
+    },
+    {
+      "id": 29,
+      "citation": "Ferrag, M. A., Maglaras, L., Moschoyiannis, S., & Janicke, H. (2020). Deep learning for cyber security intrusion detection: Approaches, datasets, and comparative study. Journal of Information Security and Applications, 50, 102419.",
+      "doi": "10.1016/j.jisa.2019.102419"
+    },
+    {
+      "id": 30,
+      "citation": "Canadian Institute for Cybersecurity. (n.d.). NSL-KDD Dataset. University of New Brunswick.",
+      "url": "https://www.unb.ca/cic/datasets/nsl.html"
+    }
+  ]
+}

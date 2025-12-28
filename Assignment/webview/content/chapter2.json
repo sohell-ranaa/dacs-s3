@@ -1,0 +1,96 @@
+{
+  "chapter_key": "chapter2",
+  "chapter_number": "2",
+  "title": "Methodology",
+  "introduction": "<p>This chapter presents the methodology for evaluating machine learning approaches to network intrusion detection, covering dataset description, preprocessing pipeline, model selection, evaluation metrics, and implementation details.</p>",
+  "sections": [
+    {
+      "section_key": "2.1",
+      "title": "Dataset Description",
+      "content_html": "<p>The NSL-KDD dataset (Tavallaee et al., 2009) serves as the primary benchmark. It addresses limitations of the original KDD Cup 1999 dataset by eliminating duplicate records and maintaining a manageable size. The training set contains 63,280 records (53.21% normal, 46.79% attack), while the test set contains 22,544 records (43.08% normal, 56.92% attack). This distributional shift tests model robustness to varying attack prevalence.</p><p>The dataset comprises 41 features across four categories: basic connection features (duration, protocol, bytes transferred), content features (login attempts, shell access), time-based features (connections per 2-second window), and host-based features (100-connection history). After one-hot encoding of categorical variables (protocol_type, service, flag), the feature space expands to 121 dimensions.</p><p>Attacks are categorized into DoS (denial of service), Probe (reconnaissance), R2L (remote-to-local), and U2R (user-to-root). The test set intentionally includes attack variants absent from training data, testing generalization to novel threats.</p>",
+      "figures": [
+        {
+          "id": "fig-dataset-size",
+          "number": "2.1",
+          "src": "figures/comparison_dataset_size.png",
+          "caption": "Dataset size comparison between training and test sets",
+          "description": "Figure 2.1 presents a bar chart comparing the sizes of the training and test partitions in the NSL-KDD dataset. The training set contains 63,280 network connection records, while the test set comprises 22,544 records, representing an approximate 74%-26% split. This partition ratio follows standard machine learning practice, providing sufficient training data for model learning while reserving an adequate test set for unbiased performance evaluation. The substantial size of both partitions ensures statistical reliability in the experimental results. The training set's larger size enables the models to learn diverse patterns across different attack types and normal traffic behaviors, while the test set size provides enough samples to achieve statistically significant performance measurements with narrow confidence intervals."
+        },
+        {
+          "id": "fig-class-dist",
+          "number": "2.2",
+          "src": "figures/comparison_class_distribution.png",
+          "caption": "Class distribution across training and test partitions",
+          "description": "Figure 2.2 illustrates the class distribution differences between training and test sets using a stacked bar chart. The training set exhibits a slight majority of normal traffic (53.21%) compared to attacks (46.79%), while the test set reverses this pattern with attacks comprising 56.92% and normal traffic only 43.08%. This intentional distributional shift serves a critical evaluation purpose: it tests whether models can maintain performance when the class balance differs from training conditions—a realistic scenario in production network environments where attack prevalence fluctuates. Models that overfit to the training distribution will show degraded test performance, while robust models will demonstrate consistent classification accuracy despite this shift. This experimental design choice by the NSL-KDD creators ensures that evaluation reflects real-world deployment challenges."
+        }
+      ],
+      "tables": [
+        {
+          "id": "table-dataset-stats",
+          "number": "2.1",
+          "caption": "NSL-KDD Dataset Statistics",
+          "headers": ["Partition", "Total Records", "Normal (%)", "Attack (%)", "Features"],
+          "rows": [
+            ["Training Set", "63,280", "33,672 (53.21%)", "29,608 (46.79%)", "121"],
+            ["Test Set", "22,544", "9,711 (43.08%)", "12,833 (56.92%)", "121"]
+          ],
+          "description": "Table 2.1 presents comprehensive statistics for both dataset partitions. The training set's 63,280 records provide substantial data for model learning, with a near-balanced class distribution (53.21% normal, 46.79% attack) that facilitates effective learning of both classes. The test set's 22,544 records offer statistically significant evaluation capability, with its shifted distribution (43.08% normal, 56.92% attack) testing model robustness to varying attack prevalence. The 121 features result from one-hot encoding the original 41 features, expanding the three categorical variables (protocol_type, service, flag) into binary indicators. This feature expansion preserves all categorical information without imposing artificial ordinal relationships, enabling the machine learning models to learn appropriate weights for each category independently."
+        }
+      ]
+    },
+    {
+      "section_key": "2.2",
+      "title": "Data Preprocessing Pipeline",
+      "content_html": "<p>The preprocessing pipeline follows established best practices (Pedregosa et al., 2011):</p><ol><li><strong>Feature Removal:</strong> The feature num_outbound_cmds (containing only zeros) was removed.</li><li><strong>Categorical Encoding:</strong> One-hot encoding transformed protocol_type (3 categories), service (70 categories), and flag (11 categories) into 84 binary columns.</li><li><strong>Label Encoding:</strong> All attack types mapped to class 1; normal connections to class 0.</li><li><strong>Feature Scaling:</strong> MinMaxScaler applied to numeric features using training data statistics only, preventing data leakage.</li></ol>",
+      "tables": [
+        {
+          "id": "table-features",
+          "number": "2.2",
+          "caption": "Feature Preprocessing Summary",
+          "headers": ["Feature Category", "Original", "After Encoding", "Transformation"],
+          "rows": [
+            ["Categorical", "3", "84", "One-Hot Encoding"],
+            ["Numeric", "37", "37", "MinMax Scaling"],
+            ["Removed", "1", "0", "Zero variance"],
+            ["Total", "41", "121", "Combined"]
+          ],
+          "description": "Table 2.2 summarizes the feature transformations applied during preprocessing. The three categorical features (protocol_type with 3 categories, service with 70 categories, and flag with 11 categories) were transformed into 84 binary columns using one-hot encoding, preventing the models from incorrectly interpreting categorical values as ordinal. The 37 numeric features underwent MinMax scaling to normalize their ranges to [0,1], ensuring that features with larger magnitudes do not dominate the learning process. Critically, scaling parameters were computed solely from training data and applied consistently to the test set, preventing data leakage that would artificially inflate performance estimates. The single removed feature (num_outbound_cmds) contained only zero values, providing no discriminative information."
+        }
+      ]
+    },
+    {
+      "section_key": "2.3",
+      "title": "Model Selection and Optimization",
+      "content_html": "<p>Each student followed a structured selection protocol within their assigned algorithm family:</p><ol><li><strong>Baseline Establishment:</strong> Multiple candidate algorithms evaluated with default parameters; best performer selected by balanced accuracy.</li><li><strong>Hyperparameter Optimization:</strong> Grid search with 5-fold stratified cross-validation to identify optimal configurations.</li><li><strong>Final Validation:</strong> Optimized models validated on cross-validation folds before test set evaluation.</li></ol>",
+      "tables": [
+        {
+          "id": "table-models",
+          "number": "2.3",
+          "caption": "Final Model Configurations",
+          "headers": ["Family", "Model", "Key Parameters", "Justification"],
+          "rows": [
+            ["Ensemble", "BaggingClassifier", "n_estimators=150, max_samples=0.85", "Variance reduction via bootstrap aggregating (Breiman, 1996)"],
+            ["Non-Linear", "DecisionTreeClassifier", "max_depth=20, criterion='gini'", "Captures complex patterns with controlled depth (Breiman et al., 1984)"],
+            ["Linear", "RidgeClassifier", "class_weight='balanced'", "L2 regularization with balanced weighting (Hoerl & Kennard, 1970)"]
+          ],
+          "description": "Table 2.3 presents the final optimized configurations for each model family. The BaggingClassifier employs 150 decision tree base estimators, each trained on 85% bootstrap samples of the training data—this configuration provides sufficient ensemble diversity for variance reduction while maintaining individual tree strength. The DecisionTreeClassifier uses a maximum depth of 20, which grid search identified as the optimal balance between capturing complex patterns and preventing overfitting; shallower trees underfit while deeper trees showed diminishing returns. The RidgeClassifier relies on balanced class weights as its primary optimization, as the linear model's fundamental limitation (inability to capture non-linear patterns) cannot be addressed through hyperparameter tuning. All models use class_weight='balanced' to address the class imbalance inherent in the dataset."
+        }
+      ]
+    },
+    {
+      "section_key": "2.4",
+      "title": "Evaluation Metrics",
+      "content_html": "<p>Given class imbalance, multiple complementary metrics were employed (Chicco & Jurman, 2020):</p><ul><li><strong>Balanced Accuracy:</strong> Mean of sensitivity and specificity, giving equal weight to both classes.</li><li><strong>Matthews Correlation Coefficient (MCC):</strong> Considers all confusion matrix quadrants; ranges from -1 to +1 (Matthews, 1975).</li><li><strong>Attack Detection Rate:</strong> Proportion of actual attacks correctly identified (recall for attack class).</li><li><strong>False Alarm Rate:</strong> Proportion of normal connections incorrectly flagged as attacks.</li><li><strong>F1-Score:</strong> Harmonic mean of precision and recall.</li></ul>"
+    },
+    {
+      "section_key": "2.5",
+      "title": "Cross-Validation and Bias-Variance Analysis",
+      "content_html": "<p><strong>5-Fold Stratified Cross-Validation:</strong> Training data partitioned into 5 stratified folds maintaining class proportions. Each fold served as validation exactly once, with results reported as mean ± standard deviation (Kohavi, 1995).</p><p><strong>Bias-Variance Decomposition:</strong> Bootstrap-based analysis (200 samples) using mlxtend library characterized error sources (Geman et al., 1992):</p><ul><li><strong>Bias:</strong> Systematic error from model assumptions (underfitting indicator).</li><li><strong>Variance:</strong> Sensitivity to training data fluctuations (overfitting indicator).</li><li><strong>Expected Loss:</strong> Total prediction error ≈ bias + variance.</li></ul>"
+    },
+    {
+      "section_key": "2.6",
+      "title": "Implementation Details",
+      "content_html": "<p>Experiments conducted in Python using scikit-learn for ML algorithms, pandas for data manipulation, and mlxtend for bias-variance decomposition. Random seed (42) fixed for reproducibility. All models evaluated on identical test set (22,544 records) using consistent metrics for fair comparison.</p>"
+    }
+  ]
+}

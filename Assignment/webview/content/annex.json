@@ -1,0 +1,43 @@
+{
+  "title": "Annexes",
+  "annexes": [
+    {
+      "id": "A",
+      "title": "Individual Jupyter Notebooks",
+      "description": "The following Jupyter notebooks contain the complete implementation code, data analysis, and experimental results for each student's investigation. These notebooks are submitted as separate files accompanying this report.",
+      "items": [
+        {
+          "label": "Annex A.1",
+          "title": "Student 1: Ensemble Methods Notebook",
+          "filename": "skML-Ensemble.ipynb",
+          "description": "Complete implementation of BaggingClassifier investigation including baseline comparison, hyperparameter optimization, and bias-variance decomposition analysis."
+        },
+        {
+          "label": "Annex A.2",
+          "title": "Student 2: Non-Linear Methods Notebook",
+          "filename": "skML-NonLinear.ipynb",
+          "description": "Complete implementation of DecisionTreeClassifier investigation including baseline comparison, hyperparameter optimization, and bias-variance decomposition analysis."
+        },
+        {
+          "label": "Annex A.3",
+          "title": "Student 3: Support Vector Methods Notebook",
+          "filename": "skML-SupportVector.ipynb",
+          "description": "Complete implementation of RidgeClassifier investigation including baseline comparison, hyperparameter optimization, and bias-variance decomposition analysis."
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Dataset Information",
+      "description": "The NSL-KDD dataset used in this study is publicly available from the Canadian Institute for Cybersecurity.",
+      "items": [
+        {
+          "label": "Annex B.1",
+          "title": "NSL-KDD Dataset",
+          "filename": "N/A (External Source)",
+          "description": "Available at: https://www.unb.ca/cic/datasets/nsl.html"
+        }
+      ]
+    }
+  ]
+}

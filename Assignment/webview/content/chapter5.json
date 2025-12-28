@@ -1,0 +1,56 @@
+{
+  "chapter_key": "chapter5",
+  "chapter_number": "5",
+  "title": "Conclusion",
+  "introduction": "<p>This chapter synthesizes findings and provides recommendations for deploying machine learning-based intrusion detection systems.</p>",
+  "sections": [
+    {
+      "section_key": "5.1",
+      "title": "Summary of Key Findings",
+      "content_html": "<p>This study compared three machine learning approaches for binary intrusion classification on NSL-KDD:</p><ol><li><strong>Ensemble Methods Excel:</strong> BaggingClassifier achieved highest performance (91.60% balanced accuracy, 0.8244 MCC, 87.20% attack detection, 4.00% false alarms). Bias-variance decomposition confirmed optimal balance through variance reduction (Breiman, 1996).</li><li><strong>Decision Trees Provide Competitive Performance:</strong> DecisionTreeClassifier achieved statistically comparable results (91.19% balanced accuracy, 0.8160 MCC) while offering interpretability—analysts can trace classification decisions through human-readable rules.</li><li><strong>Linear Methods Are Unsuitable:</strong> RidgeClassifier demonstrated substantially lower performance (79.18% balanced accuracy, 0.5894 MCC, 65.36% detection). High bias (0.2276) confirms fundamental underfitting—linear boundaries cannot capture attack patterns.</li><li><strong>Generalization Achieved:</strong> All models showed moderate degradation (~3.5%) facing novel attacks, indicating successful learning of transferable patterns.</li></ol>"
+    },
+    {
+      "section_key": "5.2",
+      "title": "Best Performing Model",
+      "content_html": "<p>The <strong>BaggingClassifier</strong> is identified as the best-performing model, achieving top performance across all primary metrics.</p>",
+      "tables": [
+        {
+          "id": "table-winner",
+          "number": "5.1",
+          "caption": "Best Performing Model by Criterion",
+          "headers": ["Criterion", "Winner", "Value"],
+          "rows": [
+            ["Balanced Accuracy", "Ensemble_Bagging", "0.9160"],
+            ["MCC", "Ensemble_Bagging", "0.8244"],
+            ["Attack Detection Rate", "Ensemble_Bagging", "0.8720"],
+            ["False Alarm Rate", "Ensemble_Bagging", "0.0400"],
+            ["Expected Loss", "Ensemble_Bagging", "0.0996"]
+          ],
+          "description": "BaggingClassifier achieves top performance in all primary evaluation criteria."
+        }
+      ],
+      "subsections": [
+        {
+          "section_key": "5.2.1",
+          "title": "Model Selection Guidance",
+          "content_html": "<ul><li><strong>Maximum Accuracy:</strong> Deploy BaggingClassifier (n_estimators=150, max_samples=0.85).</li><li><strong>Interpretability Required:</strong> Deploy DecisionTreeClassifier (max_depth=20)—sacrifice 0.41 points for full decision path transparency.</li><li><strong>Computational Constraints:</strong> DecisionTree offers fastest practical option (0.87s training) with adequate accuracy.</li></ul>"
+        }
+      ]
+    },
+    {
+      "section_key": "5.3",
+      "title": "Recommendations",
+      "content_html": "<ol><li><strong>Prioritize Non-Linear Methods:</strong> Decision trees, random forests, and bagging classifiers should be preferred over linear methods.</li><li><strong>Use Appropriate Metrics:</strong> Always evaluate with Balanced Accuracy and MCC rather than simple accuracy for imbalanced datasets (Chicco & Jurman, 2020).</li><li><strong>Consider Interpretability:</strong> Decision trees offer substantial advantages when analysts must validate predictions.</li><li><strong>Plan for Maintenance:</strong> The ~3.5% generalization gap indicates periodic retraining is needed as new attacks emerge.</li></ol>"
+    },
+    {
+      "section_key": "5.4",
+      "title": "Limitations and Future Work",
+      "content_html": "<p><strong>Limitations:</strong></p><ul><li><strong>Dataset Age:</strong> NSL-KDD derives from 1999 traffic. Validation on modern datasets (CICIDS2017, UNSW-NB15) would confirm transferability (Moustafa & Slay, 2015).</li><li><strong>Binary Scope:</strong> Multi-class categorization (DoS, Probe, R2L, U2R) would provide finer-grained operational value.</li><li><strong>Deep Learning:</strong> Neural network approaches were not comprehensively evaluated.</li></ul><p><strong>Future Directions:</strong></p><ul><li>Real-time deployment evaluation with latency measurements</li><li>Adversarial robustness assessment</li><li>Explainable AI integration (SHAP, LIME) for ensemble methods</li></ul>"
+    },
+    {
+      "section_key": "5.5",
+      "title": "Concluding Remarks",
+      "content_html": "<p>This study provides comprehensive evidence that ensemble and tree-based methods substantially outperform linear approaches for NSL-KDD classification. The BaggingClassifier achieves optimal performance (91.60% balanced accuracy, 0.8244 MCC) while DecisionTreeClassifier offers near-equivalent accuracy with interpretability benefits. Linear classifiers demonstrate fundamental limitations arising from non-linear attack patterns. These findings provide clear guidance: non-linear methods are essential for effective intrusion detection, appropriate evaluation metrics are critical for imbalanced datasets, and model selection should consider the accuracy-interpretability tradeoff.</p>"
+    }
+  ]
+}

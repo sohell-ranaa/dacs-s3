@@ -1,0 +1,63 @@
+{
+  "institution": "Asia Pacific University of Technology & Innovation",
+  "title": "Machine Learning for Network Intrusion Detection",
+  "subtitle": "A Comparative Study of Ensemble, Non-Linear, and Support Vector Methods Using the NSL-KDD Dataset",
+  "module": "CT095-6-M Research Methodology in Computing and Engineering",
+  "intake": "APDMF2501CYS(PR)",
+  "supervisor": "Assoc. Prof. Dr. Thang Ka Fei",
+  "date": "January 2026",
+  "authors": [
+    {
+      "name": "Student 1",
+      "id": "TP000001",
+      "role": "Ensemble Methods (BaggingClassifier)"
+    },
+    {
+      "name": "Student 2",
+      "id": "TP000002",
+      "role": "Non-Linear Methods (DecisionTreeClassifier)"
+    },
+    {
+      "name": "Student 3",
+      "id": "TP000003",
+      "role": "Support Vector Methods (RidgeClassifier)"
+    }
+  ],
+  "declaration": "We hereby declare that this assignment is our own original work and has not been submitted for assessment in any other course or institution. All sources of information used have been properly acknowledged and referenced. We understand that any act of plagiarism or academic dishonesty may result in disciplinary action as per the university's academic integrity policy.",
+  "acknowledgments": "We would like to express our sincere gratitude to our supervisor for their invaluable guidance and support throughout this project. We are also thankful to Asia Pacific University of Technology & Innovation for providing the resources and facilities necessary for this research. Special thanks to the Canadian Institute for Cybersecurity at the University of New Brunswick for making the NSL-KDD dataset publicly available for research purposes. Finally, we acknowledge the open-source community, particularly the developers of scikit-learn, for providing the machine learning tools that made this study possible.",
+  "abbreviations": [
+    {"abbr": "APA", "full": "American Psychological Association"},
+    {"abbr": "CART", "full": "Classification and Regression Trees"},
+    {"abbr": "CV", "full": "Cross-Validation"},
+    {"abbr": "DoS", "full": "Denial of Service"},
+    {"abbr": "FAR", "full": "False Alarm Rate"},
+    {"abbr": "FN", "full": "False Negative"},
+    {"abbr": "FP", "full": "False Positive"},
+    {"abbr": "IDS", "full": "Intrusion Detection System"},
+    {"abbr": "KDD", "full": "Knowledge Discovery and Data Mining"},
+    {"abbr": "MCC", "full": "Matthews Correlation Coefficient"},
+    {"abbr": "ML", "full": "Machine Learning"},
+    {"abbr": "NSL", "full": "Network Security Laboratory"},
+    {"abbr": "R2L", "full": "Remote to Local"},
+    {"abbr": "SVM", "full": "Support Vector Machine"},
+    {"abbr": "TN", "full": "True Negative"},
+    {"abbr": "TP", "full": "True Positive"},
+    {"abbr": "TPR", "full": "True Positive Rate"},
+    {"abbr": "U2R", "full": "User to Root"}
+  ],
+  "abstract": "Network intrusion detection systems (IDS) serve as critical components in modern cybersecurity infrastructure, providing real-time monitoring and classification of network traffic to identify potential security threats. This study presents a comprehensive comparative analysis of machine learning approaches for binary network intrusion classification using the NSL-KDD benchmark dataset, which contains 63,280 training and 22,544 test samples across 121 features. Three students independently investigated different algorithm families: Ensemble Methods (BaggingClassifier with 150 decision tree estimators), Non-Linear Methods (DecisionTreeClassifier with depth-20 constraint), and Support Vector Methods (RidgeClassifier with L2 regularization). The experimental methodology employed 5-fold stratified cross-validation, systematic hyperparameter optimization, bootstrap-based bias-variance decomposition, and comprehensive multi-metric evaluation including Balanced Accuracy, Matthews Correlation Coefficient (MCC), Attack Detection Rate, and False Alarm Rate. Results demonstrate clear performance stratification: the BaggingClassifier achieved the highest performance with 91.60% balanced accuracy, 0.8244 MCC, 87.20% attack detection rate, and only 4.00% false alarm rate. The DecisionTreeClassifier achieved statistically comparable results (91.19% balanced accuracy, 0.8160 MCC) while offering interpretability advantages. The RidgeClassifier substantially underperformed (79.18% balanced accuracy, 0.5894 MCC), with bias-variance decomposition confirming fundamental underfitting (bias=0.2276) due to linear separability limitations. The study contributes empirical benchmarks for NSL-KDD classification, demonstrates the value of bias-variance analysis for understanding classifier behavior, and provides actionable guidance for practitioners: non-linear methods are essential for effective intrusion detection, appropriate metrics (balanced accuracy, MCC) are critical for imbalanced datasets, and model selection should consider the accuracy-interpretability-efficiency tradeoff. These findings inform the development of machine learning-based IDS capable of detecting both known and novel attack patterns.",
+  "keywords": [
+    "Machine Learning",
+    "Intrusion Detection System",
+    "NSL-KDD Dataset",
+    "Network Security",
+    "Binary Classification",
+    "Ensemble Methods",
+    "BaggingClassifier",
+    "Decision Trees",
+    "Bias-Variance Decomposition",
+    "Matthews Correlation Coefficient",
+    "Class Imbalance",
+    "Cross-Validation"
+  ]
+}

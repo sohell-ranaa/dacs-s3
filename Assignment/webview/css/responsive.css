@@ -1,0 +1,1061 @@
+/**
+ * DACS Thesis Document - Responsive Styles
+ * Premium mobile-first responsive design
+ */
+
+/* ============================================
+   TABLET STYLES (768px - 1024px)
+   ============================================ */
+
+@media (max-width: 1200px) {
+    :root {
+        --sidebar-width: 280px;
+    }
+
+    .thesis-content {
+        padding: 40px 48px 72px;
+    }
+
+    .cover-page {
+        padding: 56px 48px;
+    }
+
+    .cover-title {
+        font-size: 2rem;
+    }
+
+    .chapter-title {
+        font-size: 1.5rem;
+        padding: 28px 32px 20px;
+    }
+
+    .section {
+        padding: 0 32px 28px;
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+    }
+
+    .abstract-box {
+        margin: 20px 32px 28px;
+        padding: 28px 32px;
+    }
+}
+
+/* ============================================
+   MOBILE STYLES (< 768px)
+   ============================================ */
+
+@media (max-width: 767px) {
+    :root {
+        --header-height: 64px;
+    }
+
+    /* Header Mobile - Compact */
+    .thesis-header {
+        padding: 0 16px;
+    }
+
+    .header-title {
+        font-size: 1rem;
+    }
+
+    .header-subtitle {
+        display: none;
+    }
+
+    .export-btn span {
+        display: none;
+    }
+
+    .export-btn {
+        padding: 10px 14px;
+        min-width: auto;
+        gap: 0;
+    }
+
+    .export-btn svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    /* Sidebar Mobile - Full Screen Overlay */
+    .thesis-sidebar {
+        position: fixed;
+        left: -100%;
+        width: 100%;
+        max-width: 340px;
+        z-index: 1000;
+        transition: left 0.35s var(--ease-out);
+        box-shadow: var(--shadow-xl);
+    }
+
+    .thesis-sidebar.active {
+        left: 0;
+    }
+
+    .sidebar-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.5);
+        backdrop-filter: blur(4px);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s var(--ease-out);
+    }
+
+    .sidebar-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .toc-toggle {
+        display: flex;
+    }
+
+    .sidebar-close {
+        display: flex;
+    }
+
+    .sidebar-header {
+        padding: 20px 24px 16px;
+    }
+
+    .toc-nav {
+        padding: 12px 0;
+    }
+
+    .toc-chapter-link,
+    .toc-section-link {
+        padding: 12px 24px;
+    }
+
+    .toc-section-link {
+        padding-left: 36px;
+    }
+
+    .sidebar-footer {
+        padding: 16px 24px;
+    }
+
+    /* Main Content Mobile */
+    .thesis-content {
+        margin-left: 0;
+        padding: 24px 16px 80px;
+    }
+
+    /* Cover Page Mobile */
+    .cover-page {
+        padding: 40px 24px;
+        border-radius: var(--radius-lg);
+    }
+
+    .cover-page::before {
+        height: 4px;
+    }
+
+    .cover-institution {
+        font-size: 0.9375rem;
+        margin-bottom: 32px;
+    }
+
+    .cover-title {
+        font-size: 1.5rem;
+        line-height: 1.3;
+    }
+
+    .cover-subtitle {
+        font-size: 1rem;
+        margin-bottom: 40px;
+    }
+
+    .cover-authors {
+        flex-direction: column;
+        gap: 16px;
+        margin-bottom: 40px;
+    }
+
+    .author-card {
+        padding: 20px 24px;
+        min-width: 100%;
+    }
+
+    .author-name {
+        font-size: 1rem;
+    }
+
+    .author-role {
+        font-size: 0.75rem;
+        padding: 3px 10px;
+    }
+
+    .cover-meta {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+
+    .cover-meta span {
+        justify-content: center;
+    }
+
+    /* Sections Mobile */
+    .thesis-section {
+        border-radius: var(--radius-lg);
+        margin-bottom: 24px;
+    }
+
+    .chapter-title {
+        font-size: 1.375rem;
+        padding: 24px 20px 18px;
+    }
+
+    .chapter-title .chapter-number {
+        font-size: 0.6875rem;
+        margin-bottom: 6px;
+    }
+
+    .chapter-intro {
+        padding: 0 20px 20px;
+        font-size: 1rem;
+    }
+
+    .section {
+        padding: 0 20px 24px;
+    }
+
+    .section-title {
+        font-size: 1.125rem;
+        margin: 32px 0 16px;
+        padding-bottom: 10px;
+    }
+
+    .subsection-title {
+        font-size: 1rem;
+        margin: 24px 0 12px;
+        padding-left: 12px;
+    }
+
+    /* Typography Mobile */
+    .section-content p,
+    .subsection-content p {
+        font-size: 0.9375rem;
+        line-height: 1.75;
+        text-align: left;
+        hyphens: none;
+    }
+
+    .section-content ul,
+    .section-content ol {
+        padding-left: 20px;
+    }
+
+    .section-content li {
+        margin-bottom: 10px;
+        font-size: 0.9375rem;
+    }
+
+    /* Figures Mobile */
+    .thesis-figure {
+        margin: 28px -20px;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        padding: 20px;
+    }
+
+    .thesis-figure img {
+        border-radius: var(--radius-sm);
+        max-height: 280px;
+        object-fit: contain;
+    }
+
+    .figure-caption {
+        font-size: 0.8125rem;
+        margin-top: 14px;
+    }
+
+    /* Tables Mobile */
+    .thesis-table-wrapper {
+        margin: 24px -20px;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table-caption {
+        padding: 14px 16px;
+        font-size: 0.8125rem;
+    }
+
+    .thesis-table {
+        font-size: 0.8125rem;
+        min-width: 480px;
+    }
+
+    .thesis-table th,
+    .thesis-table td {
+        padding: 10px 14px;
+    }
+
+    /* Abstract Mobile */
+    .abstract-box {
+        margin: 16px 20px 24px;
+        padding: 24px 20px;
+        border-radius: var(--radius-md);
+    }
+
+    .abstract-box h3 {
+        font-size: 1rem;
+    }
+
+    .abstract-box p {
+        font-size: 0.9375rem;
+        text-align: left;
+    }
+
+    .abstract-keywords {
+        font-size: 0.875rem;
+        margin-top: 20px;
+        padding-top: 16px;
+    }
+
+    /* References Mobile */
+    .references-list {
+        padding: 0 20px 24px;
+    }
+
+    .reference-item {
+        padding: 14px 0;
+        gap: 12px;
+    }
+
+    .reference-number {
+        width: 28px;
+        height: 28px;
+        font-size: 0.6875rem;
+    }
+
+    .reference-text {
+        font-size: 0.875rem;
+        line-height: 1.65;
+    }
+
+    .reference-link {
+        display: block;
+        margin-left: 0;
+        margin-top: 4px;
+    }
+
+    /* TOC in Content Mobile */
+    .toc-section {
+        padding: 24px 20px;
+    }
+
+    .toc-content .toc-chapter-link {
+        padding: 10px 12px;
+        font-size: 0.9375rem;
+    }
+
+    .toc-content .toc-section-link {
+        padding: 6px 12px 6px 24px;
+        font-size: 0.875rem;
+    }
+
+    /* List of Figures/Tables Mobile */
+    .list-content {
+        padding: 0 20px 24px;
+    }
+
+    .list-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        font-size: 0.875rem;
+    }
+
+    .list-item-dots {
+        display: none;
+    }
+
+    /* Metrics Grid Mobile */
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .metric-card {
+        padding: 16px;
+        border-radius: var(--radius-md);
+    }
+
+    .metric-value {
+        font-size: 1.5rem;
+    }
+
+    .metric-label {
+        font-size: 0.6875rem;
+    }
+
+    /* Loading State Mobile */
+    .content-loading {
+        padding: 60px 16px;
+    }
+
+    .loading-spinner {
+        width: 36px;
+        height: 36px;
+    }
+
+    /* Error State Mobile */
+    .error-state {
+        padding: 60px 20px;
+    }
+
+    .error-icon {
+        width: 56px;
+        height: 56px;
+        font-size: 1.5rem;
+    }
+
+    .error-state h3 {
+        font-size: 1.25rem;
+    }
+}
+
+/* ============================================
+   SMALL MOBILE (< 480px)
+   ============================================ */
+
+@media (max-width: 479px) {
+    .thesis-content {
+        padding: 20px 12px 72px;
+    }
+
+    .cover-page {
+        padding: 32px 16px;
+    }
+
+    .cover-title {
+        font-size: 1.25rem;
+    }
+
+    .cover-subtitle {
+        font-size: 0.9375rem;
+    }
+
+    .author-card {
+        padding: 16px 20px;
+    }
+
+    .author-name {
+        font-size: 0.9375rem;
+    }
+
+    .chapter-title {
+        font-size: 1.25rem;
+        padding: 20px 16px 14px;
+    }
+
+    .section {
+        padding: 0 16px 20px;
+    }
+
+    .section-title {
+        font-size: 1.0625rem;
+    }
+
+    .subsection-title {
+        font-size: 0.9375rem;
+    }
+
+    .section-content p,
+    .subsection-content p,
+    .section-content li {
+        font-size: 0.875rem;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .thesis-figure {
+        margin: 24px -16px;
+        padding: 16px;
+    }
+
+    .thesis-figure img {
+        max-height: 220px;
+    }
+
+    .thesis-table {
+        font-size: 0.75rem;
+    }
+
+    .thesis-table th,
+    .thesis-table td {
+        padding: 8px 10px;
+    }
+
+    .abstract-box {
+        margin: 12px 16px 20px;
+        padding: 20px 16px;
+    }
+
+    .references-list {
+        padding: 0 16px 20px;
+    }
+}
+
+/* ============================================
+   LANDSCAPE MOBILE
+   ============================================ */
+
+@media (max-width: 767px) and (orientation: landscape) {
+    .cover-page {
+        min-height: auto;
+        padding: 32px 24px;
+    }
+
+    .cover-authors {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .author-card {
+        min-width: auto;
+        flex: 1 1 200px;
+        max-width: 260px;
+    }
+
+    .thesis-figure img {
+        max-height: 180px;
+    }
+
+    .metrics-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ============================================
+   LARGE SCREENS (> 1400px)
+   ============================================ */
+
+@media (min-width: 1400px) {
+    :root {
+        --sidebar-width: 340px;
+        --content-max-width: 880px;
+    }
+
+    .thesis-content {
+        padding: 56px 72px 96px;
+    }
+
+    .cover-page {
+        padding: 80px 72px;
+    }
+
+    .cover-title {
+        font-size: 2.5rem;
+    }
+
+    .chapter-title {
+        font-size: 2rem;
+        padding: 36px 48px 28px;
+    }
+
+    .section {
+        padding: 0 48px 40px;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .metrics-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .abstract-box {
+        margin: 28px 48px 40px;
+        padding: 40px 48px;
+    }
+}
+
+/* ============================================
+   EXTRA LARGE SCREENS (> 1600px)
+   ============================================ */
+
+@media (min-width: 1600px) {
+    :root {
+        --sidebar-width: 360px;
+    }
+
+    .cover-title {
+        font-size: 2.75rem;
+    }
+}
+
+/* ============================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ============================================ */
+
+@media (hover: none) and (pointer: coarse) {
+    /* Larger touch targets */
+    .toc-chapter-link,
+    .toc-section-link {
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+    }
+
+    .export-btn {
+        min-height: 48px;
+    }
+
+    .toc-toggle {
+        min-width: 48px;
+        min-height: 48px;
+    }
+
+    /* Remove hover effects on touch */
+    .toc-chapter-link:hover,
+    .toc-section-link:hover {
+        background: transparent;
+    }
+
+    .toc-chapter-link:active,
+    .toc-section-link:active {
+        background: var(--primary-50);
+    }
+
+    .author-card:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .thesis-figure:hover {
+        box-shadow: none;
+    }
+
+    .metric-card:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* Smooth scrolling for touch */
+    .thesis-content,
+    .toc-nav {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+
+    /* Better tap feedback */
+    .export-btn:active {
+        transform: scale(0.98);
+        opacity: 0.9;
+    }
+}
+
+/* ============================================
+   PRINT RESPONSIVE OVERRIDES
+   ============================================ */
+
+@media print {
+    .thesis-sidebar,
+    .thesis-header,
+    .sidebar-overlay,
+    .toc-toggle,
+    .export-btn {
+        display: none !important;
+    }
+
+    .thesis-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: none !important;
+    }
+
+    .thesis-section {
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    .thesis-figure {
+        margin: 20pt 0 !important;
+        page-break-inside: avoid;
+        border: 1px solid #ccc !important;
+        border-radius: 4pt !important;
+    }
+
+    .thesis-table-wrapper {
+        overflow: visible !important;
+        border-radius: 0 !important;
+    }
+
+    .thesis-table {
+        min-width: auto !important;
+        font-size: 9pt !important;
+    }
+
+    .cover-page {
+        page-break-after: always;
+    }
+
+    .chapter-title {
+        page-break-before: always;
+    }
+
+    .abstract-box {
+        border: 1px solid #ccc !important;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY - REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .thesis-sidebar {
+        transition: none !important;
+    }
+
+    .sidebar-overlay {
+        transition: none !important;
+    }
+
+    .thesis-section {
+        animation: none !important;
+    }
+}
+
+/* ============================================
+   HIGH CONTRAST MODE
+   ============================================ */
+
+@media (prefers-contrast: high) {
+    :root {
+        --text-primary: #000000;
+        --text-secondary: #1a1a1a;
+        --text-tertiary: #333333;
+        --border: #000000;
+        --border-light: #666666;
+        --primary: #0000cc;
+        --primary-dark: #000099;
+    }
+
+    .thesis-section {
+        border-width: 2px;
+    }
+
+    .thesis-table th,
+    .thesis-table td {
+        border-width: 2px;
+    }
+
+    .toc-chapter-link.active,
+    .toc-section-link.active {
+        border-left-width: 5px;
+    }
+
+    .section-title {
+        border-bottom-width: 3px;
+    }
+
+    .subsection-title {
+        border-left-width: 5px;
+    }
+}
+
+/* ============================================
+   DARK MODE SUPPORT (Optional)
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+    /*
+     * Currently using light theme only.
+     * Dark mode variables can be added here if needed.
+     */
+}
+
+/* ============================================
+   APPENDIX RESPONSIVE STYLES
+   ============================================ */
+
+@media (max-width: 1200px) {
+    .appendix-tabs {
+        padding: 0 32px 20px;
+    }
+
+    .appendix-header {
+        padding: 20px 32px;
+    }
+
+    .appendix-intro {
+        padding: 0 32px 24px;
+    }
+}
+
+@media (max-width: 767px) {
+    .page-indicator {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+
+    .page-indicator .current-page,
+    .page-indicator .total-pages {
+        min-width: 18px;
+    }
+
+    .appendix-tabs {
+        padding: 0 16px 16px;
+        gap: 6px;
+    }
+
+    .appendix-tab {
+        padding: 10px 14px;
+        font-size: 0.8125rem;
+    }
+
+    .appendix-tab .tab-letter {
+        width: 24px;
+        height: 24px;
+        font-size: 0.75rem;
+    }
+
+    .appendix-tab .tab-title {
+        display: none;
+    }
+
+    .appendix-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 20px;
+    }
+
+    .appendix-header h3 {
+        font-size: 1.0625rem;
+    }
+
+    .appendix-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .appendix-open-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .appendix-intro {
+        padding: 0 20px 20px;
+        font-size: 0.9375rem;
+    }
+
+    .appendix-iframe-container {
+        min-height: 500px;
+    }
+
+    .appendix-iframe {
+        height: 500px;
+    }
+}
+
+@media (max-width: 479px) {
+    .page-indicator {
+        padding: 4px 10px;
+        font-size: 0.6875rem;
+    }
+
+    .appendix-tab {
+        padding: 8px 12px;
+    }
+
+    .appendix-iframe-container {
+        min-height: 400px;
+    }
+
+    .appendix-iframe {
+        height: 400px;
+    }
+}
+
+/* ============================================
+   DECLARATION, ACKNOWLEDGMENTS, ABBREVIATIONS RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1200px) {
+    .declaration-section .declaration-content,
+    .acknowledgments-section .acknowledgments-content,
+    .abbreviations-section .abbreviations-content {
+        padding: 0 32px 32px;
+    }
+
+    .signature-grid {
+        gap: 24px;
+    }
+}
+
+@media (max-width: 767px) {
+    .declaration-section .declaration-content,
+    .acknowledgments-section .acknowledgments-content,
+    .abbreviations-section .abbreviations-content {
+        padding: 0 20px 28px;
+    }
+
+    .signature-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .signature-block {
+        padding: 16px 0;
+    }
+
+    .signature-name {
+        font-size: 0.9375rem;
+    }
+
+    .signature-id {
+        font-size: 0.8125rem;
+    }
+
+    .declaration-date {
+        text-align: center;
+        margin-top: 24px;
+    }
+
+    .acknowledgments-content p {
+        font-size: 0.9375rem;
+        line-height: 1.75;
+    }
+
+    .abbr-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        padding: 10px 0;
+    }
+
+    .abbr-item dt {
+        min-width: auto;
+        font-size: 0.875rem;
+    }
+
+    .abbr-item dd {
+        margin-left: 0;
+        font-size: 0.9375rem;
+    }
+}
+
+@media (max-width: 479px) {
+    .declaration-section .declaration-content,
+    .acknowledgments-section .acknowledgments-content,
+    .abbreviations-section .abbreviations-content {
+        padding: 0 16px 24px;
+    }
+
+    .signature-grid {
+        gap: 20px;
+        margin: 32px 0;
+    }
+
+    .declaration-content p,
+    .acknowledgments-content p {
+        font-size: 0.875rem;
+    }
+}
+
+/* ============================================
+   LIGHTBOX RESPONSIVE
+   ============================================ */
+
+@media (max-width: 767px) {
+    .lightbox-content {
+        max-width: 95vw;
+        max-height: 95vh;
+        padding: 8px;
+    }
+
+    .lightbox-content img {
+        max-height: 70vh;
+        border-radius: var(--radius-md);
+    }
+
+    .lightbox-caption {
+        padding: 12px;
+        font-size: 0.8125rem;
+    }
+
+    .lightbox-close {
+        top: 12px;
+        right: 12px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .thesis-figure::after {
+        width: 28px;
+        height: 28px;
+        top: 8px;
+        right: 8px;
+    }
+}
+
+/* ============================================
+   BACK TO TOP RESPONSIVE
+   ============================================ */
+
+@media (max-width: 767px) {
+    .back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 44px;
+        height: 44px;
+    }
+}
+
+/* ============================================
+   READING PROGRESS RESPONSIVE
+   ============================================ */
+
+@media (max-width: 767px) {
+    .reading-progress {
+        height: 2px;
+    }
+}
+
+/* ============================================
+   TOC ICONS RESPONSIVE
+   ============================================ */
+
+@media (max-width: 767px) {
+    .toc-chapter-link {
+        padding-left: 32px !important;
+    }
+
+    .toc-chapter-link::before {
+        width: 16px;
+        height: 16px;
+        left: 10px;
+    }
+}

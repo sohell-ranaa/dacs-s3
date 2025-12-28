@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DACS Assignment - Machine Learning for Intrusion Detection</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Styles (cache-bust) -->
+    <link rel="stylesheet" href="css/thesis.css?v=20241228b">
+    <link rel="stylesheet" href="css/responsive.css?v=20241228b">
+
+    <!-- DOCX Export Libraries -->
+    <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="thesis-header">
+        <div class="header-content">
+            <h1 class="header-title">DACS Assignment</h1>
+            <p class="header-subtitle">Machine Learning for Network Intrusion Detection</p>
+        </div>
+        <div class="header-actions">
+            <div class="page-indicator" id="pageIndicator">
+                <span class="current-page">1</span>
+                <span class="page-sep">/</span>
+                <span class="total-pages">1</span>
+            </div>
+            <button id="exportBtn" class="export-btn" onclick="ThesisExport.exportToDocx()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                <span>Export DOCX</span>
+            </button>
+            <button class="toc-toggle" onclick="ThesisApp.toggleToc()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="thesis-layout">
+        <!-- Sidebar TOC -->
+        <aside class="thesis-sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Contents</h2>
+                <button class="sidebar-close" onclick="ThesisApp.toggleToc()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <nav class="toc-nav" id="tocNav">
+                <!-- TOC will be populated by JavaScript -->
+                <div class="toc-loading">Loading contents...</div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="doc-stats" id="docStats">
+                    <span class="stat"><strong id="wordCount">0</strong> words</span>
+                    <span class="stat"><strong id="pageCount">0</strong> pages</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Sidebar Overlay (Mobile) -->
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="ThesisApp.toggleToc()"></div>
+
+        <!-- Main Content -->
+        <main class="thesis-content" id="thesisContent">
+            <!-- Loading State -->
+            <div class="content-loading" id="contentLoading">
+                <div class="loading-spinner"></div>
+                <p>Loading document...</p>
+            </div>
+
+            <!-- Content will be populated by JavaScript -->
+        </main>
+    </div>
+
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress">
+        <div class="reading-progress-bar" id="readingProgress"></div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="18 15 12 9 6 15"/>
+        </svg>
+    </button>
+
+    <!-- Scripts -->
+    <script src="js/thesis.js?v=20241228f"></script>
+    <script src="js/export.js?v=20241228f"></script>
+
+    <script>
+        // Initialize app when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            ThesisApp.init();
+
+            // Reading progress bar
+            const progressBar = document.getElementById('readingProgress');
+            const backToTop = document.getElementById('backToTop');
+
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+                progressBar.style.width = progress + '%';
+
+                // Back to top button visibility
+                backToTop.classList.toggle('visible', scrollTop > 400);
+            });
+        });
+    </script>
+</body>
+</html>
