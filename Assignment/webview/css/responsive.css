@@ -49,20 +49,40 @@
 
 @media (max-width: 767px) {
     :root {
-        --header-height: 64px;
+        --header-height: 56px;
+    }
+
+    /* Prevent horizontal scroll */
+    html, body {
+        overflow-x: hidden;
+        width: 100%;
     }
 
     /* Header Mobile - Compact */
     .thesis-header {
-        padding: 0 16px;
+        padding: 0 12px;
+        height: var(--header-height);
+    }
+
+    .header-content {
+        flex: 1;
+        min-width: 0;
     }
 
     .header-title {
-        font-size: 1rem;
+        font-size: 0.875rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .header-subtitle {
         display: none;
+    }
+
+    .header-actions {
+        gap: 8px;
+        flex-shrink: 0;
     }
 
     .export-btn span {
@@ -70,14 +90,20 @@
     }
 
     .export-btn {
-        padding: 10px 14px;
-        min-width: auto;
+        padding: 10px 12px;
+        min-width: 44px;
+        height: 44px;
         gap: 0;
+        justify-content: center;
     }
 
     .export-btn svg {
-        width: 22px;
-        height: 22px;
+        width: 20px;
+        height: 20px;
+    }
+
+    .page-indicator {
+        display: none;
     }
 
     /* Sidebar Mobile - Full Screen Overlay */
@@ -286,6 +312,7 @@
         border-right: none;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+        max-width: 100vw;
     }
 
     .table-caption {
@@ -293,14 +320,33 @@
         font-size: 0.8125rem;
     }
 
-    .thesis-table {
+    .table-description {
+        padding: 10px 16px 14px;
         font-size: 0.8125rem;
-        min-width: 480px;
+    }
+
+    .thesis-table {
+        font-size: 0.75rem;
+        min-width: 400px;
     }
 
     .thesis-table th,
     .thesis-table td {
-        padding: 10px 14px;
+        padding: 8px 10px;
+        white-space: nowrap;
+    }
+
+    .thesis-table td:first-child,
+    .thesis-table th:first-child {
+        position: sticky;
+        left: 0;
+        background: var(--bg-surface);
+        z-index: 1;
+        box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+    }
+
+    .thesis-table th:first-child {
+        background: var(--primary-100);
     }
 
     /* Abstract Mobile */
@@ -1057,5 +1103,202 @@
         width: 16px;
         height: 16px;
         left: 10px;
+    }
+}
+
+/* ============================================
+   ADDITIONAL MOBILE ENHANCEMENTS
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Ensure text doesn't overflow */
+    .section-content,
+    .subsection-content,
+    .chapter-intro {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    /* Better code handling on mobile */
+    .section-content code,
+    .subsection-content code {
+        font-size: 0.75rem;
+        padding: 2px 5px;
+        word-break: break-all;
+    }
+
+    /* Improve list readability */
+    .section-content ul,
+    .section-content ol {
+        margin-left: 0;
+        padding-left: 18px;
+    }
+
+    /* Better figure zoom icon */
+    .thesis-figure::after {
+        display: none;
+    }
+
+    /* Fix cover page on mobile */
+    .cover-page::after {
+        height: 4px;
+    }
+
+    /* Improve reference links on mobile */
+    .reference-link {
+        word-break: break-all;
+        font-size: 0.75rem;
+    }
+
+    /* Better scrollable tables hint */
+    .thesis-table-wrapper::before {
+        content: 'Scroll horizontally →';
+        display: block;
+        padding: 8px 16px;
+        font-size: 0.6875rem;
+        color: var(--text-muted);
+        background: var(--bg-subtle);
+        border-bottom: 1px solid var(--border-light);
+        font-family: var(--font-display);
+        text-align: center;
+    }
+
+    /* Hide reading progress on mobile - too small */
+    .reading-progress {
+        display: none;
+    }
+}
+
+/* ============================================
+   VERY SMALL MOBILE (< 360px)
+   ============================================ */
+
+@media (max-width: 359px) {
+    .thesis-header {
+        padding: 0 8px;
+    }
+
+    .header-title {
+        font-size: 0.75rem;
+    }
+
+    .export-btn {
+        padding: 8px 10px;
+        min-width: 40px;
+        height: 40px;
+    }
+
+    .toc-toggle {
+        width: 40px;
+        height: 40px;
+    }
+
+    .thesis-content {
+        padding: 16px 8px 60px;
+    }
+
+    .cover-page {
+        padding: 24px 12px;
+    }
+
+    .cover-title {
+        font-size: 1.125rem;
+    }
+
+    .chapter-title {
+        font-size: 1.125rem;
+        padding: 16px 12px;
+    }
+
+    .section {
+        padding: 0 12px 16px;
+    }
+
+    .section-title {
+        font-size: 1rem;
+    }
+
+    .abstract-box {
+        margin: 8px 12px 16px;
+        padding: 16px 12px;
+    }
+
+    .metrics-grid {
+        gap: 8px;
+    }
+
+    .metric-card {
+        padding: 12px;
+    }
+
+    .metric-value {
+        font-size: 1.25rem;
+    }
+
+    .author-card {
+        padding: 12px 16px;
+    }
+}
+
+/* ============================================
+   iOS SAFE AREAS
+   ============================================ */
+
+@supports (padding: max(0px)) {
+    @media (max-width: 767px) {
+        .thesis-header {
+            padding-left: max(12px, env(safe-area-inset-left));
+            padding-right: max(12px, env(safe-area-inset-right));
+        }
+
+        .thesis-content {
+            padding-left: max(16px, env(safe-area-inset-left));
+            padding-right: max(16px, env(safe-area-inset-right));
+            padding-bottom: max(80px, calc(60px + env(safe-area-inset-bottom)));
+        }
+
+        .thesis-sidebar {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .back-to-top {
+            bottom: max(20px, calc(16px + env(safe-area-inset-bottom)));
+            right: max(20px, env(safe-area-inset-right));
+        }
+    }
+}
+
+/* ============================================
+   NOTCH HANDLING (iPhone X+)
+   ============================================ */
+
+@media (max-width: 767px) and (display-mode: standalone) {
+    .thesis-header {
+        padding-top: env(safe-area-inset-top, 0);
+        height: calc(var(--header-height) + env(safe-area-inset-top, 0));
+    }
+
+    .thesis-layout {
+        margin-top: calc(var(--header-height) + env(safe-area-inset-top, 0));
+    }
+}
+
+/* ============================================
+   IMPROVE TOUCH SCROLLING
+   ============================================ */
+
+@media (max-width: 767px) {
+    .thesis-content {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+
+    .thesis-table-wrapper {
+        scroll-snap-type: x proximity;
+    }
+
+    /* Prevent text selection during scroll */
+    .thesis-content:active {
+        user-select: none;
     }
 }

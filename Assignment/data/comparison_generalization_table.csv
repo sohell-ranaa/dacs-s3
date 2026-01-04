@@ -1,4 +1,4 @@
-Model,Train_CV,Test,Gap,Gap_%,Overfitting
-Ensemble_Bagging,0.9975,0.916,0.0814,8.1619,High
-NonLinear_DecisionTree,0.9964,0.9119,0.0845,8.4835,High
-SupportVector_Ridge,0.9623,0.7918,0.1705,17.7178,High
+Model,Train_CV,Test,Gap,Gap_%
+Ensemble_Bagging,0.9975,0.916,0.0814,8.1619
+NonLinear_DecisionTree,0.9964,0.9119,0.0845,8.4835
+SupportVector_Ridge,0.9623,0.7918,0.1705,17.7178

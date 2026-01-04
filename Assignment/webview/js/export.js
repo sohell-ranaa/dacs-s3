@@ -9,6 +9,13 @@ const ThesisExport = {
     tableNumber: 0,
     shortTitle: 'MACHINE LEARNING FOR INTRUSION DETECTION',  // Running header
 
+    // Click protection - requires 6 consecutive clicks
+    clickCount: 0,
+    lastClickTime: 0,
+    clickTimeout: null,
+    requiredClicks: 6,
+    clickWindow: 2000,  // 2 seconds window for consecutive clicks
+
     // APA Style - Clean academic colors
     colors: {
         black: '000000',
@@ -35,9 +42,40 @@ const ThesisExport = {
     },
 
     /**
-     * Export document to DOCX
+     * Export document to DOCX - requires 6 consecutive clicks
      */
     async exportToDocx() {
+        const now = Date.now();
+        const btn = document.getElementById('exportBtn');
+
+        // Check if click is within time window
+        if (now - this.lastClickTime > this.clickWindow) {
+            // Reset counter if too much time passed
+            this.clickCount = 0;
+        }
+
+        this.lastClickTime = now;
+        this.clickCount++;
+
+        // Clear any existing timeout
+        if (this.clickTimeout) {
+            clearTimeout(this.clickTimeout);
+        }
+
+        // Check if we have enough clicks (secret - no visual feedback)
+        const remaining = this.requiredClicks - this.clickCount;
+        if (remaining > 0) {
+            // Reset counter after timeout (silently)
+            this.clickTimeout = setTimeout(() => {
+                this.clickCount = 0;
+            }, this.clickWindow);
+            return;
+        }
+
+        // Reset click counter
+        this.clickCount = 0;
+
+        // Proceed with actual export
         if (typeof docx === 'undefined') {
             alert('Export library not available. Please refresh the page.');
             return;
@@ -47,7 +85,6 @@ const ThesisExport = {
         this.figureNumber = 0;
         this.tableNumber = 0;
 
-        const btn = document.getElementById('exportBtn');
         const originalContent = btn.innerHTML;
 
         try {
@@ -63,13 +100,27 @@ const ThesisExport = {
 
             btn.innerHTML = '<span>Downloaded!</span>';
             setTimeout(() => {
-                btn.innerHTML = originalContent;
+                btn.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    <span>Export DOCX</span>
+                `;
                 btn.disabled = false;
             }, 2000);
 
         } catch (error) {
             console.error('Export failed:', error);
-            btn.innerHTML = originalContent;
+            btn.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                <span>Export DOCX</span>
+            `;
             btn.disabled = false;
             alert('Export failed: ' + error.message);
         }

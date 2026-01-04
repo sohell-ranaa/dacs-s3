@@ -1,0 +1,4 @@
+Model,CV_Accuracy,CV_Balanced_Acc,CV_F1_Score
+Ensemble_Bagging,0.9975 (+/-0.0003),0.9975 (+/-0.0003),0.9975 (+/-0.0003)
+NonLinear_DecisionTree,0.9964 (+/-0.0007),0.9964 (+/-0.0006),0.9964 (+/-0.0007)
+SupportVector_Ridge,0.9632 (+/-0.0006),0.9623 (+/-0.0006),0.9632 (+/-0.0006)

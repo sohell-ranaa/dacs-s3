@@ -765,14 +765,15 @@ const ThesisApp = {
         this.elements.tocNav.innerHTML = html;
         this.state.tocBuilt = true;
 
-        // Add click handlers
+        // Disable click handlers - make TOC non-clickable
         this.elements.tocNav.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                const targetId = link.getAttribute('href').substring(1);
-                this.scrollToSection(targetId);
-                this.closeToc();
+                e.stopPropagation();
+                // Do nothing - navigation disabled
             });
+            link.style.cursor = 'default';
+            link.style.pointerEvents = 'none';
         });
     },
 
@@ -918,18 +919,24 @@ const ThesisApp = {
     },
 
     /**
-     * Initialize click handlers for in-document TOC links
+     * Initialize click handlers for in-document TOC links - disabled
      */
     initDocumentTocLinks() {
-        // Add click handlers for all TOC links in the document
-        const tocSection = document.getElementById('toc');
-        if (!tocSection) return;
+        // Disable click handlers for TOC, List of Figures, and List of Tables
+        const sections = ['toc', 'list-of-figures', 'list-of-tables'];
 
-        tocSection.querySelectorAll('a[href^="#"]').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetId = link.getAttribute('href').substring(1);
-                this.scrollToSection(targetId);
+        sections.forEach(sectionId => {
+            const section = document.getElementById(sectionId);
+            if (!section) return;
+
+            section.querySelectorAll('a[href^="#"]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    // Do nothing - navigation disabled
+                });
+                link.style.cursor = 'default';
+                link.style.pointerEvents = 'none';
             });
         });
     },
