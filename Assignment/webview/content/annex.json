@@ -8,19 +8,19 @@
       "items": [
         {
           "label": "Annex A.1",
-          "title": "Imran Shahadat Noble: Ensemble Methods Notebook",
+          "title": "Muhammad Usama Fazal: Ensemble Methods Notebook",
           "filename": "skML-Ensemble.ipynb",
           "description": "Complete implementation of BaggingClassifier investigation including baseline comparison, hyperparameter optimization, and bias-variance decomposition analysis."
         },
         {
           "label": "Annex A.2",
-          "title": "Muhammad Usama Fazal: Non-Linear Methods Notebook",
+          "title": "Md Sohel Rana: Non-Linear Methods Notebook",
           "filename": "skML-NonLinear.ipynb",
           "description": "Complete implementation of DecisionTreeClassifier investigation including baseline comparison, hyperparameter optimization, and bias-variance decomposition analysis."
         },
         {
           "label": "Annex A.3",
-          "title": "Md Sohel Rana: Support Vector Methods Notebook",
+          "title": "Imran Shahadat Noble: Support Vector Methods Notebook",
           "filename": "skML-SupportVector.ipynb",
           "description": "Complete implementation of RidgeClassifier investigation including baseline comparison, hyperparameter optimization, and bias-variance decomposition analysis."
         }

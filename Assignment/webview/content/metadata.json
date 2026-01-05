@@ -8,18 +8,18 @@
   "date": "January 2026",
   "authors": [
     {
-      "name": "Imran Shahadat Noble",
-      "id": "TP087895",
-      "role": "Ensemble Methods (BaggingClassifier)"
-    },
-    {
       "name": "Muhammad Usama Fazal",
       "id": "TP086008",
-      "role": "Non-Linear Methods (DecisionTreeClassifier)"
+      "role": "Ensemble Methods (BaggingClassifier)"
     },
     {
       "name": "Md Sohel Rana",
       "id": "TP086217",
+      "role": "Non-Linear Methods (DecisionTreeClassifier)"
+    },
+    {
+      "name": "Imran Shahadat Noble",
+      "id": "TP087895",
       "role": "Support Vector Methods (RidgeClassifier)"
     }
   ],
