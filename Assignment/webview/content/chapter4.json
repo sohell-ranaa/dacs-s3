@@ -7,7 +7,7 @@
     {
       "section_key": "4.1",
       "title": "Student 1: Ensemble Methods Investigation",
-      "content_html": "<p>Student 1 investigated ensemble methods—algorithms combining multiple base learners for improved robustness (Breiman, 1996).</p><p><strong>Baseline Comparison:</strong> Five methods were evaluated: RandomForestClassifier, BaggingClassifier, AdaBoostClassifier, GradientBoostingClassifier, and ExtraTreesClassifier. BaggingClassifier achieved highest baseline balanced accuracy (90.82%).</p><p><strong>Model Selection Rationale:</strong> BaggingClassifier was selected over RandomForest despite similar theoretical foundations because: (1) BaggingClassifier allows explicit control over base estimator complexity, (2) the feature randomization in RandomForest provided no additional benefit for the already high-dimensional NSL-KDD feature space (121 features), and (3) BaggingClassifier's simpler architecture facilitates bias-variance analysis interpretation.</p><p><strong>Optimization Journey:</strong> Initial experiments with n_estimators=50 showed variance of 0.038; increasing to 150 reduced variance to 0.025 with diminishing returns at 200 (variance=0.024). The max_samples parameter required careful tuning—0.85 balanced between tree diversity (lower values) and individual tree strength (higher values). Interestingly, bootstrap=True outperformed bootstrap=False (subsampling without replacement), confirming Breiman's theoretical prediction about the importance of bootstrap sampling for variance reduction.</p><p><strong>Results:</strong> Balanced accuracy improved from 90.82% to 91.60% (+0.78 points), MCC from 0.8076 to 0.8244. Bias-variance decomposition showed optimal balance (bias=0.0966, variance=0.0255).</p><p><strong>Challenges Encountered:</strong> Training time scaled linearly with n_estimators, requiring 79 seconds for the final model. Memory consumption was manageable (~2GB) but would be problematic for streaming applications.</p><p><strong>Key Insight:</strong> Pure bagging outperformed boosting variants (AdaBoost, GradientBoosting), suggesting NSL-KDD's classification challenge stems from variance rather than bias—the decision boundary is learnable but unstable across data samples.</p>",
+      "content_html": "<p>Student 1 investigated ensemble methods—algorithms combining multiple base learners for improved robustness (Breiman, 1996).</p><p><strong>Baseline Comparison:</strong> Three bagging-based methods were evaluated: RandomForestClassifier (89.27% balanced accuracy), BaggingClassifier (90.37%), and ExtraTreesClassifier (86.69%). BaggingClassifier achieved highest baseline balanced accuracy.</p><p><strong>Model Selection Rationale:</strong> BaggingClassifier was selected over RandomForest despite similar theoretical foundations because: (1) BaggingClassifier allows explicit control over base estimator complexity, (2) the feature randomization in RandomForest provided no additional benefit for the already high-dimensional NSL-KDD feature space (121 features), and (3) BaggingClassifier's simpler architecture facilitates bias-variance analysis interpretation.</p><p><strong>Optimization Journey:</strong> Initial experiments with n_estimators=100 showed baseline performance of 90.37%; increasing to 150 improved performance to 91.60% with diminishing returns at 200. The max_samples parameter was tuned to 0.85, balancing between tree diversity (lower values) and individual tree strength (higher values). Bootstrap sampling (bootstrap=True) confirmed Breiman's theoretical prediction about variance reduction.</p><p><strong>Results:</strong> Balanced accuracy improved from 90.37% to 91.60% (+1.36%), MCC from 0.7997 to 0.8244. Bias-variance decomposition showed optimal balance (bias=0.121, variance=0.027).</p><p><strong>Challenges Encountered:</strong> Training time scaled linearly with n_estimators, requiring approximately 80 seconds for the final model. Memory consumption was manageable (~2GB) but would be problematic for streaming applications.</p><p><strong>Key Insight:</strong> Bootstrap aggregating provides effective variance reduction through averaging predictions from 150 decision trees, achieving the best overall performance among all tested methods.</p>",
       "tables": [
         {
           "id": "table-s1-baseline",
@@ -15,13 +15,11 @@
           "caption": "Ensemble Methods Baseline Comparison",
           "headers": ["Model", "Accuracy", "Balanced Acc.", "F1-Score", "MCC"],
           "rows": [
-            ["RandomForestClassifier", "0.8892", "0.8977", "0.8899", "0.7869"],
-            ["BaggingClassifier", "0.9012", "0.9082", "0.9018", "0.8076"],
-            ["AdaBoostClassifier", "0.8756", "0.8841", "0.8765", "0.7585"],
-            ["GradientBoostingClassifier", "0.8845", "0.8926", "0.8853", "0.7763"],
-            ["ExtraTreesClassifier", "0.8934", "0.9015", "0.8940", "0.7945"]
+            ["RandomForestClassifier", "0.8834", "0.8927", "0.8834", "0.7872"],
+            ["BaggingClassifier", "0.8960", "0.9037", "0.8965", "0.7997"],
+            ["ExtraTreesClassifier", "0.8611", "0.8669", "0.8611", "0.7421"]
           ],
-          "description": "Baseline comparison showing BaggingClassifier achieving highest balanced accuracy (90.82%)."
+          "description": "Baseline comparison showing BaggingClassifier achieving highest balanced accuracy (90.37%)."
         },
         {
           "id": "table-s1-results",
@@ -29,17 +27,17 @@
           "caption": "Student 1: Optimization Results",
           "headers": ["Configuration", "Balanced Accuracy", "MCC", "Improvement"],
           "rows": [
-            ["Baseline (defaults)", "0.9082", "0.8076", "—"],
-            ["Optimized (n_estimators=150)", "0.9160", "0.8244", "+0.78%"]
+            ["Baseline (n_estimators=100)", "0.9037", "0.7997", "—"],
+            ["Optimized (n_estimators=150, max_samples=0.85)", "0.9160", "0.8244", "+1.36%"]
           ],
-          "description": "Optimization improved balanced accuracy by 0.78 percentage points."
+          "description": "Optimization improved balanced accuracy by 1.36 percentage points through increased ensemble size and bootstrap sample tuning."
         }
       ]
     },
     {
       "section_key": "4.2",
       "title": "Student 2: Non-Linear Methods Investigation",
-      "content_html": "<p>Student 2 investigated non-linear methods capable of capturing complex relationships (Breiman et al., 1984; Quinlan, 1993).</p><p><strong>Baseline Comparison:</strong> Four methods evaluated: DecisionTreeClassifier (90.50% balanced accuracy), MLPClassifier (89.12%), KNeighborsClassifier (88.41%), and GaussianNB (77.12%). GaussianNB's poor performance (77.12%) definitively confirmed the conditional independence assumption is violated—network intrusion features are highly correlated.</p><p><strong>Model Selection Rationale:</strong> DecisionTreeClassifier was selected over MLPClassifier despite neural networks' universal approximation capability because: (1) decision trees achieved higher baseline accuracy, (2) trees provide inherent interpretability through traceable decision paths—critical for security analysts who must validate flagged connections, (3) trees require no feature scaling or normalization, and (4) prediction complexity is O(log n) versus O(hidden_units × features) for neural networks.</p><p><strong>Optimization Journey:</strong> The max_depth parameter showed a clear accuracy-complexity tradeoff: depth=5 achieved only 85.2% (underfitting), depth=15 achieved 90.8%, depth=20 achieved 91.2%, and depth=25 achieved 91.1% (slight overfitting). The optimal depth=20 created approximately 2,400 leaf nodes. Experiments with min_samples_split showed that the default value of 2 was optimal—stricter values (5, 10) reduced accuracy by forcing premature leaf creation. The Gini criterion marginally outperformed entropy (0.3% difference), consistent with literature suggesting Gini is computationally faster with equivalent accuracy.</p><p><strong>Results:</strong> Balanced accuracy improved from 90.50% to 91.19% (+0.69 points), achieving within 0.41 points of the ensemble method. Bias-variance analysis revealed lowest bias (0.0868) among all models but higher variance (0.0331) than the ensemble—confirming theoretical expectations that single trees are unbiased but unstable.</p><p><strong>Interpretability Analysis:</strong> The trained tree's top splitting features were src_bytes (importance=0.23), dst_bytes (0.18), and count (0.12)—all intuitive for distinguishing attack from normal traffic. This interpretability would allow security analysts to understand why specific connections were flagged.</p><p><strong>Key Insight:</strong> A single well-tuned decision tree achieves near-ensemble performance (0.41% gap) while offering full interpretability and 90x faster training (0.87s vs 79s). For applications requiring explainable predictions, the accuracy sacrifice is minimal.</p>",
+      "content_html": "<p>Student 2 investigated non-linear methods capable of capturing complex relationships (Breiman et al., 1984; Quinlan, 1993).</p><p><strong>Baseline Comparison:</strong> Three methods evaluated: DecisionTreeClassifier (91.12% balanced accuracy), KNeighborsClassifier (85.82%), and GaussianNB (61.72%). GaussianNB's poor performance (61.72%) definitively confirmed the conditional independence assumption is violated—network intrusion features are highly correlated.</p><p><strong>Model Selection Rationale:</strong> DecisionTreeClassifier was selected as the clear winner because: (1) decision trees achieved highest baseline accuracy by a significant margin, (2) trees provide inherent interpretability through traceable decision paths—critical for security analysts who must validate flagged connections, (3) trees require no feature scaling or normalization, and (4) prediction complexity is O(log n) making real-time classification feasible.</p><p><strong>Optimization Journey:</strong> The max_depth parameter showed a clear accuracy-complexity tradeoff: depth=15 achieved 90.58%, depth=20 achieved 91.19%, and unlimited depth achieved 91.12%. The optimal depth=20 provided the best balance between model complexity and performance. Experiments with class_weight='balanced' showed slight degradation (90.38-90.51%), indicating the base model already handled class imbalance effectively through the tree structure.</p><p><strong>Results:</strong> Balanced accuracy improved marginally from 91.12% to 91.19% (+0.07%), as the baseline DecisionTree already performed excellently. Bias-variance analysis revealed lowest bias (0.088) among all models but higher variance (0.034) than the ensemble—confirming theoretical expectations that single trees are unbiased but less stable.</p><p><strong>Interpretability Analysis:</strong> The trained tree's top splitting features were src_bytes, dst_bytes, and count—all intuitive for distinguishing attack from normal traffic. This interpretability allows security analysts to understand why specific connections were flagged.</p><p><strong>Key Insight:</strong> A single well-tuned decision tree achieves near-ensemble performance (0.41% gap) while offering full interpretability and approximately 90x faster training. For applications requiring explainable predictions, the accuracy sacrifice is minimal.</p>",
       "tables": [
         {
           "id": "table-s2-baseline",
@@ -47,12 +45,11 @@
           "caption": "Non-Linear Methods Baseline Comparison",
           "headers": ["Model", "Accuracy", "Balanced Acc.", "F1-Score", "MCC"],
           "rows": [
-            ["DecisionTreeClassifier", "0.8978", "0.9050", "0.8984", "0.8012"],
-            ["KNeighborsClassifier", "0.8756", "0.8841", "0.8764", "0.7583"],
-            ["GaussianNB", "0.7523", "0.7712", "0.7512", "0.5456"],
-            ["MLPClassifier", "0.8834", "0.8912", "0.8842", "0.7741"]
+            ["DecisionTreeClassifier", "0.9049", "0.9112", "0.9054", "0.8147"],
+            ["KNeighborsClassifier", "0.8504", "0.8582", "0.8511", "0.7096"],
+            ["GaussianNB", "0.5651", "0.6172", "0.5058", "0.3343"]
           ],
-          "description": "Baseline comparison showing DecisionTreeClassifier achieving highest balanced accuracy (90.50%)."
+          "description": "Baseline comparison showing DecisionTreeClassifier achieving highest balanced accuracy (91.12%)."
         },
         {
           "id": "table-s2-results",
@@ -60,17 +57,17 @@
           "caption": "Student 2: Optimization Results",
           "headers": ["Configuration", "Balanced Accuracy", "MCC", "Improvement"],
           "rows": [
-            ["Baseline (defaults)", "0.9050", "0.8012", "—"],
-            ["Optimized (max_depth=20)", "0.9119", "0.8160", "+0.76%"]
+            ["Baseline (default parameters)", "0.9112", "0.8147", "—"],
+            ["Optimized (max_depth=20)", "0.9119", "0.8160", "+0.07%"]
           ],
-          "description": "Optimization improved balanced accuracy by 0.69 percentage points."
+          "description": "Optimization improved balanced accuracy by 0.07 percentage points. The baseline already performed excellently."
         }
       ]
     },
     {
       "section_key": "4.3",
       "title": "Student 3: Support Vector Methods Investigation",
-      "content_html": "<p>Student 3 investigated linear support vector methods seeking optimal separating hyperplanes (Cortes & Vapnik, 1995; Hoerl & Kennard, 1970).</p><p><strong>Baseline Comparison:</strong> Four linear methods evaluated: RidgeClassifier (78.76%), LinearSVC (78.90%), SGDClassifier (78.12%), and PassiveAggressiveClassifier (77.21%). The remarkably consistent performance across all four methods (spread of only 1.69 percentage points) strongly suggested the limitation was fundamental rather than algorithm-specific.</p><p><strong>Model Selection Rationale:</strong> RidgeClassifier was selected despite LinearSVC's marginally higher baseline because: (1) Ridge has a closed-form solution guaranteeing global optimum, (2) LinearSVC's hinge loss optimization can converge to local minima, (3) Ridge's single regularization parameter (alpha) simplifies hyperparameter search, and (4) Ridge's probabilistic interpretation (regularized least squares) facilitates theoretical analysis.</p><p><strong>Optimization Journey:</strong> Extensive hyperparameter search revealed a critical insight: varying alpha across six orders of magnitude (0.001 to 100) produced accuracy variation of only 0.8 percentage points. This flat response surface confirmed the model was fundamentally capacity-limited rather than poorly regularized. If the model were overfitting, low alpha would improve validation performance; if underfitting, high alpha would help—but neither occurred. The only meaningful improvement came from class_weight='balanced', which addressed the class imbalance but could not address the linear separability limitation.</p><p><strong>Alternative Approaches Explored:</strong> Polynomial feature expansion was tested (degree=2), which increased feature dimensionality from 121 to 7,381 and improved accuracy to 84.2%—still 7 points below decision trees. This confirmed that while some non-linearity could be captured through explicit feature engineering, the computational cost was prohibitive and performance remained inferior to native non-linear methods.</p><p><strong>Results:</strong> Balanced accuracy improved marginally from 78.76% to 79.18% (+0.42 points). Bias-variance decomposition quantified the problem: bias=0.2276 (more than double other models), variance=0.0045. The 22.76% irreducible bias represents the systematic error from forcing a linear boundary onto a non-linear problem.</p><p><strong>Value of Negative Results:</strong> While this investigation produced the lowest-performing model, it provides essential scientific value: (1) definitively establishing that NSL-KDD requires non-linear methods, (2) quantifying the accuracy penalty (12+ points) of inappropriate model selection, (3) demonstrating that hyperparameter optimization cannot overcome fundamental architectural limitations, and (4) providing a strong baseline for evaluating future linear approaches.</p><p><strong>Key Insight:</strong> The consistent ~79% ceiling across all linear methods, combined with the flat hyperparameter response surface, proves that NSL-KDD attack patterns occupy non-linearly separable regions of feature space. Practitioners should not attempt linear classification for this problem regardless of regularization or optimization strategy.</p>",
+      "content_html": "<p>Student 3 investigated linear support vector methods seeking optimal separating hyperplanes (Cortes & Vapnik, 1995; Hoerl & Kennard, 1970).</p><p><strong>Baseline Comparison:</strong> Two linear methods were evaluated: LinearSVC (78.62% balanced accuracy) and RidgeClassifier (79.10%). The remarkably consistent performance across both methods (spread of only 0.48 percentage points) strongly suggested the limitation was fundamental rather than algorithm-specific. Note: SVC with RBF kernel was not tested due to O(n²) computational complexity on the 63,280-sample training set.</p><p><strong>Model Selection Rationale:</strong> RidgeClassifier was selected due to its marginally higher baseline because: (1) Ridge has a closed-form solution guaranteeing global optimum, (2) LinearSVC's hinge loss optimization can converge to local minima, (3) Ridge's single regularization parameter (alpha) simplifies hyperparameter search, and (4) Ridge's faster training time (0.50s vs 1.17s for LinearSVC).</p><p><strong>Optimization Journey:</strong> Hyperparameter search revealed a critical insight: varying alpha across multiple values (0.1, 1.0, 10) produced accuracy variation of only 0.22 percentage points. This flat response surface confirmed the model was fundamentally capacity-limited rather than poorly regularized. The only meaningful improvement came from class_weight='balanced', which addressed the class imbalance but could not address the linear separability limitation.</p><p><strong>Results:</strong> Balanced accuracy improved marginally from 79.10% to 79.18% (+0.11%). Bias-variance decomposition quantified the problem: bias=0.227 (more than double other models), variance=0.004. The 22.7% irreducible bias represents the systematic error from forcing a linear boundary onto a non-linear problem.</p><p><strong>Value of Negative Results:</strong> While this investigation produced the lowest-performing model, it provides essential scientific value: (1) definitively establishing that NSL-KDD requires non-linear methods, (2) quantifying the accuracy penalty (12+ points) of inappropriate model selection, (3) demonstrating that hyperparameter optimization cannot overcome fundamental architectural limitations, and (4) providing a strong baseline for evaluating future linear approaches.</p><p><strong>Key Insight:</strong> The consistent ~79% ceiling across linear methods, combined with the flat hyperparameter response surface, proves that NSL-KDD attack patterns occupy non-linearly separable regions of feature space. Practitioners should not attempt linear classification for this problem regardless of regularization or optimization strategy.</p>",
       "tables": [
         {
           "id": "table-s3-baseline",
@@ -78,12 +75,10 @@
           "caption": "Support Vector Methods Baseline Comparison",
           "headers": ["Model", "Accuracy", "Balanced Acc.", "F1-Score", "MCC"],
           "rows": [
-            ["RidgeClassifier", "0.7689", "0.7876", "0.7678", "0.5812"],
-            ["SGDClassifier", "0.7623", "0.7812", "0.7612", "0.5689"],
-            ["LinearSVC", "0.7701", "0.7890", "0.7690", "0.5834"],
-            ["PassiveAggressiveClassifier", "0.7534", "0.7721", "0.7523", "0.5512"]
+            ["LinearSVC", "0.7671", "0.7862", "0.7659", "0.5782"],
+            ["RidgeClassifier", "0.7715", "0.7910", "0.7703", "0.5883"]
           ],
-          "description": "All linear methods achieve similar, limited performance (77-79% balanced accuracy)."
+          "description": "Both linear methods achieve similar, limited performance (~79% balanced accuracy), indicating fundamental linear separability limitations."
         },
         {
           "id": "table-s3-results",
@@ -91,17 +86,17 @@
           "caption": "Student 3: Optimization Results",
           "headers": ["Configuration", "Balanced Accuracy", "MCC", "Improvement"],
           "rows": [
-            ["Baseline (defaults)", "0.7876", "0.5812", "—"],
-            ["Optimized (balanced weights)", "0.7918", "0.5894", "+0.53%"]
+            ["Baseline (RidgeClassifier defaults)", "0.7910", "0.5883", "—"],
+            ["Optimized (class_weight='balanced')", "0.7918", "0.5894", "+0.11%"]
           ],
-          "description": "Modest improvement confirms hyperparameter tuning cannot overcome linear separability limitations."
+          "description": "Minimal improvement (+0.11%) confirms hyperparameter tuning cannot overcome fundamental linear separability limitations."
         }
       ]
     },
     {
       "section_key": "4.4",
       "title": "Cross-Student Synthesis",
-      "content_html": "<p><strong>Key Findings Across Investigations:</strong></p><ul><li><strong>Non-Linear Methods Essential:</strong> Both ensemble (91.60%) and decision tree (91.19%) achieved 91%+ accuracy, while linear methods plateaued at 79%—a consistent 12+ point gap confirming non-linear boundaries are essential.</li><li><strong>Optimization Provides Modest Gains:</strong> All three investigations achieved 0.4-0.8 point improvements, suggesting algorithm selection matters more than parameter fine-tuning.</li><li><strong>Distinct Bias-Variance Profiles:</strong> Ensemble achieves lowest variance through averaging; decision trees achieve lowest bias through flexible partitioning; linear methods suffer from high bias.</li></ul>"
+      "content_html": "<p><strong>Key Findings Across Investigations:</strong></p><ul><li><strong>Non-Linear Methods Essential:</strong> Both ensemble (91.60%) and decision tree (91.19%) achieved 91%+ balanced accuracy, while linear methods plateaued at 79%—a consistent 12+ point gap confirming non-linear boundaries are essential for intrusion detection.</li><li><strong>Optimization Provides Variable Gains:</strong> Ensemble optimization yielded +1.36% improvement, while DecisionTree (+0.07%) and Ridge (+0.11%) showed minimal gains—suggesting baseline algorithm selection matters more than parameter fine-tuning for well-performing models.</li><li><strong>Distinct Bias-Variance Profiles:</strong> Ensemble achieves optimal balance (bias=0.121, variance=0.027); decision trees achieve lowest bias (0.088) but higher variance (0.034); linear methods suffer from high irreducible bias (0.227) that no tuning can address.</li></ul>"
     }
   ]
 }
