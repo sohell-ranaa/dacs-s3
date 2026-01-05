@@ -38,9 +38,9 @@ const ThesisApp = {
 
     // Appendix configuration
     appendices: [
-        { id: 'appendix-a', title: 'Appendix A: Ensemble Methods Notebook', file: 'notebooks/ensemble.html', student: 'Student 1 (TP000001)' },
-        { id: 'appendix-b', title: 'Appendix B: Non-Linear Methods Notebook', file: 'notebooks/nonlinear.html', student: 'Student 2 (TP000002)' },
-        { id: 'appendix-c', title: 'Appendix C: Support Vector Methods Notebook', file: 'notebooks/supportvector.html', student: 'Student 3 (TP000003)' }
+        { id: 'appendix-a', title: 'Appendix A: Ensemble Methods Notebook', file: 'notebooks/ensemble.html', student: 'Muhammad Usama Fazal (TP086008)' },
+        { id: 'appendix-b', title: 'Appendix B: Non-Linear Methods Notebook', file: 'notebooks/nonlinear.html', student: 'Md Sohel Rana (TP086217)' },
+        { id: 'appendix-c', title: 'Appendix C: Support Vector Methods Notebook', file: 'notebooks/supportvector.html', student: 'Imran Shahadat Noble (TP087895)' }
     ],
 
     /**

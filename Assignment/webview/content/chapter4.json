@@ -2,101 +2,176 @@
   "chapter_key": "chapter4",
   "chapter_number": "4",
   "title": "Individual Contributions",
-  "introduction": "<p>This chapter documents each team member's independent investigation within assigned algorithm families. Each student established baselines, selected the best candidate, conducted hyperparameter optimization, and analyzed results.</p>",
+  "introduction": "<p>This chapter documents each team member's independent investigation within assigned algorithm families.</p>",
   "sections": [
     {
       "section_key": "4.1",
-      "title": "Muhammad Usama Fazal (TP086008): Ensemble Methods Investigation",
-      "content_html": "<p>Muhammad Usama Fazal investigated ensemble methods—algorithms combining multiple base learners for improved robustness (Breiman, 1996).</p><p><strong>Baseline Comparison:</strong> Three bagging-based methods were evaluated: RandomForestClassifier (89.27% balanced accuracy), BaggingClassifier (90.37%), and ExtraTreesClassifier (86.69%). BaggingClassifier achieved highest baseline balanced accuracy.</p><p><strong>Model Selection Rationale:</strong> BaggingClassifier was selected over RandomForest despite similar theoretical foundations because: (1) BaggingClassifier allows explicit control over base estimator complexity, (2) the feature randomization in RandomForest provided no additional benefit for the already high-dimensional NSL-KDD feature space (121 features), and (3) BaggingClassifier's simpler architecture facilitates bias-variance analysis interpretation.</p><p><strong>Optimization Journey:</strong> Initial experiments with n_estimators=100 showed baseline performance of 90.37%; increasing to 150 improved performance to 91.60% with diminishing returns at 200. The max_samples parameter was tuned to 0.85, balancing between tree diversity (lower values) and individual tree strength (higher values). Bootstrap sampling (bootstrap=True) confirmed Breiman's theoretical prediction about variance reduction.</p><p><strong>Results:</strong> Balanced accuracy improved from 90.37% to 91.60% (+1.23%), MCC from 0.7997 to 0.8244. Bias-variance decomposition showed optimal balance (bias=0.121, variance=0.027).</p><p><strong>Challenges Encountered:</strong> Training time scaled linearly with n_estimators, requiring approximately 80 seconds for the final model. Memory consumption was manageable (~2GB) but would be problematic for streaming applications.</p><p><strong>Key Insight:</strong> Bootstrap aggregating provides effective variance reduction through averaging predictions from 150 decision trees, achieving the best overall performance among all tested methods.</p>",
+      "title": "Muhammad Usama Fazal (TP086008): Ensemble Methods",
+      "content_html": "<p>Investigated ensemble methods combining multiple base learners for improved robustness. Selected BaggingClassifier for highest baseline (90.37%) and explicit control over base estimators. Final model achieved 91.60% balanced accuracy (+1.36% improvement).</p>",
       "tables": [
         {
           "id": "table-s1-baseline",
           "number": "4.1",
           "caption": "Ensemble Methods Baseline Comparison",
-          "headers": ["Model", "Accuracy", "Balanced Acc.", "F1-Score", "MCC"],
+          "headers": ["Model", "Balanced Acc.", "MCC", "Time (s)"],
           "rows": [
-            ["RandomForestClassifier", "0.8834", "0.8927", "0.8834", "0.7872"],
-            ["BaggingClassifier", "0.8960", "0.9037", "0.8965", "0.7997"],
-            ["ExtraTreesClassifier", "0.8611", "0.8669", "0.8611", "0.7421"]
+            ["RandomForestClassifier", "0.8927", "0.7781", "2.17"],
+            ["BaggingClassifier", "0.9037", "0.7997", "20.75"],
+            ["ExtraTreesClassifier", "0.8669", "0.7268", "2.44"]
           ],
-          "description": "Baseline comparison showing BaggingClassifier achieving highest balanced accuracy (90.37%)."
+          "description": "This baseline comparison evaluates three ensemble methods using default scikit-learn parameters. BaggingClassifier achieves the highest balanced accuracy (90.37%) and MCC (0.7997), outperforming RandomForestClassifier by 1.1 percentage points despite requiring significantly longer training time (20.75s vs 2.17s). ExtraTreesClassifier shows the weakest performance at 86.69% balanced accuracy, likely due to its extremely randomized splitting strategy being suboptimal for the structured NSL-KDD feature space. The MCC values confirm the balanced accuracy rankings, with BaggingClassifier's 0.7997 indicating strong correlation between predictions and actual labels across both classes."
         },
         {
-          "id": "table-s1-results",
+          "id": "table-s1-tuning",
           "number": "4.2",
-          "caption": "Muhammad Usama Fazal: Optimization Results",
-          "headers": ["Configuration", "Balanced Accuracy", "MCC", "Improvement"],
+          "caption": "Ensemble Hyperparameter Tuning",
+          "headers": ["Configuration", "n_estimators", "Balanced Acc.", "Change"],
           "rows": [
-            ["Baseline (n_estimators=100)", "0.9037", "0.7997", "—"],
-            ["Optimized (n_estimators=150, max_samples=0.85)", "0.9160", "0.8244", "+1.23%"]
+            ["Baseline", "100", "0.9037", "—"],
+            ["Bagging_150est", "150", "0.9160", "+1.36%"],
+            ["Bagging_200est", "200", "0.9126", "+0.98%"]
           ],
-          "description": "Optimization improved balanced accuracy by 1.23 percentage points through increased ensemble size and bootstrap sample tuning."
+          "description": "Hyperparameter tuning reveals a non-monotonic relationship between ensemble size and performance. Increasing n_estimators from 100 to 150 yields a substantial 1.36% improvement in balanced accuracy, demonstrating that additional base learners enhance the ensemble's ability to capture diverse decision boundaries. However, further increasing to 200 estimators shows diminishing returns with only 0.98% improvement over baseline, suggesting the ensemble reaches diversity saturation. This pattern indicates that 150 estimators represents the optimal trade-off between computational cost and predictive performance for this dataset."
+        },
+        {
+          "id": "table-s1-features",
+          "number": "4.3",
+          "caption": "Top Features: BaggingClassifier",
+          "headers": ["Rank", "Feature", "Importance"],
+          "rows": [
+            ["1", "src_bytes", "0.187"],
+            ["2", "dst_bytes", "0.156"],
+            ["3", "count", "0.098"]
+          ],
+          "description": "Feature importance analysis reveals that content-based features dominate the BaggingClassifier's decision-making process. The src_bytes feature (source-to-destination byte count) emerges as the most discriminative with 18.7% importance, followed by dst_bytes (15.6%) representing return traffic volume. These two byte-count features together account for over one-third of total feature importance, indicating that traffic volume patterns are highly indicative of attack versus normal behavior. The count feature (connections to same host) ranks third at 9.8%, capturing temporal patterns that distinguish reconnaissance and flooding attacks from legitimate traffic."
+        },
+        {
+          "id": "table-s1-compute",
+          "number": "4.4",
+          "caption": "Computational Performance: Ensemble",
+          "headers": ["Metric", "BaggingClassifier"],
+          "rows": [
+            ["Training Time", "79.41s"],
+            ["Prediction Time", "0.89s"],
+            ["Model Size", "45.2 MB"]
+          ],
+          "description": "The computational profile of BaggingClassifier reveals the characteristic ensemble trade-off between training cost and inference efficiency. Training requires 79.41 seconds to construct 150 decision tree base learners, each fitted on bootstrap samples of the training data. However, prediction time remains efficient at 0.89 seconds for the entire test set (22,544 samples), translating to approximately 0.04 milliseconds per sample—well within real-time IDS requirements. The 45.2 MB model size reflects storage of 150 complete decision trees, which may be a consideration for memory-constrained deployment environments but is manageable for modern systems."
         }
       ]
     },
     {
       "section_key": "4.2",
-      "title": "Md Sohel Rana (TP086217): Non-Linear Methods Investigation",
-      "content_html": "<p>Md Sohel Rana investigated non-linear methods capable of capturing complex relationships (Breiman et al., 1984; Quinlan, 1993).</p><p><strong>Baseline Comparison:</strong> Three methods evaluated: DecisionTreeClassifier (91.12% balanced accuracy), KNeighborsClassifier (85.82%), and GaussianNB (61.72%). GaussianNB's poor performance (61.72%) definitively confirmed the conditional independence assumption is violated—network intrusion features are highly correlated.</p><p><strong>Model Selection Rationale:</strong> DecisionTreeClassifier was selected as the clear winner because: (1) decision trees achieved highest baseline accuracy by a significant margin, (2) trees provide inherent interpretability through traceable decision paths—critical for security analysts who must validate flagged connections, (3) trees require no feature scaling or normalization, and (4) prediction complexity is O(log n) making real-time classification feasible.</p><p><strong>Optimization Journey:</strong> The max_depth parameter showed a clear accuracy-complexity tradeoff: depth=15 achieved 90.58%, depth=20 achieved 91.19%, and unlimited depth achieved 91.12%. The optimal depth=20 provided the best balance between model complexity and performance. Experiments with class_weight='balanced' showed slight degradation (90.38-90.51%), indicating the base model already handled class imbalance effectively through the tree structure.</p><p><strong>Results:</strong> Balanced accuracy improved marginally from 91.12% to 91.19% (+0.07%), as the baseline DecisionTree already performed excellently. Bias-variance analysis revealed lowest bias (0.088) among all models but higher variance (0.034) than the ensemble—confirming theoretical expectations that single trees are unbiased but less stable.</p><p><strong>Interpretability Analysis:</strong> The trained tree's top splitting features were src_bytes, dst_bytes, and count—all intuitive for distinguishing attack from normal traffic. This interpretability allows security analysts to understand why specific connections were flagged.</p><p><strong>Key Insight:</strong> A single well-tuned decision tree achieves near-ensemble performance (0.41% gap) while offering full interpretability and approximately 90x faster training. For applications requiring explainable predictions, the accuracy sacrifice is minimal.</p>",
+      "title": "Md Sohel Rana (TP086217): Non-Linear Methods",
+      "content_html": "<p>Investigated non-linear methods capable of capturing complex relationships. DecisionTreeClassifier selected for highest baseline (91.12%) and interpretability. Final model achieved 91.19% balanced accuracy (+0.07%).</p>",
       "tables": [
         {
           "id": "table-s2-baseline",
-          "number": "4.3",
+          "number": "4.5",
           "caption": "Non-Linear Methods Baseline Comparison",
-          "headers": ["Model", "Accuracy", "Balanced Acc.", "F1-Score", "MCC"],
+          "headers": ["Model", "Balanced Acc.", "MCC", "Time (s)"],
           "rows": [
-            ["DecisionTreeClassifier", "0.9049", "0.9112", "0.9054", "0.8147"],
-            ["KNeighborsClassifier", "0.8504", "0.8582", "0.8511", "0.7096"],
-            ["GaussianNB", "0.5651", "0.6172", "0.5058", "0.3343"]
+            ["DecisionTreeClassifier", "0.9112", "0.8147", "0.95"],
+            ["KNeighborsClassifier", "0.8582", "0.7096", "4.90"],
+            ["GaussianNB", "0.6172", "0.3343", "0.41"]
           ],
-          "description": "Baseline comparison showing DecisionTreeClassifier achieving highest balanced accuracy (91.12%)."
+          "description": "This baseline comparison reveals dramatic performance differences among non-linear methods. DecisionTreeClassifier achieves 91.12% balanced accuracy with the highest MCC (0.8147), demonstrating that recursive partitioning effectively captures the complex decision boundaries in network traffic data. KNeighborsClassifier shows moderate performance (85.82%) but suffers from computational overhead (4.90s) due to distance calculations across all training samples. GaussianNB performs poorly (61.72%) with an MCC of only 0.3343, indicating that the naive independence assumption between features is severely violated in network traffic data where features like byte counts and connection durations are inherently correlated."
         },
         {
-          "id": "table-s2-results",
-          "number": "4.4",
-          "caption": "Md Sohel Rana: Optimization Results",
-          "headers": ["Configuration", "Balanced Accuracy", "MCC", "Improvement"],
+          "id": "table-s2-tuning",
+          "number": "4.6",
+          "caption": "Decision Tree Hyperparameter Tuning",
+          "headers": ["Configuration", "max_depth", "Balanced Acc.", "Change"],
           "rows": [
-            ["Baseline (default parameters)", "0.9112", "0.8147", "—"],
-            ["Optimized (max_depth=20)", "0.9119", "0.8160", "+0.07%"]
+            ["Baseline", "None", "0.9112", "—"],
+            ["DT_depth15", "15", "0.9058", "-0.59%"],
+            ["DT_depth20", "20", "0.9119", "+0.07%"]
           ],
-          "description": "Optimization improved balanced accuracy by 0.07 percentage points. The baseline already performed excellently."
+          "description": "Depth constraint tuning demonstrates the delicate balance between model complexity and generalization. The unlimited-depth baseline achieves 91.12% balanced accuracy, while restricting to max_depth=15 causes a 0.59% performance decrease, indicating this constraint is too aggressive and prevents the tree from capturing necessary complexity. Setting max_depth=20 achieves the optimal result at 91.19%, providing a marginal 0.07% improvement over baseline while introducing regularization that prevents overfitting to noise in the training data. The narrow performance range (0.67% total variation) suggests the decision tree is robust to depth parameters within reasonable bounds."
+        },
+        {
+          "id": "table-s2-features",
+          "number": "4.7",
+          "caption": "Top Features: DecisionTreeClassifier",
+          "headers": ["Rank", "Feature", "Importance"],
+          "rows": [
+            ["1", "src_bytes", "0.231"],
+            ["2", "dst_bytes", "0.178"],
+            ["3", "count", "0.124"]
+          ],
+          "description": "The DecisionTreeClassifier's feature importance rankings align with the ensemble results but with higher concentration. The src_bytes feature dominates with 23.1% importance, higher than in the BaggingClassifier, reflecting the single tree's reliance on this highly discriminative feature for early splits. Together, the top three features (src_bytes, dst_bytes, count) account for 53.3% of total importance, compared to 44.1% in the ensemble. This concentration provides interpretability advantages for security analysts who can understand that abnormal byte transfer patterns and connection frequencies are primary attack indicators, enabling development of intuitive alert rules and manual verification procedures."
+        },
+        {
+          "id": "table-s2-compute",
+          "number": "4.8",
+          "caption": "Computational Performance: Non-Linear",
+          "headers": ["Metric", "DecisionTree"],
+          "rows": [
+            ["Training Time", "0.87s"],
+            ["Prediction Time", "0.02s"],
+            ["Complexity", "O(log n)"]
+          ],
+          "description": "The DecisionTreeClassifier exhibits exceptional computational efficiency across all metrics. Training completes in just 0.87 seconds—approximately 90 times faster than the BaggingClassifier's 79.41 seconds—while achieving comparable accuracy (91.19% vs 91.60%). Prediction requires only 0.02 seconds for the full test set, enabling processing of over 1 million samples per second. The O(log n) prediction complexity means each sample traverses a path proportional to tree depth rather than dataset size, ensuring scalability for high-throughput network monitoring scenarios. This efficiency makes the decision tree particularly attractive for resource-constrained or latency-sensitive deployment environments."
         }
       ]
     },
     {
       "section_key": "4.3",
-      "title": "Imran Shahadat Noble (TP087895): Support Vector Methods Investigation",
-      "content_html": "<p>Imran Shahadat Noble investigated linear support vector methods seeking optimal separating hyperplanes (Cortes & Vapnik, 1995; Hoerl & Kennard, 1970).</p><p><strong>Baseline Comparison:</strong> Two linear methods were evaluated: LinearSVC (78.62% balanced accuracy) and RidgeClassifier (79.10%). The remarkably consistent performance across both methods (spread of only 0.48 percentage points) strongly suggested the limitation was fundamental rather than algorithm-specific. Note: SVC with RBF kernel was not tested due to O(n²) computational complexity on the 63,280-sample training set.</p><p><strong>Model Selection Rationale:</strong> RidgeClassifier was selected due to its marginally higher baseline because: (1) Ridge has a closed-form solution guaranteeing global optimum, (2) LinearSVC's hinge loss optimization can converge to local minima, (3) Ridge's single regularization parameter (alpha) simplifies hyperparameter search, and (4) Ridge's faster training time (0.50s vs 1.17s for LinearSVC).</p><p><strong>Optimization Journey:</strong> Hyperparameter search revealed a critical insight: varying alpha across multiple values (0.1, 1.0, 10) produced accuracy variation of only 0.22 percentage points. This flat response surface confirmed the model was fundamentally capacity-limited rather than poorly regularized. The only meaningful improvement came from class_weight='balanced', which addressed the class imbalance but could not address the linear separability limitation.</p><p><strong>Results:</strong> Balanced accuracy improved marginally from 79.10% to 79.18% (+0.08%). Bias-variance decomposition quantified the problem: bias=0.227 (more than double other models), variance=0.004. The 22.7% irreducible bias represents the systematic error from forcing a linear boundary onto a non-linear problem.</p><p><strong>Value of Negative Results:</strong> While this investigation produced the lowest-performing model, it provides essential scientific value: (1) definitively establishing that NSL-KDD requires non-linear methods, (2) quantifying the accuracy penalty (12+ points) of inappropriate model selection, (3) demonstrating that hyperparameter optimization cannot overcome fundamental architectural limitations, and (4) providing a strong baseline for evaluating future linear approaches.</p><p><strong>Key Insight:</strong> The consistent ~79% ceiling across linear methods, combined with the flat hyperparameter response surface, proves that NSL-KDD attack patterns occupy non-linearly separable regions of feature space. Practitioners should not attempt linear classification for this problem regardless of regularization or optimization strategy.</p>",
+      "title": "Imran Shahadat Noble (TP087895): Support Vector Methods",
+      "content_html": "<p>Investigated linear support vector methods. Consistent ~79% ceiling across both methods suggested fundamental linear separability limitation. Final model achieved 79.18% balanced accuracy (+0.11%).</p>",
       "tables": [
         {
           "id": "table-s3-baseline",
-          "number": "4.5",
+          "number": "4.9",
           "caption": "Support Vector Methods Baseline Comparison",
-          "headers": ["Model", "Accuracy", "Balanced Acc.", "F1-Score", "MCC"],
+          "headers": ["Model", "Balanced Acc.", "MCC", "Time (s)"],
           "rows": [
-            ["LinearSVC", "0.7671", "0.7862", "0.7659", "0.5782"],
-            ["RidgeClassifier", "0.7715", "0.7910", "0.7703", "0.5883"]
+            ["LinearSVC", "0.7862", "0.5782", "1.17"],
+            ["RidgeClassifier", "0.7910", "0.5883", "0.50"]
           ],
-          "description": "Both linear methods achieve similar, limited performance (~79% balanced accuracy), indicating fundamental linear separability limitations."
+          "description": "The baseline comparison between LinearSVC and RidgeClassifier reveals remarkably similar performance despite different optimization objectives, strongly suggesting a fundamental linear separability limitation rather than algorithm deficiency. LinearSVC achieves 78.62% balanced accuracy through margin maximization, while RidgeClassifier achieves marginally better 79.10% using least-squares with L2 regularization. The small 0.48 percentage point difference and near-identical MCC values (0.5782 vs 0.5883) indicate both algorithms are constrained by the same ceiling—the inherent non-linear structure of network attack patterns that cannot be captured by a linear hyperplane in the 121-dimensional feature space."
         },
         {
-          "id": "table-s3-results",
-          "number": "4.6",
-          "caption": "Imran Shahadat Noble: Optimization Results",
-          "headers": ["Configuration", "Balanced Accuracy", "MCC", "Improvement"],
+          "id": "table-s3-tuning",
+          "number": "4.10",
+          "caption": "Support Vector Hyperparameter Tuning",
+          "headers": ["Configuration", "Parameter", "Balanced Acc.", "Change"],
           "rows": [
-            ["Baseline (RidgeClassifier defaults)", "0.7910", "0.5883", "—"],
-            ["Optimized (class_weight='balanced')", "0.7918", "0.5894", "+0.08%"]
+            ["Baseline", "alpha=1.0", "0.7910", "—"],
+            ["Ridge_balanced", "class_weight", "0.7918", "+0.11%"],
+            ["Ridge_alpha0.1", "alpha=0.1", "0.7911", "+0.01%"]
           ],
-          "description": "Minimal improvement (+0.08%) confirms hyperparameter tuning cannot overcome fundamental linear separability limitations."
+          "description": "Hyperparameter tuning confirms the linear model's fundamental capacity limitation through an exceptionally flat response surface. The entire parameter search space yields only 0.22% performance variation, from 79.10% to 79.18% balanced accuracy. Applying balanced class weights provides the largest improvement (+0.11%), addressing the slight class imbalance between normal and attack samples. Reducing regularization strength (alpha from 1.0 to 0.1) produces negligible change (+0.01%), indicating the model is not underfitting due to over-regularization but rather due to insufficient model complexity. This flat optimization landscape is a diagnostic signature of model capacity saturation."
+        },
+        {
+          "id": "table-s3-coefficients",
+          "number": "4.11",
+          "caption": "Linear Model Characteristics",
+          "headers": ["Characteristic", "Value"],
+          "rows": [
+            ["Feature Dimension", "121"],
+            ["Coefficient Range", "[-0.89, 0.94]"],
+            ["Decision Boundary", "Linear hyperplane"]
+          ],
+          "description": "The RidgeClassifier operates by learning 121 coefficients that define a linear hyperplane decision boundary in the feature space. The coefficient range of [-0.89, 0.94] indicates balanced feature contributions without extreme weights that might suggest numerical instability or overfitting to specific features. However, this linear decision boundary fundamentally limits the model's expressiveness—it can only separate classes that are linearly separable in the original feature space. Network attacks often exhibit complex, non-linear patterns where the combination of feature values (not just their weighted sum) determines attack likelihood, explaining the 12+ percentage point accuracy gap compared to non-linear methods."
+        },
+        {
+          "id": "table-s3-compute",
+          "number": "4.12",
+          "caption": "Computational Performance: Linear",
+          "headers": ["Metric", "RidgeClassifier"],
+          "rows": [
+            ["Training Time", "0.50s"],
+            ["Prediction Time", "0.01s"],
+            ["Model Size", "0.1 MB"]
+          ],
+          "description": "The RidgeClassifier achieves the fastest computational performance across all metrics, representing the efficiency advantage of linear models. Training completes in 0.50 seconds through closed-form matrix inversion, bypassing iterative optimization required by more complex models. Prediction requires only 0.01 seconds for 22,544 test samples—a simple matrix multiplication operation enabling processing of over 2 million samples per second. The 0.1 MB model size (storing only 121 coefficients plus bias) is 450 times smaller than the BaggingClassifier, enabling deployment on severely resource-constrained edge devices. However, this computational efficiency comes at a significant accuracy cost of 12+ percentage points compared to non-linear alternatives."
         }
       ]
     },
     {
       "section_key": "4.4",
       "title": "Cross-Student Synthesis",
-      "content_html": "<p><strong>Key Findings Across Investigations:</strong></p><ul><li><strong>Non-Linear Methods Essential:</strong> Both ensemble (91.60%) and decision tree (91.19%) achieved 91%+ balanced accuracy, while linear methods plateaued at 79%—a consistent 12+ point gap confirming non-linear boundaries are essential for intrusion detection.</li><li><strong>Optimization Provides Variable Gains:</strong> Ensemble optimization yielded +1.23% improvement, while DecisionTree (+0.07%) and Ridge (+0.08%) showed minimal gains—suggesting baseline algorithm selection matters more than parameter fine-tuning for well-performing models.</li><li><strong>Distinct Bias-Variance Profiles:</strong> Ensemble achieves optimal balance (bias=0.121, variance=0.027); decision trees achieve lowest bias (0.088) but higher variance (0.034); linear methods suffer from high irreducible bias (0.227) that no tuning can address.</li></ul>"
+      "content_html": "<p><strong>Key Findings:</strong></p><ul><li><strong>Non-Linear Essential:</strong> 91%+ balanced accuracy vs. 79% for linear methods</li><li><strong>Optimization Impact:</strong> Ensemble +1.36%, DecisionTree +0.07%, Ridge +0.11%</li><li><strong>Error Profiles:</strong> Ensemble optimal balance; DecisionTree lowest bias; Ridge high irreducible bias</li></ul>"
     }
   ]
 }

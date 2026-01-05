@@ -28,17 +28,25 @@ const ThesisExport = {
         link: '0000FF'
     },
 
-    // Font sizes (in half-points) - APA uses 12pt throughout
+    // Font sizes (in half-points) - Optimized for space
     sizes: {
         title: 28,          // 14pt for title
         heading1: 24,       // 12pt
         heading2: 24,       // 12pt
         heading3: 24,       // 12pt
-        body: 24,           // 12pt
-        caption: 24,        // 12pt (APA captions same size)
-        small: 20,          // 10pt for notes
-        code: 20,           // 10pt for code
+        body: 22,           // 11pt body text (saves space)
+        table: 20,          // 10pt for tables (compact)
+        caption: 20,        // 10pt for captions
+        small: 18,          // 9pt for notes
+        code: 18,           // 9pt for code
         header: 20          // 10pt for header/footer
+    },
+
+    // Line spacing - 1.5 instead of double saves ~25% space
+    lineSpacing: {
+        body: 360,          // 1.5 line spacing
+        heading: 276,       // 1.15 line spacing for headings
+        table: 240          // Single spacing for tables
     },
 
     /**
@@ -128,18 +136,21 @@ const ThesisExport = {
 
     /**
      * Build the complete document with multiple sections
+     * APA 7 Student Paper Format: Continuous page numbering throughout
      */
     async buildDocument(data) {
         const sections = [];
+        const isStudentPaper = true;  // Set to false for professional paper format
 
-        // Section 1: Title page (no header/footer)
+        // Section 1: Title page (with page number for student papers)
         const titleContent = this.buildTitlePage(data.metadata);
         sections.push({
             properties: this.getSectionProperties({ titlePage: true }),
+            headers: this.createHeaders(this.shortTitle, isStudentPaper),
             children: titleContent
         });
 
-        // Section 2: Front matter (Roman numeral page numbers)
+        // Section 2: Front matter (continuous page numbering for student papers)
         const frontMatter = [];
         frontMatter.push(...this.buildDeclaration(data.metadata));
         frontMatter.push(...this.buildAcknowledgments(data.metadata));
@@ -150,17 +161,14 @@ const ThesisExport = {
 
         sections.push({
             properties: this.getSectionProperties({
-                pageNumberFormat: 'lowerRoman',
-                pageNumberStart: 1,
-                hasHeader: true,
-                headerText: 'DACS Assignment'
+                pageNumberFormat: 'decimal',
+                hasHeader: true
             }),
-            headers: this.createHeaders('DACS Assignment'),
-            footers: this.createFooters('roman'),
+            headers: this.createHeaders(this.shortTitle, isStudentPaper),
             children: frontMatter
         });
 
-        // Section 3: Main content (Arabic numeral page numbers)
+        // Section 3: Main content (continuous page numbering)
         const mainContent = [];
         for (const chapter of data.chapters) {
             mainContent.push(...await this.buildChapter(chapter));
@@ -168,17 +176,15 @@ const ThesisExport = {
         if (data.references?.references) {
             mainContent.push(...this.buildReferences(data.references.references));
         }
-        mainContent.push(...await this.buildAppendices());
+        // Appendices excluded - to be added separately
+        // mainContent.push(...await this.buildAppendices());
 
         sections.push({
             properties: this.getSectionProperties({
                 pageNumberFormat: 'decimal',
-                pageNumberStart: 1,
-                hasHeader: true,
-                headerText: this.shortTitle
+                hasHeader: true
             }),
-            headers: this.createHeaders(this.shortTitle),
-            footers: this.createFooters('arabic'),
+            headers: this.createHeaders(this.shortTitle, isStudentPaper),
             children: mainContent
         });
 
@@ -196,10 +202,10 @@ const ThesisExport = {
         const props = {
             page: {
                 margin: {
-                    top: 1440,    // 1 inch
-                    right: 1440,  // 1 inch
-                    bottom: 1440, // 1 inch
-                    left: 1440    // 1 inch
+                    top: 1152,    // 0.8 inch (saves space)
+                    right: 1152,  // 0.8 inch
+                    bottom: 1152, // 0.8 inch
+                    left: 1152    // 0.8 inch
                 }
             }
         };
@@ -212,38 +218,62 @@ const ThesisExport = {
     },
 
     /**
-     * Create headers for a section (APA 7: running head left, page number right)
+     * Create headers for a section
+     * APA 7 Student Paper: Page number only in upper right
+     * APA 7 Professional Paper: Running head left, page number right
      */
-    createHeaders(text) {
-        return {
-            default: new this.docx.Header({
-                children: [
-                    new this.docx.Paragraph({
-                        alignment: this.docx.AlignmentType.LEFT,
-                        spacing: { after: 0 },
-                        tabStops: [{
-                            type: this.docx.TabStopType.RIGHT,
-                            position: 9360  // Right margin position (6.5" from left in twips)
-                        }],
-                        children: [
-                            new this.docx.TextRun({
-                                text: text,
-                                size: this.sizes.header,
-                                font: 'Times New Roman'
-                            }),
-                            new this.docx.TextRun({
-                                text: '\t'  // Tab to right
-                            }),
-                            new this.docx.TextRun({
-                                children: [this.docx.PageNumber.CURRENT],
-                                size: this.sizes.header,
-                                font: 'Times New Roman'
-                            })
-                        ]
-                    })
-                ]
-            })
-        };
+    createHeaders(text, isStudentPaper = true) {
+        if (isStudentPaper) {
+            // Student paper: page number only, flush right
+            return {
+                default: new this.docx.Header({
+                    children: [
+                        new this.docx.Paragraph({
+                            alignment: this.docx.AlignmentType.RIGHT,
+                            spacing: { after: 0 },
+                            children: [
+                                new this.docx.TextRun({
+                                    children: [this.docx.PageNumber.CURRENT],
+                                    size: this.sizes.header,
+                                    font: 'Times New Roman'
+                                })
+                            ]
+                        })
+                    ]
+                })
+            };
+        } else {
+            // Professional paper: running head left, page number right
+            return {
+                default: new this.docx.Header({
+                    children: [
+                        new this.docx.Paragraph({
+                            alignment: this.docx.AlignmentType.LEFT,
+                            spacing: { after: 0 },
+                            tabStops: [{
+                                type: this.docx.TabStopType.RIGHT,
+                                position: 9360  // Right margin position (6.5" from left in twips)
+                            }],
+                            children: [
+                                new this.docx.TextRun({
+                                    text: text,
+                                    size: this.sizes.header,
+                                    font: 'Times New Roman'
+                                }),
+                                new this.docx.TextRun({
+                                    text: '\t'  // Tab to right
+                                }),
+                                new this.docx.TextRun({
+                                    children: [this.docx.PageNumber.CURRENT],
+                                    size: this.sizes.header,
+                                    font: 'Times New Roman'
+                                })
+                            ]
+                        })
+                    ]
+                })
+            };
+        }
     },
 
     /**
@@ -285,8 +315,8 @@ const ThesisExport = {
                         color: this.colors.black
                     },
                     paragraph: {
-                        spacing: { line: 480, after: 0 },  // Double spacing (APA 7)
-                        alignment: this.docx.AlignmentType.JUSTIFIED
+                        spacing: { line: 340, after: 0 },  // 1.4 line spacing (compact)
+                        alignment: this.docx.AlignmentType.LEFT
                     }
                 }
             },
@@ -301,7 +331,7 @@ const ThesisExport = {
                     },
                     paragraph: {
                         alignment: this.docx.AlignmentType.CENTER,
-                        spacing: { after: 240, line: 480 }
+                        spacing: { after: 120, line: 340 }
                     }
                 },
                 {
@@ -318,7 +348,7 @@ const ThesisExport = {
                     },
                     paragraph: {
                         alignment: this.docx.AlignmentType.CENTER,
-                        spacing: { before: 480, after: 240, line: 480 },
+                        spacing: { before: 240, after: 120, line: 340 },
                         outlineLevel: 0
                     }
                 },
@@ -336,7 +366,7 @@ const ThesisExport = {
                     },
                     paragraph: {
                         alignment: this.docx.AlignmentType.LEFT,
-                        spacing: { before: 360, after: 240, line: 480 },
+                        spacing: { before: 180, after: 120, line: 340 },
                         outlineLevel: 1
                     }
                 },
@@ -355,8 +385,47 @@ const ThesisExport = {
                     },
                     paragraph: {
                         alignment: this.docx.AlignmentType.LEFT,
-                        spacing: { before: 240, after: 120, line: 480 },
+                        spacing: { before: 240, after: 120, line: 340 },
                         outlineLevel: 2
+                    }
+                },
+                {
+                    // APA Level 4: Indented, Bold, Title Case, Ending with Period
+                    id: 'Heading4',
+                    name: 'Heading 4',
+                    basedOn: 'Normal',
+                    next: 'Normal',
+                    quickFormat: true,
+                    run: {
+                        font: 'Times New Roman',
+                        size: this.sizes.body,
+                        bold: true
+                    },
+                    paragraph: {
+                        alignment: this.docx.AlignmentType.LEFT,
+                        indent: { firstLine: 720 },
+                        spacing: { before: 240, after: 0, line: 340 },
+                        outlineLevel: 3
+                    }
+                },
+                {
+                    // APA Level 5: Indented, Bold, Italic, Title Case, Ending with Period
+                    id: 'Heading5',
+                    name: 'Heading 5',
+                    basedOn: 'Normal',
+                    next: 'Normal',
+                    quickFormat: true,
+                    run: {
+                        font: 'Times New Roman',
+                        size: this.sizes.body,
+                        bold: true,
+                        italics: true
+                    },
+                    paragraph: {
+                        alignment: this.docx.AlignmentType.LEFT,
+                        indent: { firstLine: 720 },
+                        spacing: { before: 240, after: 0, line: 340 },
+                        outlineLevel: 4
                     }
                 }
             ]
@@ -381,13 +450,22 @@ const ThesisExport = {
                 },
                 {
                     reference: 'bullet-list',
-                    levels: [{
-                        level: 0,
-                        format: this.docx.LevelFormat.BULLET,
-                        text: '•',
-                        alignment: this.docx.AlignmentType.LEFT,
-                        style: { paragraph: { indent: { left: 720, hanging: 360 } } }
-                    }]
+                    levels: [
+                        {
+                            level: 0,
+                            format: this.docx.LevelFormat.BULLET,
+                            text: '•',
+                            alignment: this.docx.AlignmentType.LEFT,
+                            style: { paragraph: { indent: { left: 720, hanging: 360 } } }
+                        },
+                        {
+                            level: 1,
+                            format: this.docx.LevelFormat.BULLET,
+                            text: '○',
+                            alignment: this.docx.AlignmentType.LEFT,
+                            style: { paragraph: { indent: { left: 1080, hanging: 360 } } }
+                        }
+                    ]
                 }
             ]
         };
@@ -404,13 +482,13 @@ const ThesisExport = {
 
         // Spacing from top
         for (let i = 0; i < 6; i++) {
-            elements.push(new P({ spacing: { after: 240 } }));
+            elements.push(new P({ spacing: { after: 120 } }));
         }
 
         // Title (Bold, Centered)
         elements.push(new P({
             alignment: CENTER,
-            spacing: { after: 240, line: 480 },
+            spacing: { after: 120, line: 340 },
             children: [new T({
                 text: meta.title,
                 bold: true,
@@ -423,7 +501,7 @@ const ThesisExport = {
         if (meta.subtitle) {
             elements.push(new P({
                 alignment: CENTER,
-                spacing: { after: 480, line: 480 },
+                spacing: { after: 480, line: 340 },
                 children: [new T({
                     text: meta.subtitle,
                     size: this.sizes.body,
@@ -436,7 +514,7 @@ const ThesisExport = {
         meta.authors.forEach(author => {
             elements.push(new P({
                 alignment: CENTER,
-                spacing: { after: 0, line: 480 },
+                spacing: { after: 0, line: 340 },
                 children: [new T({
                     text: author.name,
                     size: this.sizes.body,
@@ -445,12 +523,12 @@ const ThesisExport = {
             }));
         });
 
-        elements.push(new P({ spacing: { after: 240 } }));
+        elements.push(new P({ spacing: { after: 120 } }));
 
         // Institution
         elements.push(new P({
             alignment: CENTER,
-            spacing: { after: 0, line: 480 },
+            spacing: { after: 0, line: 340 },
             children: [new T({
                 text: meta.institution,
                 size: this.sizes.body,
@@ -461,7 +539,7 @@ const ThesisExport = {
         // Module
         elements.push(new P({
             alignment: CENTER,
-            spacing: { after: 0, line: 480 },
+            spacing: { after: 0, line: 340 },
             children: [new T({
                 text: meta.module,
                 size: this.sizes.body,
@@ -472,7 +550,7 @@ const ThesisExport = {
         // Supervisor
         elements.push(new P({
             alignment: CENTER,
-            spacing: { after: 0, line: 480 },
+            spacing: { after: 0, line: 340 },
             children: [new T({
                 text: `Supervisor: ${meta.supervisor}`,
                 size: this.sizes.body,
@@ -483,7 +561,7 @@ const ThesisExport = {
         // Date
         elements.push(new P({
             alignment: CENTER,
-            spacing: { after: 0, line: 480 },
+            spacing: { after: 0, line: 340 },
             children: [new T({
                 text: meta.date,
                 size: this.sizes.body,
@@ -505,7 +583,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_1,
             alignment: this.docx.AlignmentType.CENTER,
-            spacing: { before: 0, after: 240, line: 480 },
+            spacing: { before: 0, after: 120, line: 340 },
             children: [new this.docx.TextRun({
                 text: 'Declaration of Originality',
                 bold: true,
@@ -516,8 +594,8 @@ const ThesisExport = {
 
         // Declaration text
         elements.push(new this.docx.Paragraph({
-            alignment: this.docx.AlignmentType.JUSTIFIED,
-            spacing: { after: 240, line: 480 },
+            alignment: this.docx.AlignmentType.LEFT,
+            spacing: { after: 120, line: 340 },
             indent: { firstLine: 720 },
             children: [new this.docx.TextRun({
                 text: meta.declaration,
@@ -531,7 +609,7 @@ const ThesisExport = {
 
         meta.authors.forEach(author => {
             elements.push(new this.docx.Paragraph({
-                spacing: { after: 480, line: 480 },
+                spacing: { after: 480, line: 340 },
                 children: [new this.docx.TextRun({
                     text: '_'.repeat(50),
                     size: this.sizes.body,
@@ -539,7 +617,7 @@ const ThesisExport = {
                 })]
             }));
             elements.push(new this.docx.Paragraph({
-                spacing: { after: 240, line: 480 },
+                spacing: { after: 120, line: 340 },
                 children: [new this.docx.TextRun({
                     text: `${author.name} (${author.id})`,
                     size: this.sizes.body,
@@ -561,7 +639,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_1,
             alignment: this.docx.AlignmentType.CENTER,
-            spacing: { before: 0, after: 240, line: 480 },
+            spacing: { before: 0, after: 120, line: 340 },
             children: [new this.docx.TextRun({
                 text: 'Acknowledgments',
                 bold: true,
@@ -571,8 +649,8 @@ const ThesisExport = {
         }));
 
         elements.push(new this.docx.Paragraph({
-            alignment: this.docx.AlignmentType.JUSTIFIED,
-            spacing: { after: 240, line: 480 },
+            alignment: this.docx.AlignmentType.LEFT,
+            spacing: { after: 120, line: 340 },
             indent: { firstLine: 720 },
             children: [new this.docx.TextRun({
                 text: meta.acknowledgments,
@@ -594,7 +672,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_1,
             alignment: this.docx.AlignmentType.CENTER,
-            spacing: { before: 0, after: 240, line: 480 },
+            spacing: { before: 0, after: 120, line: 340 },
             children: [new this.docx.TextRun({
                 text: 'Table of Contents',
                 bold: true,
@@ -606,6 +684,18 @@ const ThesisExport = {
         elements.push(new this.docx.TableOfContents("Table of Contents", {
             hyperlink: true,
             headingStyleRange: "1-3"
+        }));
+
+        // Instruction to update TOC
+        elements.push(new this.docx.Paragraph({
+            spacing: { before: 240, after: 120 },
+            children: [new this.docx.TextRun({
+                text: '[Right-click here and select "Update Field" to refresh page numbers]',
+                italics: true,
+                size: this.sizes.small,
+                color: '666666',
+                font: 'Times New Roman'
+            })]
         }));
 
         elements.push(new this.docx.Paragraph({ children: [new this.docx.PageBreak()] }));
@@ -621,7 +711,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_1,
             alignment: this.docx.AlignmentType.CENTER,
-            spacing: { before: 0, after: 240, line: 480 },
+            spacing: { before: 0, after: 120, line: 340 },
             children: [new this.docx.TextRun({
                 text: 'List of Figures',
                 bold: true,
@@ -632,7 +722,7 @@ const ThesisExport = {
 
         // Note about updating page numbers
         elements.push(new this.docx.Paragraph({
-            spacing: { after: 240, line: 480 },
+            spacing: { after: 120, line: 340 },
             children: [new this.docx.TextRun({
                 text: 'Note: Update page numbers by pressing Ctrl+A then F9 in Microsoft Word.',
                 size: this.sizes.small,
@@ -651,7 +741,7 @@ const ThesisExport = {
                             figNum++;
                             const chapterNum = chapter.chapter_number || '';
                             elements.push(new this.docx.Paragraph({
-                                spacing: { after: 120, line: 480 },
+                                spacing: { after: 120, line: 340 },
                                 indent: { left: 0, hanging: 0 },
                                 children: [
                                     new this.docx.TextRun({
@@ -693,7 +783,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_1,
             alignment: this.docx.AlignmentType.CENTER,
-            spacing: { before: 0, after: 240, line: 480 },
+            spacing: { before: 0, after: 120, line: 340 },
             children: [new this.docx.TextRun({
                 text: 'List of Tables',
                 bold: true,
@@ -704,7 +794,7 @@ const ThesisExport = {
 
         // Note about updating page numbers
         elements.push(new this.docx.Paragraph({
-            spacing: { after: 240, line: 480 },
+            spacing: { after: 120, line: 340 },
             children: [new this.docx.TextRun({
                 text: 'Note: Update page numbers by pressing Ctrl+A then F9 in Microsoft Word.',
                 size: this.sizes.small,
@@ -723,7 +813,7 @@ const ThesisExport = {
                             tableNum++;
                             const chapterNum = chapter.chapter_number || '';
                             elements.push(new this.docx.Paragraph({
-                                spacing: { after: 120, line: 480 },
+                                spacing: { after: 120, line: 340 },
                                 indent: { left: 0, hanging: 0 },
                                 children: [
                                     new this.docx.TextRun({
@@ -765,7 +855,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_1,
             alignment: this.docx.AlignmentType.CENTER,
-            spacing: { before: 0, after: 240, line: 480 },
+            spacing: { before: 0, after: 120, line: 340 },
             children: [new this.docx.TextRun({
                 text: 'Abstract',
                 bold: true,
@@ -776,8 +866,8 @@ const ThesisExport = {
 
         // Abstract text - no first line indent per APA
         elements.push(new this.docx.Paragraph({
-            alignment: this.docx.AlignmentType.JUSTIFIED,
-            spacing: { after: 240, line: 480 },
+            alignment: this.docx.AlignmentType.LEFT,
+            spacing: { after: 120, line: 340 },
             indent: { firstLine: 0 },  // Explicitly no indent for abstract
             children: [new this.docx.TextRun({
                 text: meta.abstract,
@@ -789,7 +879,7 @@ const ThesisExport = {
         // Keywords (APA style - italicized label, indented)
         if (meta.keywords) {
             elements.push(new this.docx.Paragraph({
-                spacing: { after: 240, line: 480 },
+                spacing: { after: 120, line: 340 },
                 indent: { firstLine: 720 },
                 children: [
                     new this.docx.TextRun({
@@ -821,7 +911,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_1,
             alignment: this.docx.AlignmentType.CENTER,
-            spacing: { before: 0, after: 240, line: 480 },
+            spacing: { before: 0, after: 120, line: 340 },
             children: [new this.docx.TextRun({
                 text: `Chapter ${chapter.chapter_number}: ${chapter.title}`,
                 bold: true,
@@ -856,7 +946,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_2,
             alignment: this.docx.AlignmentType.LEFT,
-            spacing: { before: 360, after: 240, line: 480 },
+            spacing: { before: 180, after: 120, line: 340 },
             children: [new this.docx.TextRun({
                 text: `${section.section_key} ${section.title}`,
                 bold: true,
@@ -904,7 +994,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_3,
             alignment: this.docx.AlignmentType.LEFT,
-            spacing: { before: 240, after: 120, line: 480 },
+            spacing: { before: 240, after: 120, line: 340 },
             children: [new this.docx.TextRun({
                 text: `${subsection.section_key} ${subsection.title}`,
                 bold: true,
@@ -940,7 +1030,7 @@ const ThesisExport = {
         const elements = [];
         this.figureNumber++;
 
-        elements.push(new this.docx.Paragraph({ spacing: { before: 360 } }));
+        elements.push(new this.docx.Paragraph({ spacing: { before: 180 } }));
 
         // Try to load and embed image
         try {
@@ -954,11 +1044,11 @@ const ThesisExport = {
 
                 elements.push(new this.docx.Paragraph({
                     alignment: this.docx.AlignmentType.CENTER,
-                    spacing: { after: 240 },
+                    spacing: { after: 120 },
                     children: [
                         new this.docx.ImageRun({
                             data: uint8Array,
-                            transformation: { width: 450, height: 280 },
+                            transformation: { width: 400, height: 250 },  // Proper size with aspect ratio
                             type: 'png'
                         })
                     ]
@@ -968,21 +1058,22 @@ const ThesisExport = {
             // Skip image if can't load
         }
 
-        // APA Figure caption: "Figure X" in italics, then caption
+        // APA 7 Figure number (bold, on its own line)
         elements.push(new this.docx.Paragraph({
-            spacing: { after: 120, line: 480 },
+            spacing: { after: 0, line: 340 },
             children: [
                 new this.docx.TextRun({
                     text: `Figure ${fig.number || this.figureNumber}`,
-                    italics: true,
+                    bold: true,
                     size: this.sizes.body,
                     font: 'Times New Roman'
                 })
             ]
         }));
 
+        // APA 7 Figure caption (italicized, on its own line)
         elements.push(new this.docx.Paragraph({
-            spacing: { after: 120, line: 480 },
+            spacing: { after: 120, line: 340 },
             children: [
                 new this.docx.TextRun({
                     text: fig.caption,
@@ -996,8 +1087,8 @@ const ThesisExport = {
         // Description as Note
         if (fig.description) {
             elements.push(new this.docx.Paragraph({
-                alignment: this.docx.AlignmentType.JUSTIFIED,
-                spacing: { after: 360, line: 480 },
+                alignment: this.docx.AlignmentType.LEFT,
+                spacing: { after: 180, line: 340 },
                 children: [
                     new this.docx.TextRun({
                         text: 'Note. ',
@@ -1024,22 +1115,22 @@ const ThesisExport = {
         const elements = [];
         this.tableNumber++;
 
-        elements.push(new this.docx.Paragraph({ spacing: { before: 360 } }));
+        elements.push(new this.docx.Paragraph({ spacing: { before: 180 } }));
 
-        // APA Table number
+        // APA 7 Table number (bold, on its own line)
         elements.push(new this.docx.Paragraph({
-            spacing: { after: 120, line: 480 },
+            spacing: { after: 0, line: 340 },
             children: [new this.docx.TextRun({
                 text: `Table ${tableData.number || this.tableNumber}`,
-                italics: true,
+                bold: true,
                 size: this.sizes.body,
                 font: 'Times New Roman'
             })]
         }));
 
-        // Table title (italicized)
+        // APA 7 Table title (italicized, on its own line)
         elements.push(new this.docx.Paragraph({
-            spacing: { after: 120, line: 480 },
+            spacing: { after: 120, line: 340 },
             children: [new this.docx.TextRun({
                 text: tableData.caption,
                 italics: true,
@@ -1051,21 +1142,27 @@ const ThesisExport = {
         // Build table
         const rows = [];
 
-        // Header row
+        // Header row - compact 10pt font with cell padding
         if (tableData.headers) {
             rows.push(new this.docx.TableRow({
                 tableHeader: true,
                 children: tableData.headers.map(header =>
                     new this.docx.TableCell({
                         children: [new this.docx.Paragraph({
-                            spacing: { after: 0 },
+                            spacing: { before: 60, after: 60, line: 240 },
                             children: [new this.docx.TextRun({
                                 text: header,
                                 bold: true,
-                                size: this.sizes.body,
+                                size: this.sizes.table,
                                 font: 'Times New Roman'
                             })]
                         })],
+                        margins: {
+                            top: 40,
+                            bottom: 40,
+                            left: 80,
+                            right: 80
+                        },
                         borders: {
                             top: { style: this.docx.BorderStyle.SINGLE, size: 8, color: this.colors.black },
                             bottom: { style: this.docx.BorderStyle.SINGLE, size: 4, color: this.colors.black },
@@ -1077,7 +1174,7 @@ const ThesisExport = {
             }));
         }
 
-        // Data rows
+        // Data rows - compact 10pt font with cell padding
         if (tableData.rows) {
             tableData.rows.forEach((row, idx) => {
                 const isLast = idx === tableData.rows.length - 1;
@@ -1085,13 +1182,19 @@ const ThesisExport = {
                     children: row.map(cell =>
                         new this.docx.TableCell({
                             children: [new this.docx.Paragraph({
-                                spacing: { after: 0 },
+                                spacing: { before: 40, after: 40, line: 240 },
                                 children: [new this.docx.TextRun({
                                     text: String(cell),
-                                    size: this.sizes.body,
+                                    size: this.sizes.table,
                                     font: 'Times New Roman'
                                 })]
                             })],
+                            margins: {
+                                top: 30,
+                                bottom: 30,
+                                left: 80,
+                                right: 80
+                            },
                             borders: {
                                 top: { style: this.docx.BorderStyle.NONE },
                                 bottom: isLast
@@ -1114,8 +1217,8 @@ const ThesisExport = {
         // Note (description)
         if (tableData.description) {
             elements.push(new this.docx.Paragraph({
-                alignment: this.docx.AlignmentType.JUSTIFIED,
-                spacing: { before: 120, after: 360, line: 480 },
+                alignment: this.docx.AlignmentType.LEFT,
+                spacing: { before: 120, after: 180, line: 340 },
                 children: [
                     new this.docx.TextRun({
                         text: 'Note. ',
@@ -1144,7 +1247,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_1,
             alignment: this.docx.AlignmentType.CENTER,
-            spacing: { before: 0, after: 240, line: 480 },
+            spacing: { before: 0, after: 120, line: 340 },
             children: [new this.docx.TextRun({
                 text: 'References',
                 bold: true,
@@ -1160,7 +1263,7 @@ const ThesisExport = {
 
             // APA hanging indent: 0.5 inch (720 twips)
             elements.push(new this.docx.Paragraph({
-                spacing: { after: 240, line: 480 },
+                spacing: { after: 120, line: 340 },
                 indent: { left: 720, hanging: 720 },
                 children: [new this.docx.TextRun({
                     text: text,
@@ -1185,7 +1288,7 @@ const ThesisExport = {
         elements.push(new this.docx.Paragraph({
             heading: this.docx.HeadingLevel.HEADING_1,
             alignment: this.docx.AlignmentType.CENTER,
-            spacing: { before: 0, after: 240, line: 480 },
+            spacing: { before: 0, after: 120, line: 340 },
             children: [new this.docx.TextRun({
                 text: 'Appendices',
                 bold: true,
@@ -1195,8 +1298,8 @@ const ThesisExport = {
         }));
 
         elements.push(new this.docx.Paragraph({
-            alignment: this.docx.AlignmentType.JUSTIFIED,
-            spacing: { after: 360, line: 480 },
+            alignment: this.docx.AlignmentType.LEFT,
+            spacing: { after: 180, line: 340 },
             indent: { firstLine: 720 },
             children: [new this.docx.TextRun({
                 text: 'The following appendices contain the complete Jupyter Notebook implementations for each machine learning model evaluated in this study. Each appendix preserves the exact notebook format with syntax-highlighted code cells, outputs, and visualizations as executed during the experimental phase.',
@@ -1245,7 +1348,7 @@ const ThesisExport = {
             elements.push(new this.docx.Paragraph({
                 heading: this.docx.HeadingLevel.HEADING_2,
                 alignment: this.docx.AlignmentType.LEFT,
-                spacing: { before: 480, after: 120, line: 480 },
+                spacing: { before: 240, after: 120, line: 340 },
                 children: [new this.docx.TextRun({
                     text: `Appendix ${nb.id}: ${nb.title}`,
                     bold: true,
@@ -1255,7 +1358,7 @@ const ThesisExport = {
             }));
 
             elements.push(new this.docx.Paragraph({
-                spacing: { after: 240, line: 480 },
+                spacing: { after: 120, line: 340 },
                 children: [new this.docx.TextRun({
                     text: nb.subtitle,
                     italics: true,
@@ -1292,17 +1395,18 @@ const ThesisExport = {
     /**
      * Embed pre-rendered notebook page images (A4 PDF pages)
      * Each image is one full page from the notebook PDF
+     * Sized to fit within 1" margins on US Letter paper
      */
     async embedNotebookImages(notebookKey, manifestData) {
         const elements = [];
         const basePath = 'notebook-images/';
 
-        // Source file reference
+        // Source file reference with better styling
         elements.push(new this.docx.Paragraph({
-            spacing: { after: 200, line: 480 },
+            spacing: { after: 120, line: 340 },
             children: [
                 new this.docx.TextRun({
-                    text: 'Source File: ',
+                    text: 'Source: ',
                     bold: true,
                     size: this.sizes.body,
                     font: 'Times New Roman'
@@ -1311,11 +1415,16 @@ const ThesisExport = {
                     text: manifestData.file,
                     size: this.sizes.body,
                     font: 'Consolas'
-                }),
+                })
+            ]
+        }));
+
+        elements.push(new this.docx.Paragraph({
+            spacing: { after: 180, line: 340 },
+            children: [
                 new this.docx.TextRun({
-                    text: ` (${manifestData.pages.length} pages)`,
+                    text: `Total Pages: ${manifestData.pages.length}`,
                     size: this.sizes.body,
-                    italics: true,
                     font: 'Times New Roman'
                 })
             ]
@@ -1331,39 +1440,61 @@ const ThesisExport = {
                     const arrayBuffer = await blob.arrayBuffer();
                     const uint8Array = new Uint8Array(arrayBuffer);
 
-                    // Page header
+                    // Page header - clearer formatting
                     elements.push(new this.docx.Paragraph({
-                        alignment: this.docx.AlignmentType.RIGHT,
-                        spacing: { before: 0, after: 60 },
+                        alignment: this.docx.AlignmentType.CENTER,
+                        spacing: { before: 120, after: 120 },
                         children: [new this.docx.TextRun({
-                            text: `Page ${i + 1} of ${manifestData.pages.length}`,
-                            size: 18,
-                            italics: true,
-                            color: this.colors.gray,
+                            text: `— Notebook Page ${i + 1} of ${manifestData.pages.length} —`,
+                            size: this.sizes.small,
+                            bold: true,
                             font: 'Times New Roman'
                         })]
                     }));
 
-                    // Full-page notebook image (A4 proportions: 210mm x 297mm ≈ 1:1.414)
-                    // Width: 6 inches = 540 points, Height: 8.5 inches = 765 points
-                    elements.push(new this.docx.Paragraph({
-                        alignment: this.docx.AlignmentType.CENTER,
-                        spacing: { before: 0, after: 0 },
-                        children: [
-                            new this.docx.ImageRun({
-                                data: uint8Array,
-                                transformation: {
-                                    width: 540,
-                                    height: 765
-                                },
-                                type: 'png'
+                    // Notebook page image in a table cell with border (creates frame effect)
+                    // Size: 6" wide x 8" tall (fits within 1" margins with room for header)
+                    const imageTable = new this.docx.Table({
+                        width: { size: 100, type: this.docx.WidthType.PERCENTAGE },
+                        rows: [
+                            new this.docx.TableRow({
+                                children: [
+                                    new this.docx.TableCell({
+                                        children: [
+                                            new this.docx.Paragraph({
+                                                alignment: this.docx.AlignmentType.CENTER,
+                                                spacing: { before: 0, after: 0 },
+                                                children: [
+                                                    new this.docx.ImageRun({
+                                                        data: uint8Array,
+                                                        transformation: {
+                                                            width: 460,  // ~6.4" fits within margins
+                                                            height: 595  // Maintains A4 aspect ratio
+                                                        },
+                                                        type: 'png'
+                                                    })
+                                                ]
+                                            })
+                                        ],
+                                        borders: {
+                                            top: { style: this.docx.BorderStyle.SINGLE, size: 8, color: '666666' },
+                                            bottom: { style: this.docx.BorderStyle.SINGLE, size: 8, color: '666666' },
+                                            left: { style: this.docx.BorderStyle.SINGLE, size: 8, color: '666666' },
+                                            right: { style: this.docx.BorderStyle.SINGLE, size: 8, color: '666666' }
+                                        },
+                                        shading: { fill: 'FFFFFF' }
+                                    })
+                                ]
                             })
                         ]
-                    }));
+                    });
+
+                    elements.push(imageTable);
 
                     // Page break after each image (except the last one)
                     if (i < manifestData.pages.length - 1) {
                         elements.push(new this.docx.Paragraph({
+                            spacing: { before: 120 },
                             children: [new this.docx.PageBreak()]
                         }));
                     }
@@ -1381,7 +1512,7 @@ const ThesisExport = {
      */
     createNotebookFallbackMessage(file) {
         return new this.docx.Paragraph({
-            spacing: { after: 240, line: 480 },
+            spacing: { after: 120, line: 340 },
             shading: { fill: 'FFF3CD' },
             children: [new this.docx.TextRun({
                 text: `Note: Pre-rendered notebook images not found. Run 'python generate_notebook_images.py' to generate high-quality notebook images for this appendix. Source file: ${file}`,
@@ -1392,7 +1523,7 @@ const ThesisExport = {
     },
 
     /**
-     * Render Jupyter Notebook - Exact browser-like format
+     * Render Jupyter Notebook - Professional format with cell numbers and borders
      */
     async renderJupyterNotebook(notebook) {
         const elements = [];
@@ -1400,6 +1531,7 @@ const ThesisExport = {
         if (!notebook.cells) return elements;
 
         let cellIndex = 0;
+        let codeIndex = 0;
 
         for (const cell of notebook.cells) {
             cellIndex++;
@@ -1411,56 +1543,95 @@ const ThesisExport = {
                     elements.push(...this.renderMarkdownCell(source));
                 }
             } else if (cell.cell_type === 'code') {
-                // Code cells - exact Jupyter format
+                codeIndex++;
+                // Code cells - professional Jupyter format
                 const source = Array.isArray(cell.source) ? cell.source.join('') : cell.source;
-                const execCount = cell.execution_count || ' ';
+                const execCount = cell.execution_count || codeIndex;
 
                 if (source.trim()) {
-                    // Input cell with bracket notation
+                    // Cell separator
                     elements.push(new this.docx.Paragraph({
-                        spacing: { before: 240, after: 60 },
+                        spacing: { before: 180, after: 120 },
+                        children: [new this.docx.TextRun({
+                            text: `━━━ Cell ${codeIndex} ━━━`,
+                            size: this.sizes.small,
+                            color: '999999',
+                            font: 'Consolas'
+                        })]
+                    }));
+
+                    // Input header with blue background
+                    elements.push(new this.docx.Paragraph({
+                        spacing: { before: 0, after: 0 },
+                        shading: { fill: 'E8F4FD' },
+                        border: {
+                            top: { style: this.docx.BorderStyle.SINGLE, size: 4, color: '3498DB' },
+                            left: { style: this.docx.BorderStyle.SINGLE, size: 4, color: '3498DB' },
+                            right: { style: this.docx.BorderStyle.SINGLE, size: 4, color: '3498DB' }
+                        },
                         children: [
                             new this.docx.TextRun({
                                 text: `In [${execCount}]:`,
                                 bold: true,
                                 size: this.sizes.code,
                                 font: 'Consolas',
-                                color: '0000AA'
+                                color: '2980B9'
                             })
                         ]
                     }));
 
-                    // Code content in a bordered box
+                    // Code content with line numbers in a bordered box
                     const codeLines = source.split('\n');
-                    for (let i = 0; i < Math.min(codeLines.length, 50); i++) {
+                    const maxLines = 150; // Increased limit
+                    const linesToShow = Math.min(codeLines.length, maxLines);
+
+                    for (let i = 0; i < linesToShow; i++) {
+                        const lineNum = String(i + 1).padStart(3, ' ');
+                        const isLast = i === linesToShow - 1 && codeLines.length <= maxLines;
                         elements.push(new this.docx.Paragraph({
                             spacing: { after: 0 },
-                            shading: { fill: 'F7F7F7' },
-                            indent: { left: 360 },
-                            children: [new this.docx.TextRun({
-                                text: codeLines[i] || ' ',
-                                size: this.sizes.code,
-                                font: 'Consolas'
-                            })]
+                            shading: { fill: 'F8F8F8' },
+                            border: {
+                                left: { style: this.docx.BorderStyle.SINGLE, size: 4, color: '3498DB' },
+                                right: { style: this.docx.BorderStyle.SINGLE, size: 4, color: '3498DB' },
+                                bottom: isLast ? { style: this.docx.BorderStyle.SINGLE, size: 4, color: '3498DB' } : { style: this.docx.BorderStyle.NONE }
+                            },
+                            children: [
+                                new this.docx.TextRun({
+                                    text: `${lineNum} │ `,
+                                    size: this.sizes.code,
+                                    font: 'Consolas',
+                                    color: '999999'
+                                }),
+                                new this.docx.TextRun({
+                                    text: codeLines[i] || ' ',
+                                    size: this.sizes.code,
+                                    font: 'Consolas'
+                                })
+                            ]
                         }));
                     }
 
-                    if (codeLines.length > 50) {
+                    if (codeLines.length > maxLines) {
                         elements.push(new this.docx.Paragraph({
                             spacing: { after: 0 },
-                            shading: { fill: 'F7F7F7' },
-                            indent: { left: 360 },
+                            shading: { fill: 'FFF3CD' },
+                            border: {
+                                left: { style: this.docx.BorderStyle.SINGLE, size: 4, color: '3498DB' },
+                                right: { style: this.docx.BorderStyle.SINGLE, size: 4, color: '3498DB' },
+                                bottom: { style: this.docx.BorderStyle.SINGLE, size: 4, color: '3498DB' }
+                            },
                             children: [new this.docx.TextRun({
-                                text: `... [${codeLines.length - 50} more lines]`,
+                                text: `    ... [${codeLines.length - maxLines} more lines truncated]`,
                                 size: this.sizes.code,
                                 font: 'Consolas',
                                 italics: true,
-                                color: '888888'
+                                color: '856404'
                             })]
                         }));
                     }
 
-                    // Outputs
+                    // Outputs with different styling
                     if (cell.outputs && cell.outputs.length > 0) {
                         for (const output of cell.outputs) {
                             elements.push(...await this.renderCellOutput(output, execCount));
@@ -1474,7 +1645,7 @@ const ThesisExport = {
     },
 
     /**
-     * Render markdown cell content
+     * Render markdown cell content with inline formatting support
      */
     renderMarkdownCell(source) {
         const elements = [];
@@ -1484,68 +1655,67 @@ const ThesisExport = {
             if (line.startsWith('# ')) {
                 // H1
                 elements.push(new this.docx.Paragraph({
-                    spacing: { before: 360, after: 120, line: 480 },
-                    children: [new this.docx.TextRun({
-                        text: line.substring(2),
-                        bold: true,
-                        size: 28,
-                        font: 'Times New Roman'
-                    })]
+                    spacing: { before: 180, after: 120, line: 340 },
+                    children: this.parseInlineMarkdown(line.substring(2), { bold: true, size: 28 })
                 }));
             } else if (line.startsWith('## ')) {
                 // H2
                 elements.push(new this.docx.Paragraph({
-                    spacing: { before: 240, after: 120, line: 480 },
-                    children: [new this.docx.TextRun({
-                        text: line.substring(3),
-                        bold: true,
-                        size: 26,
-                        font: 'Times New Roman'
-                    })]
+                    spacing: { before: 240, after: 120, line: 340 },
+                    children: this.parseInlineMarkdown(line.substring(3), { bold: true, size: 26 })
                 }));
             } else if (line.startsWith('### ')) {
                 // H3
                 elements.push(new this.docx.Paragraph({
-                    spacing: { before: 180, after: 120, line: 480 },
-                    children: [new this.docx.TextRun({
-                        text: line.substring(4),
-                        bold: true,
-                        italics: true,
-                        size: this.sizes.body,
-                        font: 'Times New Roman'
-                    })]
+                    spacing: { before: 180, after: 120, line: 340 },
+                    children: this.parseInlineMarkdown(line.substring(4), { bold: true, italics: true, size: this.sizes.body })
+                }));
+            } else if (line.startsWith('#### ')) {
+                // H4
+                elements.push(new this.docx.Paragraph({
+                    spacing: { before: 120, after: 60, line: 340 },
+                    children: this.parseInlineMarkdown(line.substring(5), { bold: true, size: this.sizes.body })
                 }));
             } else if (line.startsWith('- ') || line.startsWith('* ')) {
                 // Bullet
                 elements.push(new this.docx.Paragraph({
-                    bullet: { level: 0 },
-                    spacing: { after: 60, line: 480 },
-                    children: [new this.docx.TextRun({
-                        text: line.substring(2),
-                        size: this.sizes.body,
-                        font: 'Times New Roman'
-                    })]
+                    numbering: { reference: 'bullet-list', level: 0 },
+                    spacing: { after: 60, line: 340 },
+                    children: this.parseInlineMarkdown(line.substring(2), { size: this.sizes.body })
+                }));
+            } else if (line.startsWith('  - ') || line.startsWith('  * ')) {
+                // Nested bullet
+                elements.push(new this.docx.Paragraph({
+                    numbering: { reference: 'bullet-list', level: 1 },
+                    spacing: { after: 60, line: 340 },
+                    children: this.parseInlineMarkdown(line.substring(4), { size: this.sizes.body })
                 }));
             } else if (line.match(/^\d+\.\s/)) {
                 // Numbered list
                 elements.push(new this.docx.Paragraph({
                     numbering: { reference: 'numbered-list', level: 0 },
-                    spacing: { after: 60, line: 480 },
-                    children: [new this.docx.TextRun({
-                        text: line.replace(/^\d+\.\s/, ''),
-                        size: this.sizes.body,
-                        font: 'Times New Roman'
-                    })]
+                    spacing: { after: 60, line: 340 },
+                    children: this.parseInlineMarkdown(line.replace(/^\d+\.\s/, ''), { size: this.sizes.body })
                 }));
-            } else if (line.trim()) {
-                // Regular paragraph
+            } else if (line.startsWith('> ')) {
+                // Blockquote
                 elements.push(new this.docx.Paragraph({
-                    spacing: { after: 120, line: 480 },
-                    children: [new this.docx.TextRun({
-                        text: line,
-                        size: this.sizes.body,
-                        font: 'Times New Roman'
-                    })]
+                    spacing: { after: 120, line: 340 },
+                    indent: { left: 720 },
+                    shading: { fill: 'F5F5F5' },
+                    border: {
+                        left: { style: this.docx.BorderStyle.SINGLE, size: 12, color: 'CCCCCC' }
+                    },
+                    children: this.parseInlineMarkdown(line.substring(2), { size: this.sizes.body, italics: true })
+                }));
+            } else if (line.startsWith('```')) {
+                // Skip code block markers (handled separately)
+                continue;
+            } else if (line.trim()) {
+                // Regular paragraph with inline formatting
+                elements.push(new this.docx.Paragraph({
+                    spacing: { after: 120, line: 340 },
+                    children: this.parseInlineMarkdown(line, { size: this.sizes.body })
                 }));
             }
         }
@@ -1554,26 +1724,161 @@ const ThesisExport = {
     },
 
     /**
-     * Render cell output - including images
+     * Parse inline markdown formatting (bold, italic, code, links)
+     */
+    parseInlineMarkdown(text, baseStyle = {}) {
+        const runs = [];
+        // Pattern to match **bold**, *italic*, `code`, and combinations
+        const pattern = /(\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(.+?)\*|`(.+?)`|_(.+?)_)/g;
+
+        let lastIndex = 0;
+        let match;
+
+        while ((match = pattern.exec(text)) !== null) {
+            // Add text before the match
+            if (match.index > lastIndex) {
+                runs.push(new this.docx.TextRun({
+                    text: text.substring(lastIndex, match.index),
+                    font: 'Times New Roman',
+                    ...baseStyle
+                }));
+            }
+
+            // Determine the type of formatting
+            if (match[2]) {
+                // ***bold italic***
+                runs.push(new this.docx.TextRun({
+                    text: match[2],
+                    font: 'Times New Roman',
+                    bold: true,
+                    italics: true,
+                    ...baseStyle
+                }));
+            } else if (match[3]) {
+                // **bold**
+                runs.push(new this.docx.TextRun({
+                    text: match[3],
+                    font: 'Times New Roman',
+                    bold: true,
+                    ...baseStyle
+                }));
+            } else if (match[4]) {
+                // *italic*
+                runs.push(new this.docx.TextRun({
+                    text: match[4],
+                    font: 'Times New Roman',
+                    italics: true,
+                    ...baseStyle
+                }));
+            } else if (match[5]) {
+                // `code`
+                runs.push(new this.docx.TextRun({
+                    text: match[5],
+                    font: 'Consolas',
+                    size: this.sizes.small,
+                    shading: { fill: 'F0F0F0' }
+                }));
+            } else if (match[6]) {
+                // _italic_
+                runs.push(new this.docx.TextRun({
+                    text: match[6],
+                    font: 'Times New Roman',
+                    italics: true,
+                    ...baseStyle
+                }));
+            }
+
+            lastIndex = match.index + match[0].length;
+        }
+
+        // Add remaining text
+        if (lastIndex < text.length) {
+            runs.push(new this.docx.TextRun({
+                text: text.substring(lastIndex),
+                font: 'Times New Roman',
+                ...baseStyle
+            }));
+        }
+
+        // If no matches were found, return the whole text
+        if (runs.length === 0) {
+            runs.push(new this.docx.TextRun({
+                text: text,
+                font: 'Times New Roman',
+                ...baseStyle
+            }));
+        }
+
+        return runs;
+    },
+
+    /**
+     * Render cell output - including images with improved styling
      */
     async renderCellOutput(output, execCount) {
         const elements = [];
+        const maxOutputLines = 100; // Increased from 30
 
         // Handle different output types
         if (output.output_type === 'stream') {
-            // Stream output (print statements)
+            // Stream output (print statements) with green styling
             const text = Array.isArray(output.text) ? output.text.join('') : (output.text || '');
             if (text.trim()) {
-                const lines = text.split('\n').slice(0, 30);
-                for (const line of lines) {
+                // Output header
+                elements.push(new this.docx.Paragraph({
+                    spacing: { before: 120, after: 0 },
+                    shading: { fill: 'E8F5E9' },
+                    border: {
+                        top: { style: this.docx.BorderStyle.SINGLE, size: 4, color: '27AE60' },
+                        left: { style: this.docx.BorderStyle.SINGLE, size: 4, color: '27AE60' },
+                        right: { style: this.docx.BorderStyle.SINGLE, size: 4, color: '27AE60' }
+                    },
+                    children: [new this.docx.TextRun({
+                        text: output.name === 'stderr' ? 'stderr:' : 'Output:',
+                        bold: true,
+                        size: this.sizes.code,
+                        font: 'Consolas',
+                        color: output.name === 'stderr' ? 'C0392B' : '27AE60'
+                    })]
+                }));
+
+                const allLines = text.split('\n');
+                const lines = allLines.slice(0, maxOutputLines);
+                for (let i = 0; i < lines.length; i++) {
+                    const isLast = i === lines.length - 1 && allLines.length <= maxOutputLines;
                     elements.push(new this.docx.Paragraph({
                         spacing: { after: 0 },
-                        shading: { fill: 'FFFFFF' },
-                        indent: { left: 360 },
+                        shading: { fill: 'FAFAFA' },
+                        border: {
+                            left: { style: this.docx.BorderStyle.SINGLE, size: 4, color: '27AE60' },
+                            right: { style: this.docx.BorderStyle.SINGLE, size: 4, color: '27AE60' },
+                            bottom: isLast ? { style: this.docx.BorderStyle.SINGLE, size: 4, color: '27AE60' } : { style: this.docx.BorderStyle.NONE }
+                        },
+                        indent: { left: 180 },
                         children: [new this.docx.TextRun({
-                            text: line || ' ',
+                            text: lines[i] || ' ',
                             size: this.sizes.code,
                             font: 'Consolas'
+                        })]
+                    }));
+                }
+
+                if (allLines.length > maxOutputLines) {
+                    elements.push(new this.docx.Paragraph({
+                        spacing: { after: 0 },
+                        shading: { fill: 'FFF3CD' },
+                        border: {
+                            left: { style: this.docx.BorderStyle.SINGLE, size: 4, color: '27AE60' },
+                            right: { style: this.docx.BorderStyle.SINGLE, size: 4, color: '27AE60' },
+                            bottom: { style: this.docx.BorderStyle.SINGLE, size: 4, color: '27AE60' }
+                        },
+                        indent: { left: 180 },
+                        children: [new this.docx.TextRun({
+                            text: `... [${allLines.length - maxOutputLines} more lines truncated]`,
+                            size: this.sizes.code,
+                            font: 'Consolas',
+                            italics: true,
+                            color: '856404'
                         })]
                     }));
                 }
@@ -1607,7 +1912,7 @@ const ThesisExport = {
                     // Embed the image
                     elements.push(new this.docx.Paragraph({
                         alignment: this.docx.AlignmentType.CENTER,
-                        spacing: { before: 120, after: 240 },
+                        spacing: { before: 120, after: 120 },
                         children: [
                             new this.docx.ImageRun({
                                 data: bytes,
@@ -1631,50 +1936,108 @@ const ThesisExport = {
                     }));
                 }
             } else if (output.data && output.data['text/plain']) {
-                // Text output
+                // Text output with red styling for Out[]
                 const text = Array.isArray(output.data['text/plain'])
                     ? output.data['text/plain'].join('')
                     : output.data['text/plain'];
 
                 if (text.trim()) {
+                    // Output header
                     elements.push(new this.docx.Paragraph({
-                        spacing: { before: 120, after: 60 },
+                        spacing: { before: 120, after: 0 },
+                        shading: { fill: 'FDEDEC' },
+                        border: {
+                            top: { style: this.docx.BorderStyle.SINGLE, size: 4, color: 'E74C3C' },
+                            left: { style: this.docx.BorderStyle.SINGLE, size: 4, color: 'E74C3C' },
+                            right: { style: this.docx.BorderStyle.SINGLE, size: 4, color: 'E74C3C' }
+                        },
                         children: [
                             new this.docx.TextRun({
                                 text: `Out[${execCount}]:`,
                                 bold: true,
                                 size: this.sizes.code,
                                 font: 'Consolas',
-                                color: 'AA0000'
+                                color: 'C0392B'
                             })
                         ]
                     }));
 
-                    const lines = text.split('\n').slice(0, 20);
-                    for (const line of lines) {
+                    const allLines = text.split('\n');
+                    const maxLines = 80;
+                    const lines = allLines.slice(0, maxLines);
+                    for (let i = 0; i < lines.length; i++) {
+                        const isLast = i === lines.length - 1 && allLines.length <= maxLines;
                         elements.push(new this.docx.Paragraph({
                             spacing: { after: 0 },
-                            indent: { left: 360 },
+                            shading: { fill: 'FAFAFA' },
+                            border: {
+                                left: { style: this.docx.BorderStyle.SINGLE, size: 4, color: 'E74C3C' },
+                                right: { style: this.docx.BorderStyle.SINGLE, size: 4, color: 'E74C3C' },
+                                bottom: isLast ? { style: this.docx.BorderStyle.SINGLE, size: 4, color: 'E74C3C' } : { style: this.docx.BorderStyle.NONE }
+                            },
+                            indent: { left: 180 },
                             children: [new this.docx.TextRun({
-                                text: line || ' ',
+                                text: lines[i] || ' ',
                                 size: this.sizes.code,
                                 font: 'Consolas'
+                            })]
+                        }));
+                    }
+
+                    if (allLines.length > maxLines) {
+                        elements.push(new this.docx.Paragraph({
+                            spacing: { after: 0 },
+                            shading: { fill: 'FFF3CD' },
+                            border: {
+                                left: { style: this.docx.BorderStyle.SINGLE, size: 4, color: 'E74C3C' },
+                                right: { style: this.docx.BorderStyle.SINGLE, size: 4, color: 'E74C3C' },
+                                bottom: { style: this.docx.BorderStyle.SINGLE, size: 4, color: 'E74C3C' }
+                            },
+                            indent: { left: 180 },
+                            children: [new this.docx.TextRun({
+                                text: `... [${allLines.length - maxLines} more lines truncated]`,
+                                size: this.sizes.code,
+                                font: 'Consolas',
+                                italics: true,
+                                color: '856404'
                             })]
                         }));
                     }
                 }
             }
         } else if (output.output_type === 'error') {
-            // Error output
+            // Error output with prominent red styling
             elements.push(new this.docx.Paragraph({
-                spacing: { before: 60, after: 60 },
-                shading: { fill: 'FFF0F0' },
-                indent: { left: 360 },
+                spacing: { before: 120, after: 0 },
+                shading: { fill: 'FADBD8' },
+                border: {
+                    top: { style: this.docx.BorderStyle.SINGLE, size: 4, color: 'C0392B' },
+                    left: { style: this.docx.BorderStyle.SINGLE, size: 4, color: 'C0392B' },
+                    right: { style: this.docx.BorderStyle.SINGLE, size: 4, color: 'C0392B' }
+                },
                 children: [new this.docx.TextRun({
-                    text: output.ename ? `${output.ename}: ${output.evalue}` : 'Error',
+                    text: `Error: ${output.ename || 'Exception'}`,
+                    bold: true,
                     size: this.sizes.code,
                     font: 'Consolas',
-                    color: 'CC0000'
+                    color: 'C0392B'
+                })]
+            }));
+
+            elements.push(new this.docx.Paragraph({
+                spacing: { after: 0 },
+                shading: { fill: 'FFF5F5' },
+                border: {
+                    left: { style: this.docx.BorderStyle.SINGLE, size: 4, color: 'C0392B' },
+                    right: { style: this.docx.BorderStyle.SINGLE, size: 4, color: 'C0392B' },
+                    bottom: { style: this.docx.BorderStyle.SINGLE, size: 4, color: 'C0392B' }
+                },
+                indent: { left: 180 },
+                children: [new this.docx.TextRun({
+                    text: output.evalue || 'An error occurred',
+                    size: this.sizes.code,
+                    font: 'Consolas',
+                    color: 'C0392B'
                 })]
             }));
         }
@@ -1695,8 +2058,8 @@ const ThesisExport = {
                 elements.push(...this.processElement(node));
             } else if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
                 elements.push(new this.docx.Paragraph({
-                    alignment: this.docx.AlignmentType.JUSTIFIED,
-                    spacing: { after: 240, line: 480 },
+                    alignment: this.docx.AlignmentType.LEFT,
+                    spacing: { after: 120, line: 340 },
                     indent: { firstLine: 720 },
                     children: [new this.docx.TextRun({
                         text: node.textContent.trim(),
@@ -1720,8 +2083,8 @@ const ThesisExport = {
         switch (tag) {
             case 'p':
                 elements.push(new this.docx.Paragraph({
-                    alignment: this.docx.AlignmentType.JUSTIFIED,
-                    spacing: { after: 240, line: 480 },
+                    alignment: this.docx.AlignmentType.LEFT,
+                    spacing: { after: 120, line: 340 },
                     indent: { firstLine: 720 },
                     children: this.getTextRuns(element)
                 }));
@@ -1730,8 +2093,8 @@ const ThesisExport = {
             case 'ul':
                 element.querySelectorAll(':scope > li').forEach(li => {
                     elements.push(new this.docx.Paragraph({
-                        bullet: { level: 0 },
-                        spacing: { after: 120, line: 480 },
+                        numbering: { reference: 'bullet-list', level: 0 },
+                        spacing: { after: 120, line: 340 },
                         children: this.getTextRuns(li)
                     }));
                 });
@@ -1741,7 +2104,7 @@ const ThesisExport = {
                 element.querySelectorAll(':scope > li').forEach(li => {
                     elements.push(new this.docx.Paragraph({
                         numbering: { reference: 'numbered-list', level: 0 },
-                        spacing: { after: 120, line: 480 },
+                        spacing: { after: 120, line: 340 },
                         children: this.getTextRuns(li)
                     }));
                 });
@@ -1750,7 +2113,7 @@ const ThesisExport = {
             case 'h3':
             case 'h4':
                 elements.push(new this.docx.Paragraph({
-                    spacing: { before: 240, after: 120, line: 480 },
+                    spacing: { before: 240, after: 120, line: 340 },
                     children: [new this.docx.TextRun({
                         text: element.textContent,
                         bold: true,
@@ -1764,7 +2127,7 @@ const ThesisExport = {
             case 'blockquote':
                 elements.push(new this.docx.Paragraph({
                     indent: { left: 720 },
-                    spacing: { after: 240, line: 480 },
+                    spacing: { after: 120, line: 340 },
                     children: [new this.docx.TextRun({
                         text: element.textContent,
                         size: this.sizes.body,
@@ -1776,8 +2139,8 @@ const ThesisExport = {
             default:
                 if (element.textContent.trim()) {
                     elements.push(new this.docx.Paragraph({
-                        alignment: this.docx.AlignmentType.JUSTIFIED,
-                        spacing: { after: 240, line: 480 },
+                        alignment: this.docx.AlignmentType.LEFT,
+                        spacing: { after: 120, line: 340 },
                         children: [new this.docx.TextRun({
                             text: element.textContent.trim(),
                             size: this.sizes.body,

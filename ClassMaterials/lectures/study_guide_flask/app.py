@@ -486,6 +486,6 @@ def page_not_found(e):
 if __name__ == '__main__':
     print("=" * 40)
     print("DACS ML Study Guide")
-    print("http://localhost:8082")
+    print("http://localhost:9991")
     print("=" * 40)
-    app.run(debug=True, host='0.0.0.0', port=8082)
+    app.run(debug=True, host='0.0.0.0', port=9991)

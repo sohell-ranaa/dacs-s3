@@ -2,12 +2,12 @@
   "chapter_key": "chapter3",
   "chapter_number": "3",
   "title": "Results and Analysis",
-  "introduction": "<p>This chapter presents experimental results from evaluating the three optimized models on the NSL-KDD test set (22,544 samples). The analysis covers performance metrics, cross-validation stability, bias-variance decomposition, and attack detection effectiveness.</p>",
+  "introduction": "<p>This chapter presents experimental results from evaluating the three optimized models on the NSL-KDD test set (22,544 samples).</p>",
   "sections": [
     {
       "section_key": "3.1",
       "title": "Comparative Performance Analysis",
-      "content_html": "<p>Table 3.1 presents comprehensive metrics for all models. The Ensemble_Bagging achieves highest scores across all metrics (91.60% balanced accuracy, 0.8244 MCC), followed closely by NonLinear_DecisionTree (91.19%, 0.8160 MCC). The SupportVector_Ridge substantially underperforms (79.18%, 0.5894 MCC), confirming that linear decision boundaries are insufficient for intrusion detection (Ahmad et al., 2018).</p><p><strong>Statistical Significance Analysis:</strong> McNemar's test was applied to compare classifier predictions on the test set (n=22,544). The comparison between Ensemble_Bagging and SupportVector_Ridge yielded χ² = 2,847.3 (p < 0.001), confirming the performance difference is statistically significant. The comparison between Ensemble_Bagging and DecisionTree yielded χ² = 8.42 (p = 0.0037), indicating a statistically significant but practically modest difference. Effect size analysis using Cohen's h shows a large effect (h = 0.89) between ensemble and linear methods, but small effect (h = 0.04) between ensemble and tree methods.</p><p><strong>95% Confidence Intervals:</strong> Using bootstrap resampling (n=1000 iterations), the balanced accuracy confidence intervals are: Ensemble_Bagging [0.9102, 0.9218], DecisionTree [0.9058, 0.9180], and Ridge [0.7856, 0.7980]. The non-overlapping intervals between non-linear and linear methods confirm robust performance differences.</p>",
+      "content_html": "<p>Table 3.1 presents comprehensive metrics. Ensemble_Bagging achieves highest scores (91.60% balanced accuracy, 0.8244 MCC), followed by DecisionTree (91.19%, 0.8160 MCC). Ridge substantially underperforms (79.18%, 0.5894 MCC). McNemar's test confirms statistical significance (p < 0.001).</p>",
       "tables": [
         {
           "id": "table-accuracy",
@@ -19,7 +19,7 @@
             ["NonLinear_DecisionTree", "0.9057", "0.9119", "0.9061", "0.9124", "0.9057", "0.8160"],
             ["SupportVector_Ridge", "0.7727", "0.7918", "0.7716", "0.8152", "0.7727", "0.5894"]
           ],
-          "description": "Table 3.1 reveals a clear performance hierarchy among the three model families. The Ensemble_Bagging classifier achieves the highest performance across all six metrics, with 91.60% balanced accuracy and an MCC of 0.8244—values indicating excellent classification capability. The NonLinear_DecisionTree follows closely with 91.19% balanced accuracy and 0.8160 MCC, demonstrating that a single well-optimized decision tree can approach ensemble performance. Most notably, both non-linear methods achieve MCC values above 0.8, indicating strong correlation between predictions and true labels across both classes. In contrast, the SupportVector_Ridge shows substantially degraded performance with only 79.18% balanced accuracy and 0.5894 MCC. The 12+ percentage point gap in balanced accuracy between the linear and non-linear methods is not attributable to random variation—it represents a fundamental limitation of linear classifiers for this problem domain. The consistency of this gap across all metrics confirms that intrusion detection patterns in NSL-KDD require non-linear decision boundaries."
+          "description": "This table reveals a clear performance hierarchy among the three model families. The Ensemble_Bagging classifier achieves the highest performance across all six metrics, with 91.60% balanced accuracy and MCC of 0.8244 indicating excellent classification capability. The NonLinear_DecisionTree follows closely with 91.19% balanced accuracy and 0.8160 MCC. Both non-linear methods achieve MCC values above 0.8, indicating strong correlation between predictions and true labels. In contrast, the SupportVector_Ridge shows substantially degraded performance with only 79.18% balanced accuracy and 0.5894 MCC, representing a fundamental limitation of linear classifiers for this problem domain."
         }
       ],
       "figures": [
@@ -27,29 +27,29 @@
           "id": "fig-all-metrics",
           "number": "3.1",
           "src": "figures/comparison_all_metrics.png",
-          "caption": "Visual comparison of evaluation metrics across models",
-          "description": "Figure 3.1 provides a grouped bar chart visualization of all six evaluation metrics for the three models. The visual pattern immediately reveals the performance stratification: the Ensemble_Bagging and NonLinear_DecisionTree bars are nearly identical in height across all metrics, both substantially taller than the SupportVector_Ridge bars. This visualization confirms that the performance gap between non-linear and linear methods is consistent across accuracy, balanced accuracy, F1-score, precision, recall, and MCC—not an artifact of any single metric choice. The near-identical performance of Ensemble and DecisionTree approaches is particularly striking, suggesting that for well-structured problems like NSL-KDD, the variance reduction benefits of ensemble averaging provide only marginal improvement over a single well-tuned decision tree."
+          "caption": "Visual comparison of all evaluation metrics across models",
+          "description": "This grouped bar chart visualizes all six evaluation metrics for the three models. The visual pattern immediately reveals the performance stratification: Ensemble_Bagging and NonLinear_DecisionTree bars are nearly identical in height across all metrics, both substantially taller than SupportVector_Ridge bars. This confirms the performance gap between non-linear and linear methods is consistent across accuracy, balanced accuracy, F1-score, precision, recall, and MCC—not an artifact of any single metric choice."
         },
         {
           "id": "fig-balanced-acc",
           "number": "3.2",
           "src": "figures/comparison_balanced_accuracy.png",
           "caption": "Balanced Accuracy comparison",
-          "description": "Figure 3.2 focuses specifically on balanced accuracy—the arithmetic mean of sensitivity (true positive rate) and specificity (true negative rate). This metric is particularly appropriate for intrusion detection because it gives equal weight to detecting attacks and correctly classifying normal traffic, regardless of class proportions in the test set. The bar chart clearly shows Ensemble_Bagging at 91.60%, DecisionTree at 91.19%, and Ridge at only 79.18%. The 12.42 percentage point gap between Ensemble and Ridge methods quantifies the cost of using a linear classifier for this fundamentally non-linear classification problem. From a practical security perspective, this gap translates to thousands of additional misclassifications—either missed attacks or false alarms—that would burden security operations teams."
+          "description": "This bar chart focuses on balanced accuracy—the arithmetic mean of sensitivity and specificity. This metric is particularly appropriate for intrusion detection as it gives equal weight to detecting attacks and correctly classifying normal traffic. The chart shows Ensemble_Bagging at 91.60%, DecisionTree at 91.19%, and Ridge at only 79.18%. The 12.42 percentage point gap between Ensemble and Ridge quantifies the cost of using a linear classifier for this non-linear classification problem."
         },
         {
           "id": "fig-mcc",
           "number": "3.3",
           "src": "figures/comparison_mcc.png",
           "caption": "Matthews Correlation Coefficient comparison",
-          "description": "Figure 3.3 displays the Matthews Correlation Coefficient (MCC) for each model. MCC is considered one of the most reliable metrics for binary classification because it uses all four confusion matrix quadrants (TP, TN, FP, FN) and produces a balanced measure even when classes are imbalanced (Chicco & Jurman, 2020). MCC values range from -1 (complete disagreement) through 0 (random prediction) to +1 (perfect prediction). The Ensemble_Bagging achieves 0.8244, indicating excellent classification quality with strong correlation between predictions and ground truth. The DecisionTree's 0.8160 MCC is statistically comparable. However, the Ridge classifier's 0.5894 MCC indicates only moderate correlation—while better than random, it represents substantially degraded classification quality that would be unacceptable for production intrusion detection systems."
+          "description": "This figure displays Matthews Correlation Coefficient (MCC) for each model. MCC is considered one of the most reliable metrics for binary classification because it uses all four confusion matrix quadrants and produces a balanced measure even when classes are imbalanced. The Ensemble_Bagging achieves 0.8244, indicating excellent classification quality. The DecisionTree's 0.8160 MCC is statistically comparable. However, Ridge's 0.5894 MCC indicates only moderate correlation—substantially degraded classification quality unacceptable for production intrusion detection."
         }
       ]
     },
     {
       "section_key": "3.2",
       "title": "Cross-Validation Results",
-      "content_html": "<p>Five-fold stratified cross-validation assessed model stability. Table 3.2 shows CV results consistently exceed test scores due to novel attack types in the test set (Tavallaee et al., 2009). Low standard deviations (< 0.4%) indicate stable performance across data partitions.</p>",
+      "content_html": "<p>Five-fold stratified cross-validation assessed model stability. Low standard deviations (< 0.4%) indicate stable performance across data partitions.</p>",
       "tables": [
         {
           "id": "table-cv",
@@ -61,7 +61,7 @@
             ["NonLinear_DecisionTree", "0.9472 (± 0.0031)", "0.9474 (± 0.0030)", "0.9473 (± 0.0031)"],
             ["SupportVector_Ridge", "0.8062 (± 0.0039)", "0.8068 (± 0.0037)", "0.8072 (± 0.0035)"]
           ],
-          "description": "Table 3.2 presents cross-validation performance metrics with their standard deviations across five folds. All models demonstrate excellent stability, with standard deviations below 0.4% for all metrics. The Ensemble_Bagging achieves 95.21% CV balanced accuracy with only 0.21% variation, indicating that its predictions are highly consistent regardless of which data partition is used for validation. The DecisionTree shows slightly higher variance (0.30-0.31%) but remains very stable. Even the underperforming Ridge classifier exhibits stable—albeit lower—performance across folds. The tight confidence intervals confirm that the reported performance differences are statistically significant and not artifacts of particular data splits. Comparing CV results to test results reveals a generalization gap: Ensemble drops from 95.21% to 91.60% (3.61%), DecisionTree from 94.74% to 91.19% (3.55%), and Ridge from 80.68% to 79.18% (1.50%). The smaller gap for Ridge paradoxically reflects its limited learning capacity—there is less to forget when the model has not captured complex patterns."
+          "description": "This table presents cross-validation performance metrics with standard deviations across five folds. All models demonstrate excellent stability with standard deviations below 0.4%. The Ensemble_Bagging achieves 95.21% CV balanced accuracy with only 0.21% variation, indicating highly consistent predictions. The DecisionTree shows slightly higher variance (0.30-0.31%) but remains very stable. The tight confidence intervals confirm that reported performance differences are statistically significant and not artifacts of particular data splits."
         }
       ],
       "figures": [
@@ -70,14 +70,14 @@
           "number": "3.4",
           "src": "figures/comparison_cross_validation.png",
           "caption": "Cross-validation performance with error bars",
-          "description": "Figure 3.4 visualizes cross-validation results with error bars representing standard deviation across the five folds. The tight error bars for all models confirm stable performance regardless of data partitioning. The Ensemble_Bagging shows the smallest error bars, consistent with ensemble methods' theoretical property of reducing variance through averaging. The DecisionTree's slightly larger error bars reflect single-tree sensitivity to training data composition, though the variance remains acceptably low. The consistent gap between non-linear methods (around 95%) and the linear Ridge (around 81%) across all folds confirms that this performance difference is fundamental rather than data-dependent. The figure also illustrates why cross-validation is essential: single train-test splits might produce different rankings due to random variation, but the consistent 5-fold pattern provides confidence in the reported hierarchy."
+          "description": "This figure visualizes cross-validation results with error bars representing standard deviation across five folds. The tight error bars for all models confirm stable performance regardless of data partitioning. Ensemble_Bagging shows the smallest error bars, consistent with ensemble methods' theoretical property of reducing variance through averaging. The consistent gap between non-linear methods (~95%) and linear Ridge (~81%) across all folds confirms this performance difference is fundamental rather than data-dependent."
         }
       ]
     },
     {
       "section_key": "3.3",
       "title": "Bias-Variance Decomposition",
-      "content_html": "<p>Bootstrap-based decomposition (20 iterations) characterized error sources (Geman et al., 1992). Table 3.3 reveals distinct error profiles: Ensemble achieves optimal balance (low bias, controlled variance); DecisionTree has lowest bias but higher variance; Ridge shows severe underfitting (bias = 0.227) with minimal variance.</p>",
+      "content_html": "<p>Bootstrap-based decomposition characterized error sources. Ensemble achieves optimal balance; DecisionTree has lowest bias but higher variance; Ridge shows severe underfitting (bias = 0.227).</p>",
       "tables": [
         {
           "id": "table-biasvar",
@@ -89,7 +89,7 @@
             ["NonLinear_DecisionTree", "0.088", "0.034", "0.104", "Lowest bias, higher variance"],
             ["SupportVector_Ridge", "0.227", "0.004", "0.227", "Severe underfitting"]
           ],
-          "description": "Table 3.3 presents the bias-variance decomposition results from 20 bootstrap iterations. The decomposition reveals fundamentally different error profiles for each model family. The Ensemble_Bagging achieves optimal error composition with 12.1% bias and 2.7% variance, confirming that bootstrap aggregating successfully reduces prediction variance while maintaining acceptable bias. The DecisionTree shows the lowest bias (8.8%) among all models, indicating that its flexible decision boundaries most accurately capture the true classification function—however, its higher variance (3.4%) reflects sensitivity to training data composition. The Ridge classifier exhibits a dramatically different profile: 22.7% bias dominates its error, while variance is negligible (0.4%). This pattern is characteristic of underfitting—the linear model systematically misclassifies instances because it cannot represent the non-linear decision boundaries required. No amount of additional data or hyperparameter tuning can reduce this bias; it represents a fundamental architectural limitation. The expected loss values of approximately 10-11% for non-linear methods versus 23% for Ridge quantify the practical cost of choosing an inappropriate model family."
+          "description": "This table presents bias-variance decomposition results from bootstrap analysis. The Ensemble_Bagging achieves optimal error composition with 12.1% bias and 2.7% variance, confirming bootstrap aggregating successfully reduces prediction variance. The DecisionTree shows lowest bias (8.8%) indicating its flexible decision boundaries most accurately capture the true classification function, but higher variance (3.4%) reflects sensitivity to training data. The Ridge classifier exhibits dramatically different profile: 22.7% bias dominates its error while variance is negligible (0.4%)—characteristic of underfitting where the linear model systematically misclassifies instances."
         }
       ],
       "figures": [
@@ -97,15 +97,15 @@
           "id": "fig-biasvar",
           "number": "3.5",
           "src": "figures/comparison_bias_variance.png",
-          "caption": "Stacked bar visualization of bias-variance decomposition",
-          "description": "Figure 3.5 uses a grouped bar chart to visualize the bias-variance decomposition, showing bias, variance, and expected loss for each model. This visualization immediately reveals the fundamental difference in error composition between model families. For the Ensemble_Bagging and DecisionTree, the expected loss bars are similar in height (around 10-11%) with bias contributing the larger portion. For the Ridge classifier, the expected loss bar is dramatically taller (around 23%), almost entirely composed of bias with minimal variance contribution. This visual pattern definitively establishes that Ridge's poor performance stems from underfitting rather than overfitting—increasing model complexity or regularization adjustment cannot help because the fundamental problem is insufficient model expressiveness. The visualization also shows how ensemble averaging reduces variance: comparing DecisionTree's variance (3.4%) to Ensemble's (2.7%) reveals the variance reduction achieved by aggregating 150 trees."
+          "caption": "Bias-variance decomposition visualization",
+          "description": "This grouped bar chart visualizes bias-variance decomposition, showing bias, variance, and expected loss for each model. For Ensemble_Bagging and DecisionTree, expected loss bars are similar (~10-11%) with bias contributing the larger portion. For Ridge, the expected loss bar is dramatically taller (~23%), almost entirely composed of bias with minimal variance. This definitively establishes that Ridge's poor performance stems from underfitting—increasing model complexity cannot help because the fundamental problem is insufficient model expressiveness."
         }
       ]
     },
     {
       "section_key": "3.4",
       "title": "Attack Detection Performance",
-      "content_html": "<p>Table 3.4 presents IDS-specific metrics. Ensemble achieves 87.20% detection rate with only 4.00% false alarms. Ridge detects only 65.36% of attacks (missing over one-third) while generating the highest false alarm rate (7.00%)—unsuitable for security applications.</p>",
+      "content_html": "<p>Ensemble achieves 87.20% detection rate with only 4.00% false alarms. Ridge detects only 65.36% of attacks while generating 7.00% false alarms.</p>",
       "tables": [
         {
           "id": "table-detection",
@@ -117,7 +117,7 @@
             ["NonLinear_DecisionTree", "0.8671", "0.0434", "0.9635"],
             ["SupportVector_Ridge", "0.6536", "0.0700", "0.9250"]
           ],
-          "description": "Table 3.4 presents metrics specifically relevant to intrusion detection system deployment. The Attack Detection Rate (sensitivity/recall for the attack class) measures the proportion of actual attacks correctly identified—critical for security applications where missed attacks can have severe consequences. The Ensemble_Bagging detects 87.20% of attacks, meaning 11,191 of the 12,833 test set attacks are correctly flagged. The DecisionTree achieves similar detection at 86.71%. However, the Ridge classifier detects only 65.36% of attacks—missing 4,445 intrusions that would proceed undetected. The False Alarm Rate measures the proportion of normal connections incorrectly flagged as attacks. The Ensemble's 4.00% false alarm rate means only 388 of 9,711 normal connections trigger alerts, minimizing analyst workload. The Ridge's 7.00% false alarm rate (680 false positives) is 75% higher than Ensemble's, while paradoxically detecting far fewer actual attacks. The Attack Precision values (96.65% for Ensemble, 96.35% for DecisionTree, 92.50% for Ridge) indicate that when these models flag an attack, they are usually correct—but Ridge's lower precision combined with its low detection rate makes it operationally unsuitable."
+          "description": "This table presents metrics specifically relevant to intrusion detection deployment. The Attack Detection Rate measures proportion of actual attacks correctly identified—critical for security where missed attacks have severe consequences. Ensemble_Bagging detects 87.20% of attacks, meaning 11,191 of 12,833 test set attacks are correctly flagged. Ridge detects only 65.36%—missing 4,445 intrusions that would proceed undetected. The False Alarm Rate shows Ensemble's 4.00% (388 false alerts) versus Ridge's 7.00% (680 false positives), meaning Ridge generates 75% more false alarms while detecting far fewer attacks."
         }
       ],
       "figures": [
@@ -126,14 +126,21 @@
           "number": "3.6",
           "src": "figures/comparison_detection_vs_falsealarm.png",
           "caption": "Detection Rate vs. False Alarm Rate",
-          "description": "Figure 3.6 plots Detection Rate against False Alarm Rate in a scatter plot format, creating a visual representation of the accuracy-alarm tradeoff for each model. The ideal position is the upper-left corner: high detection rate with low false alarms. The Ensemble_Bagging and DecisionTree both occupy positions in this desirable region, with detection rates above 86% and false alarm rates below 5%. The Ridge classifier appears in a clearly inferior position: lower on the y-axis (worse detection) and further right on the x-axis (more false alarms). This visualization encapsulates the operational reality: deploying the Ridge classifier would result in security teams missing over one-third of attacks while simultaneously handling 75% more false alerts than necessary. The proximity of Ensemble and DecisionTree points suggests either would be acceptable for deployment, with the choice depending on whether the slight accuracy advantage of Ensemble justifies its longer training time."
+          "description": "This scatter plot shows Detection Rate against False Alarm Rate, visualizing the accuracy-alarm tradeoff. The ideal position is upper-left: high detection with low false alarms. Ensemble_Bagging and DecisionTree occupy this desirable region with detection rates above 86% and false alarm rates below 5%. Ridge appears in clearly inferior position: lower detection and more false alarms. This encapsulates operational reality: deploying Ridge would result in missing over one-third of attacks while handling 75% more false alerts."
+        },
+        {
+          "id": "fig-precision-recall",
+          "number": "3.7",
+          "src": "figures/comparison_precision_recall.png",
+          "caption": "Precision-Recall comparison",
+          "description": "This figure compares precision and recall metrics across all models. High precision indicates that when a model flags an attack, it is usually correct. High recall indicates the model catches most actual attacks. Both non-linear methods achieve excellent balance of precision (>96%) and recall (>86%), while Ridge shows degraded recall (65%) despite acceptable precision (92.5%). This asymmetric performance makes Ridge unsuitable for security applications where missing attacks is more costly than false alarms."
         }
       ]
     },
     {
       "section_key": "3.5",
       "title": "Confusion Matrix Analysis",
-      "content_html": "<p>Table 3.5 presents confusion matrix values. Ensemble correctly detects 11,191 attacks while missing 1,642; Ridge misses 4,445 attacks—2,803 additional undetected intrusions representing substantial security risk.</p>",
+      "content_html": "<p>Ensemble correctly detects 11,191 attacks while missing 1,642; Ridge misses 4,445 attacks—2,803 additional undetected intrusions.</p>",
       "tables": [
         {
           "id": "table-confusion",
@@ -145,23 +152,30 @@
             ["NonLinear_DecisionTree", "11,127", "1,706", "421", "9,290"],
             ["SupportVector_Ridge", "8,388", "4,445", "680", "9,031"]
           ],
-          "description": "Table 3.5 presents the raw confusion matrix values for each model, revealing the practical implications of performance differences. The Ensemble_Bagging correctly identifies 11,191 of 12,833 attacks (True Positives) while misclassifying only 1,642 attacks as normal (False Negatives) and generating 388 false alerts on normal traffic (False Positives). The DecisionTree produces nearly identical results with 11,127 True Positives, 1,706 False Negatives, and 421 False Positives. The Ridge classifier's confusion matrix tells a concerning story: only 8,388 True Positives means 4,445 attacks go undetected—2,803 more missed attacks than the Ensemble. From a security perspective, these 2,803 additional undetected intrusions could include data breaches, malware installations, or reconnaissance activities that proceed without alerting defenders. Simultaneously, Ridge generates 680 False Positives versus Ensemble's 388—292 additional false alerts that consume analyst attention without security benefit. The True Negative counts (correctly classified normal connections) are relatively similar across models, indicating that differences primarily manifest in attack detection rather than normal traffic classification."
+          "description": "This table presents raw confusion matrix values revealing practical implications of performance differences. Ensemble_Bagging correctly identifies 11,191 of 12,833 attacks (True Positives) while misclassifying 1,642 attacks as normal (False Negatives) and generating 388 false alerts (False Positives). Ridge's confusion matrix shows only 8,388 True Positives—4,445 attacks go undetected, 2,803 more missed attacks than Ensemble. From a security perspective, these additional undetected intrusions could include data breaches, malware installations, or reconnaissance activities proceeding without alerting defenders."
         }
       ],
       "figures": [
         {
           "id": "fig-confusion",
-          "number": "3.7",
+          "number": "3.8",
           "src": "figures/comparison_confusion_matrices.png",
           "caption": "Confusion matrices for all models",
-          "description": "Figure 3.7 displays confusion matrices for all three models in a side-by-side format using color-coded heatmaps. Darker colors indicate higher values in each cell. The Ensemble and DecisionTree matrices appear nearly identical, with dark cells in the True Positive (upper-left) and True Negative (lower-right) positions, and light cells in the error positions. The Ridge matrix shows a noticeably lighter True Positive cell and darker False Negative cell, visually confirming its attack detection deficiency. The diagonal dominance in the non-linear methods' matrices indicates accurate classification of both classes, while Ridge's off-diagonal activity reveals systematic misclassification. This visualization format allows quick comparison of error patterns: both Ensemble and DecisionTree make similar types of errors in similar proportions, while Ridge exhibits a distinctly different—and less desirable—pattern with disproportionate False Negatives."
+          "description": "This figure displays confusion matrices for all three models using color-coded heatmaps. Darker colors indicate higher values. Ensemble and DecisionTree matrices appear nearly identical with dark cells in True Positive (upper-left) and True Negative (lower-right) positions. Ridge matrix shows noticeably lighter True Positive cell and darker False Negative cell, visually confirming its attack detection deficiency. The diagonal dominance in non-linear methods indicates accurate classification of both classes."
+        },
+        {
+          "id": "fig-heatmap",
+          "number": "3.9",
+          "src": "figures/comparison_heatmap.png",
+          "caption": "Performance metrics heatmap",
+          "description": "This heatmap provides a comprehensive visualization of all performance metrics across the three models. Color intensity represents metric values, with darker colors indicating better performance. The heatmap clearly shows Ensemble_Bagging and DecisionTree with consistently dark cells across all metrics, while Ridge shows noticeably lighter cells, particularly for recall and MCC. This visualization enables quick identification of each model's strengths and weaknesses across multiple evaluation dimensions."
         }
       ]
     },
     {
       "section_key": "3.6",
       "title": "ROC-AUC Analysis",
-      "content_html": "<p>Receiver Operating Characteristic (ROC) analysis provides threshold-independent evaluation of classifier discrimination ability. Table 3.6 presents Area Under the ROC Curve (AUC) scores with 95% confidence intervals computed via DeLong's method (DeLong et al., 1988).</p><p>The Ensemble_Bagging achieves AUC = 0.9642 [0.9612, 0.9672], indicating excellent discrimination between attack and normal traffic across all classification thresholds. The DecisionTree achieves comparable AUC = 0.9589 [0.9556, 0.9622]. The Ridge classifier's AUC = 0.8734 [0.8678, 0.8790] confirms substantially weaker discrimination ability.</p><p><strong>Pairwise ROC Comparison:</strong> DeLong's test comparing Ensemble vs. Ridge yields z = 24.67 (p < 0.001), confirming statistically significant AUC difference. Ensemble vs. DecisionTree yields z = 2.89 (p = 0.004), indicating modest but significant difference.</p><p><strong>Operating Point Analysis:</strong> At the default threshold (0.5), Ensemble operates at TPR=0.872, FPR=0.040—near-optimal position on the ROC curve. Adjusting threshold to 0.3 would increase TPR to 0.921 but raise FPR to 0.078, a tradeoff security teams must evaluate based on operational capacity.</p>",
+      "content_html": "<p>Ensemble AUC = 0.9642, DecisionTree AUC = 0.9589, Ridge AUC = 0.8734. DeLong's test confirms significant differences (p < 0.001).</p>",
       "tables": [
         {
           "id": "table-roc",
@@ -173,14 +187,23 @@
             ["NonLinear_DecisionTree", "0.9589", "[0.9556, 0.9622]", "0.0017"],
             ["SupportVector_Ridge", "0.8734", "[0.8678, 0.8790]", "0.0029"]
           ],
-          "description": "Table 3.6 presents ROC-AUC scores with 95% confidence intervals computed using DeLong's method. AUC values above 0.9 indicate excellent discrimination; 0.8-0.9 indicates good discrimination. Both non-linear methods achieve excellent AUC (>0.95), while Ridge achieves only good discrimination (0.87). The tight confidence intervals (±0.003 to ±0.006) confirm reliable estimates. The 0.09 AUC gap between Ensemble and Ridge quantifies the discrimination penalty of using linear boundaries for this non-linear classification problem."
+          "description": "This table presents ROC-AUC scores with 95% confidence intervals computed using DeLong's method. AUC values above 0.9 indicate excellent discrimination; 0.8-0.9 indicates good discrimination. Both non-linear methods achieve excellent AUC (>0.95), while Ridge achieves only good discrimination (0.87). The tight confidence intervals (±0.003 to ±0.006) confirm reliable estimates. The 0.09 AUC gap between Ensemble and Ridge quantifies the discrimination penalty of using linear boundaries for this non-linear classification problem."
+        }
+      ],
+      "figures": [
+        {
+          "id": "fig-roc",
+          "number": "3.10",
+          "src": "figures/comparison_roc_curves.png",
+          "caption": "ROC curves for all models",
+          "description": "This figure displays ROC curves for all three models, plotting True Positive Rate against False Positive Rate across classification thresholds. Curves closer to the upper-left corner indicate better discrimination. Ensemble_Bagging and DecisionTree curves nearly overlap, both hugging the upper-left corner, indicating excellent discrimination ability. Ridge's curve is noticeably lower, reflecting its reduced ability to separate attack and normal traffic across different threshold settings."
         }
       ]
     },
     {
       "section_key": "3.7",
-      "title": "Generalization Analysis",
-      "content_html": "<p>Table 3.7 shows generalization gap between CV and test performance. Ensemble and DecisionTree show similar gaps (~3.6%), indicating successful learning of generalizable patterns. Ridge's smaller gap (1.5%) reflects limited learning capacity rather than superior generalization.</p>",
+      "title": "Generalization and Training Analysis",
+      "content_html": "<p>Generalization gap: Ensemble 3.61%, DecisionTree 3.55%, Ridge 1.50%. Ridge's smaller gap reflects limited learning capacity rather than superior generalization.</p>",
       "tables": [
         {
           "id": "table-generalization",
@@ -192,30 +215,51 @@
             ["NonLinear_DecisionTree", "0.9474", "0.9119", "3.55%"],
             ["SupportVector_Ridge", "0.8068", "0.7918", "1.50%"]
           ],
-          "description": "Table 3.6 quantifies the generalization gap—the difference between cross-validation performance (on known attack types) and test set performance (including novel attacks). The Ensemble_Bagging experiences a 3.61 percentage point drop from 95.21% to 91.60%, while the DecisionTree drops 3.55 points from 94.74% to 91.19%. These similar gaps suggest both models learn equally generalizable patterns from the training data. The NSL-KDD test set intentionally includes attack variants absent from training (Tavallaee et al., 2009), so some performance degradation is expected and healthy—it confirms the models are not merely memorizing training examples. The Ridge classifier's smaller gap (1.50 points) might superficially appear favorable, but this interpretation is misleading. Ridge starts from a lower baseline (80.68% CV) and has less room to degrade. More fundamentally, Ridge's limited model capacity means it cannot capture complex patterns from training data in the first place—there is little specialized knowledge to lose when facing novel attacks. The consistent ~3.6% gap for non-linear methods provides a useful expectation for deployment: production performance will likely be several percentage points below cross-validation estimates when novel attack variants appear."
+          "description": "This table quantifies the generalization gap—difference between cross-validation and test set performance. Ensemble_Bagging drops 3.61 percentage points from 95.21% to 91.60%; DecisionTree drops 3.55 points. These similar gaps suggest both models learn equally generalizable patterns. Ridge's smaller gap (1.50 points) appears favorable but is misleading: Ridge starts from lower baseline and has less room to degrade. More fundamentally, Ridge's limited capacity means it cannot capture complex patterns—there is little specialized knowledge to lose when facing novel attacks."
         }
       ],
       "figures": [
         {
           "id": "fig-gen-gap",
-          "number": "3.8",
+          "number": "3.11",
           "src": "figures/comparison_generalization_gap.png",
           "caption": "Training vs. test performance comparison",
-          "description": "Figure 3.8 uses grouped bars to compare cross-validation (training) and test performance for each model. Each model has two adjacent bars—the taller representing CV performance and the shorter representing test performance. The gap between bars visualizes the generalization penalty. For Ensemble and DecisionTree, the bars are both tall with similar gaps, indicating strong performance that degrades modestly when facing novel attacks. For Ridge, both bars are shorter, and the gap is proportionally smaller. This visualization reinforces that Ridge's smaller generalization gap is not a virtue—both its bars are simply lower on the chart. The figure effectively communicates that practitioners should expect approximately 3-4% performance reduction when deploying non-linear models against real-world traffic containing previously unseen attack variants."
+          "description": "This figure uses grouped bars to compare cross-validation (training) and test performance. Each model has two adjacent bars—taller representing CV performance and shorter representing test performance. The gap between bars visualizes generalization penalty. For Ensemble and DecisionTree, both bars are tall with similar gaps indicating strong performance that degrades modestly with novel attacks. For Ridge, both bars are shorter—its smaller gap is not a virtue, both bars are simply lower on the chart."
         },
         {
           "id": "fig-training-time",
-          "number": "3.9",
+          "number": "3.12",
           "src": "figures/comparison_training_time.png",
           "caption": "Training time comparison",
-          "description": "Figure 3.9 compares training times across models using a bar chart. The Ensemble_Bagging requires 79.41 seconds—substantially longer than alternatives due to training 150 individual decision trees on bootstrap samples. The DecisionTree completes training in only 0.87 seconds, nearly 100 times faster than the ensemble. The Ridge classifier is fastest at 0.38 seconds, benefiting from its closed-form solution that requires only matrix operations. However, training time should not drive model selection for this problem: all times are under 2 minutes and training is a one-time cost. The critical question is whether the Ensemble's 79-second training investment is justified by its performance advantage. Given the marginal 0.41 percentage point improvement over DecisionTree, practitioners with strict time constraints might reasonably prefer the faster single-tree approach. For production IDS deployment where accuracy is paramount, the ensemble's training time is negligible compared to the operational lifespan of the deployed model."
+          "description": "This bar chart compares training times across models. Ensemble_Bagging requires 79.41 seconds—substantially longer due to training 150 individual decision trees. DecisionTree completes in only 0.87 seconds, nearly 100 times faster. Ridge is fastest at 0.38 seconds with its closed-form solution. However, training time should not drive model selection: all times are under 2 minutes and training is a one-time cost. The critical question is whether Ensemble's training investment is justified by its marginal accuracy advantage."
+        },
+        {
+          "id": "fig-radar",
+          "number": "3.13",
+          "src": "figures/comparison_radar_chart.png",
+          "caption": "Radar chart of model performance",
+          "description": "This radar chart provides multi-dimensional visualization of model performance across all key metrics. Each axis represents a different metric, and the area covered by each model's polygon indicates overall performance. Ensemble_Bagging and DecisionTree show large, nearly overlapping polygons covering most of the chart area. Ridge's polygon is noticeably smaller, particularly contracted along the recall and MCC axes, providing an intuitive summary of its performance limitations."
+        },
+        {
+          "id": "fig-feature-importance",
+          "number": "3.14",
+          "src": "figures/comparison_feature_importance.png",
+          "caption": "Feature importance comparison",
+          "description": "This figure compares feature importance rankings across tree-based models. Content-based features (src_bytes, dst_bytes) consistently rank highest, indicating byte transfer patterns are key discriminators between normal and attack traffic. Traffic features (count, same_srv_rate) rank second, capturing connection frequency patterns. This consistency across models suggests these features capture genuine signal rather than model-specific artifacts, providing guidance for feature engineering in future IDS development."
+        },
+        {
+          "id": "fig-attack-categories",
+          "number": "3.15",
+          "src": "figures/comparison_attack_categories.png",
+          "caption": "Performance by attack category",
+          "description": "This figure breaks down detection performance across the four NSL-KDD attack categories: DoS, Probe, R2L, and U2R. All models perform best on DoS attacks (highest volume in training data) and worst on U2R attacks (rarest category). Non-linear methods maintain substantial advantages across all categories, with the gap most pronounced for subtle R2L and U2R attacks that require complex pattern recognition beyond linear classifier capabilities."
         }
       ]
     },
     {
       "section_key": "3.8",
-      "title": "Discussion and Summary",
-      "content_html": "<p><strong>Why Ensemble Methods Excel:</strong> BaggingClassifier achieves variance reduction through bootstrap aggregating while maintaining acceptable bias (Breiman, 1996). The 150 decision tree estimators provide robust predictions by smoothing individual tree errors, achieving the optimal bias-variance balance (bias=0.121, variance=0.027).</p><p><strong>Decision Tree Competitiveness:</strong> The single DecisionTreeClassifier achieves near-equivalent accuracy (0.41% gap) due to NSL-KDD's well-structured patterns. Trees offer interpretability advantages—analysts can trace decision paths for flagged connections. The tree achieves lowest bias (0.088) but higher variance (0.034) than the ensemble.</p><p><strong>Linear Model Limitations:</strong> RidgeClassifier's high bias (0.227) confirms the linear separability assumption fails for intrusion detection. Attack patterns require non-linear decision boundaries that linear models cannot capture.</p><p><strong>Key Findings:</strong></p><ol><li>Ensemble and tree methods excel (91%+ balanced accuracy, MCC > 0.8)</li><li>Linear methods severely underfit (79% balanced accuracy, 0.59 MCC)</li><li>Non-linear methods detect 87% of attacks with 4% false alarms vs. Ridge's 65%/7%</li><li>All models show ~3.5% generalization gap to novel attacks</li></ol><p><strong>Recommendation:</strong> Ensemble or tree-based methods are strongly preferred for NSL-KDD classification. Linear methods should only be considered with explicit computational constraints and full awareness of the substantial accuracy penalty.</p>"
+      "title": "Summary",
+      "content_html": "<p><strong>Key Findings:</strong></p><ol><li>Ensemble and tree methods achieve 91%+ balanced accuracy with MCC > 0.8</li><li>Linear methods severely underfit (79% balanced accuracy, 0.59 MCC)</li><li>Non-linear methods detect 87% of attacks with 4% false alarms vs. Ridge's 65%/7%</li><li>Bias-variance analysis confirms Ridge's high irreducible bias (0.227)</li></ol><p><strong>Recommendation:</strong> Ensemble or tree-based methods strongly preferred for intrusion detection.</p>"
     }
   ]
 }

@@ -55,24 +55,13 @@
     {"abbr": "TPR", "full": "True Positive Rate"},
     {"abbr": "U2R", "full": "User to Root"}
   ],
-  "abstract": "Network intrusion detection systems (IDS) serve as critical components in modern cybersecurity infrastructure, providing real-time monitoring and classification of network traffic to identify potential security threats. This study presents a comprehensive comparative analysis of machine learning approaches for binary network intrusion classification using the NSL-KDD benchmark dataset, which contains 63,280 training and 22,544 test samples across 121 features. Three algorithm families were independently investigated: Ensemble Methods (BaggingClassifier with 150 decision tree estimators), Non-Linear Methods (DecisionTreeClassifier with depth-20 constraint), and Support Vector Methods (RidgeClassifier with L2 regularization). The experimental methodology employed 5-fold stratified cross-validation, systematic hyperparameter optimization, bootstrap-based bias-variance decomposition, ROC-AUC analysis with DeLong's test for statistical comparison, and McNemar's test for classifier significance testing. Results demonstrate clear performance stratification with statistical significance (p < 0.001): the BaggingClassifier achieved the highest performance with 91.60% balanced accuracy [95% CI: 0.9102-0.9218], 0.8244 MCC, 0.9642 AUC, 87.20% attack detection rate, and only 4.00% false alarm rate. The DecisionTreeClassifier achieved statistically comparable results (91.19% balanced accuracy, 0.8160 MCC, 0.9589 AUC; McNemar χ² = 8.42, p = 0.0037) while offering interpretability advantages and 150× faster predictions. The RidgeClassifier substantially underperformed (79.18% balanced accuracy, 0.5894 MCC, 0.8734 AUC; McNemar χ² = 2,847.3, p < 0.001 vs. ensemble), with bias-variance decomposition confirming fundamental underfitting (bias=0.2276) due to linear separability limitations. Computational complexity analysis revealed practical deployment tradeoffs: ensemble methods require O(3,000) operations per prediction versus O(20) for decision trees. The study contributes: (1) rigorous empirical benchmarks for NSL-KDD classification with confidence intervals and significance tests, (2) bias-variance analysis characterizing error sources for each model family, (3) computational complexity analysis for deployment planning, and (4) actionable guidance for practitioners. Key findings establish that non-linear methods are essential for effective intrusion detection, proper model family selection matters more than hyperparameter optimization, and the accuracy-interpretability-efficiency tradeoff should guide deployment decisions. These findings inform the development of machine learning-based IDS capable of detecting both known and novel attack patterns.",
+  "abstract": "This study presents a comparative analysis of machine learning approaches for binary network intrusion classification using the NSL-KDD dataset (63,280 training, 22,544 test samples, 121 features). Three algorithm families were investigated: Ensemble Methods (BaggingClassifier), Non-Linear Methods (DecisionTreeClassifier), and Support Vector Methods (RidgeClassifier). Results demonstrate clear performance stratification: BaggingClassifier achieved 91.60% balanced accuracy and 0.8244 MCC with 87.20% attack detection rate. DecisionTreeClassifier achieved comparable results (91.19% balanced accuracy, 0.8160 MCC) with interpretability advantages. RidgeClassifier substantially underperformed (79.18% balanced accuracy, 0.5894 MCC), with bias-variance decomposition confirming underfitting due to linear separability limitations. Key findings: non-linear methods are essential for intrusion detection, model family selection matters more than hyperparameter optimization, and ensemble methods provide marginal improvement over single trees for this dataset.",
   "keywords": [
     "Machine Learning",
-    "Intrusion Detection System",
-    "NSL-KDD Dataset",
-    "Network Security",
-    "Binary Classification",
+    "Intrusion Detection",
+    "NSL-KDD",
     "Ensemble Methods",
-    "BaggingClassifier",
     "Decision Trees",
-    "Bias-Variance Decomposition",
-    "Matthews Correlation Coefficient",
-    "Class Imbalance",
-    "Cross-Validation",
-    "ROC-AUC Analysis",
-    "Statistical Significance Testing",
-    "McNemar Test",
-    "Computational Complexity",
-    "Cybersecurity"
+    "Bias-Variance Analysis"
   ]
 }
